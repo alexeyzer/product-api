@@ -1,0 +1,23 @@
+syntax = "proto3";
+package user.api;
+
+option go_package = "github.com/alexeyzer/product";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+service ProductApiService {
+  rpc Echo(EchoRequest) returns (EchoResponse) {
+    option (google.api.http) = {
+      get: "/v1/echo"
+    };
+  };
+}
+
+message EchoRequest {
+  string message = 1;
+}
+
+message EchoResponse {
+  string message = 1;
+}
