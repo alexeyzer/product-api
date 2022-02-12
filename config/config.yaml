@@ -1,8 +1,9 @@
 version: 3
 
 auth:
-  session_key: "x-sessionID"
+  session_key: "x-session-id"
   logout_key: "logout"
+  working: false
 database:
   dsn: "host=%s port=%s dbname=%s user=%s password=%s sslmode=%s"
   dbname: "user-api"
@@ -18,3 +19,5 @@ redis:
 app:
   http_port: "8080"
   grpc_port: "8082"
+grpc:
+  user_api: "62.84.114.46:8082"

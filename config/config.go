@@ -10,6 +10,7 @@ type config struct {
 	Auth struct {
 		SessionKey string `yaml:"session_key"`
 		LogoutKey  string `yaml:"logout_key"`
+		Working    bool   `yaml:"working"`
 	}
 	Database struct {
 		Dsn      string `yaml:"dsn"`
@@ -23,6 +24,9 @@ type config struct {
 	App struct {
 		HttpPort string `yaml:"http_port"`
 		GrpcPort string `yaml:"grpc_port"`
+	}
+	GRPC struct {
+		UserAPI string `yaml:"user_api"`
 	}
 }
 

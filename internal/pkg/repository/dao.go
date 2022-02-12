@@ -8,12 +8,12 @@ import (
 )
 
 type DAO interface {
-	UserQuery() UserQuery
+	CategoryQuery() CategoryQuery
 }
 
 type dao struct {
-	userQuery UserQuery
-	db        *sqlx.DB
+	categoryQuery CategoryQuery
+	db            *sqlx.DB
 }
 
 func NewDao() (DAO, error) {
@@ -39,9 +39,9 @@ func NewDao() (DAO, error) {
 	return dao, nil
 }
 
-func (d *dao) UserQuery() UserQuery {
-	if d.userQuery == nil {
-		d.userQuery = NewUserQuery(d.db)
+func (d *dao) CategoryQuery() CategoryQuery {
+	if d.categoryQuery == nil {
+		d.categoryQuery = NewCategoryQuery(d.db)
 	}
-	return d.userQuery
+	return d.categoryQuery
 }

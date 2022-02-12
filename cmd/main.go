@@ -2,6 +2,11 @@ package main
 
 import (
 	"context"
+	"github.com/alexeyzer/product-api/internal/client"
+	"github.com/alexeyzer/product-api/internal/pkg/service"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"net"
 	"net/http"
 	"time"
@@ -17,8 +22,33 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/protobuf/proto"
 )
+
+var userAPIClient client.UserAPIClient
+
+func authFunc(ctx context.Context) (context.Context, error) {
+	log.Info("Auth func")
+	if !config.Config.Auth.Working {
+		return ctx, nil
+	}
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		val := md.Get(config.Config.Auth.SessionKey)
+		if len(val) > 0 {
+			ctx := metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, val[0])
+			res, err := userAPIClient.SessionCheck(ctx)
+			if err != nil {
+				return nil, status.Error(codes.Unauthenticated, err.Error())
+			}
+			log.Info(res)
+		} else {
+			return nil, status.Error(codes.Unauthenticated, "SessionID doesn't exist")
+		}
+	} else {
+		return nil, status.Error(codes.Unauthenticated, "SessionID doesn't exist")
+	}
+	return ctx, nil
+}
 
 func serveSwagger(mux *http.ServeMux) {
 	prefix := "/swagger/"
@@ -37,41 +67,7 @@ func gatewayMetadataAnnotator(_ context.Context, r *http.Request) metadata.MD {
 	return metadata.Pairs()
 }
 
-func httpResponseModifier(ctx context.Context, w http.ResponseWriter, _ proto.Message) error {
-	md, ok := runtime.ServerMetadataFromContext(ctx)
-	if !ok {
-		return nil
-	}
-
-	sessionID := md.HeaderMD.Get(config.Config.Auth.SessionKey)
-	logout := md.HeaderMD.Get(config.Config.Auth.LogoutKey)
-	if len(sessionID) > 0 {
-		if len(logout) == 0 {
-			http.SetCookie(w, &http.Cookie{
-				Name:     config.Config.Auth.SessionKey,
-				Value:    sessionID[0],
-				Path:     "/",
-				HttpOnly: true,
-				Expires:  time.Now().Add(time.Hour * 24),
-				SameSite: http.SameSiteNoneMode,
-				Secure:   true,
-			})
-		} else {
-			http.SetCookie(w, &http.Cookie{
-				Name:     config.Config.Auth.SessionKey,
-				Value:    sessionID[0],
-				Path:     "/",
-				HttpOnly: true,
-				Expires:  time.Now().Add(time.Duration(-1) * time.Hour * 24),
-				SameSite: http.SameSiteNoneMode,
-				Secure:   true,
-			})
-		}
-	}
-	return nil
-}
-
-func cors(h http.Handler) http.Handler {
+func corsMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("origin"))
@@ -93,13 +89,14 @@ func RunServer(ctx context.Context, productApiServiceServer *product_serivce.Pro
 	}
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 		grpc_logrus.UnaryServerInterceptor(log.WithContext(ctx).WithTime(time.Time{})),
-		grpc_validator.UnaryServerInterceptor()),
+		grpc_validator.UnaryServerInterceptor(),
+		grpc_auth.UnaryServerInterceptor(authFunc)),
 	))
 	gw.RegisterProductApiServiceServer(grpcServer, productApiServiceServer)
 
 	mux := http.NewServeMux()
-	gwmux := runtime.NewServeMux(runtime.WithMetadata(gatewayMetadataAnnotator), runtime.WithForwardResponseOption(httpResponseModifier))
-	mux.Handle("/", cors(gwmux))
+	gwmux := runtime.NewServeMux(runtime.WithMetadata(gatewayMetadataAnnotator))
+	mux.Handle("/", corsMiddleware(gwmux))
 	serveSwagger(mux)
 	opts := []grpc.DialOption{
 		grpc.WithInsecure(),
@@ -128,12 +125,19 @@ func main() {
 		log.Fatal("Failed to create config: ", err)
 	}
 
-	_, err = repository.NewDao()
+	userAPIClient, err = client.NewUserApiClient(config.Config.GRPC.UserAPI)
+	if err != nil {
+		log.Fatal("Failed to connect to userAPI: ", err)
+	}
+
+	dao, err := repository.NewDao()
 	if err != nil {
 		log.Fatal("Failed to connect to db: ", err)
 	}
 
-	productApiServiceServer := product_serivce.NewProductApiServiceServer()
+	categoryService := service.NewCategoryService(dao)
+
+	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService)
 	if err := RunServer(ctx, productApiServiceServer); err != nil {
 		log.Fatal(err)
 	}

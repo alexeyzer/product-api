@@ -3,12 +3,14 @@ package product_serivce
 import (
 	"context"
 	"github.com/alexeyzer/product-api/config"
+	"github.com/alexeyzer/product-api/internal/pkg/service"
 	desc "github.com/alexeyzer/product-api/pb/api/product/v1"
 
 	"google.golang.org/grpc/metadata"
 )
 
 type ProductApiServiceServer struct {
+	categoryService service.CategoryService
 	desc.UnimplementedProductApiServiceServer
 }
 
@@ -23,6 +25,6 @@ func (s *ProductApiServiceServer) GetSessionIDFromContext(ctx context.Context) s
 	return ""
 }
 
-func NewProductApiServiceServer() *ProductApiServiceServer {
-	return &ProductApiServiceServer{}
+func NewProductApiServiceServer(categoryService service.CategoryService) *ProductApiServiceServer {
+	return &ProductApiServiceServer{categoryService: categoryService}
 }

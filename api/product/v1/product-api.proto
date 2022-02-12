@@ -1,10 +1,11 @@
 syntax = "proto3";
-package user.api;
+package product.api;
 
 option go_package = "github.com/alexeyzer/product";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "validate/validate.proto";
+import "google/protobuf/wrappers.proto";
 
 service ProductApiService {
   rpc Echo(EchoRequest) returns (EchoResponse) {
@@ -12,7 +13,105 @@ service ProductApiService {
       get: "/v1/echo"
     };
   };
+
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {
+    option (google.api.http) = {
+      post: "/v1/category"
+      body: "*"
+    };
+  };
+
+  rpc DeleteCategory(DeleteCategoryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/category"
+    };
+  };
+
+  rpc UpdateCategory(UpdateCategoryRequest) returns (UpdateCategoryResponse) {
+    option (google.api.http) = {
+      put: "/v1/category"
+      body: "*"
+    };
+  };
+
+  rpc GetCategory(GetCategoryRequest) returns (GetCategoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/category/{id}"
+    };
+  };
+
+  rpc ListCategory(ListCategoryRequest) returns (ListCategoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/category"
+    };
+  };
 }
+
+message ListCategoryResponse {
+  repeated Category items = 1;
+}
+
+message Category {
+  int64 id = 1;
+  string name = 2;
+  int64 level = 3;
+  google.protobuf.Int64Value parent_id = 4;
+}
+
+message ListCategoryRequest {
+  Page page = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.Int64Value level = 3;
+}
+
+message Page {
+  int64 number = 1;
+  int64 limit = 2;
+}
+
+message GetCategoryResponse {
+  int64 id = 1;
+  string name = 2;
+  int64 level = 3;
+  google.protobuf.Int64Value parent_id = 4;
+}
+
+message GetCategoryRequest {
+  int64 id = 1;
+}
+
+message UpdateCategoryRequest {
+  int64 id = 1;
+  string name = 2;
+  int64 level = 3;
+  google.protobuf.Int64Value parent_id = 4;
+}
+
+message UpdateCategoryResponse {
+  int64 id = 1;
+  string name = 2;
+  int64 level = 3;
+  google.protobuf.Int64Value parent_id = 4;
+}
+
+
+message DeleteCategoryRequest {
+  int64 id = 1;
+}
+
+message CreateCategoryRequest {
+  string name = 1;
+  int64 level = 2;
+  google.protobuf.Int64Value parent_id = 3;
+}
+
+message CreateCategoryResponse {
+  int64 id = 1;
+  string name = 2;
+  int64 level = 3;
+  google.protobuf.Int64Value parent_id = 4;
+}
+
 
 message EchoRequest {
   string message = 1;

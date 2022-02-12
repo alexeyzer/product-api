@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/product/v1/product-api.proto",
+    "title": "api/user/v1/user-api.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "ProductApiService"
+      "name": "userApiService"
     }
   ],
   "consumes": [
@@ -16,180 +16,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/category": {
-      "get": {
-        "operationId": "ProductApiService_ListCategory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiListCategoryResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "page.number",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "page.limit",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "level",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "ProductApiService"
-        ]
-      },
-      "delete": {
-        "operationId": "ProductApiService_DeleteCategory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "ProductApiService"
-        ]
-      },
-      "post": {
-        "operationId": "ProductApiService_CreateCategory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiCreateCategoryResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/apiCreateCategoryRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ProductApiService"
-        ]
-      },
-      "put": {
-        "operationId": "ProductApiService_UpdateCategory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiUpdateCategoryResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/apiUpdateCategoryRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ProductApiService"
-        ]
-      }
-    },
-    "/v1/category/{id}": {
-      "get": {
-        "operationId": "ProductApiService_GetCategory",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiGetCategoryResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          }
-        ],
-        "tags": [
-          "ProductApiService"
-        ]
-      }
-    },
     "/v1/echo": {
       "get": {
-        "operationId": "ProductApiService_Echo",
+        "operationId": "userApiService_Echo",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -213,13 +42,184 @@
           }
         ],
         "tags": [
-          "ProductApiService"
+          "userApiService"
+        ]
+      }
+    },
+    "/v1/login": {
+      "post": {
+        "operationId": "userApiService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiLoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiLoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      }
+    },
+    "/v1/logout": {
+      "post": {
+        "operationId": "userApiService_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "properties": {}
+            }
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      }
+    },
+    "/v1/session/check": {
+      "post": {
+        "operationId": "userApiService_SessionCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiSessionCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "properties": {}
+            }
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      }
+    },
+    "/v1/user": {
+      "get": {
+        "operationId": "userApiService_GetUserBySession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "userApiService"
+        ]
+      },
+      "post": {
+        "operationId": "userApiService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "userApiService"
         ]
       }
     }
   },
   "definitions": {
-    "apiCategory": {
+    "apiCreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "apiCreateUserResponse": {
       "type": "object",
       "properties": {
         "id": {
@@ -229,49 +229,17 @@
         "name": {
           "type": "string"
         },
-        "level": {
-          "type": "string",
-          "format": "int64"
-        },
-        "parentId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "apiCreateCategoryRequest": {
-      "type": "object",
-      "properties": {
-        "name": {
+        "surname": {
           "type": "string"
         },
-        "level": {
-          "type": "string",
-          "format": "int64"
-        },
-        "parentId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "apiCreateCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "name": {
+        "patronymic": {
           "type": "string"
         },
-        "level": {
-          "type": "string",
-          "format": "int64"
+        "phone": {
+          "type": "string"
         },
-        "parentId": {
-          "type": "string",
-          "format": "int64"
+        "email": {
+          "type": "string"
         }
       }
     },
@@ -283,87 +251,30 @@
         }
       }
     },
-    "apiGetCategoryResponse": {
+    "apiLoginRequest": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "name": {
+        "email": {
           "type": "string"
         },
-        "level": {
-          "type": "string",
-          "format": "int64"
-        },
-        "parentId": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "apiListCategoryResponse": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/apiCategory"
-          }
-        }
-      }
-    },
-    "apiPage": {
-      "type": "object",
-      "properties": {
-        "number": {
-          "type": "string",
-          "format": "int64"
-        },
-        "limit": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "apiUpdateCategoryRequest": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "name": {
+        "password": {
           "type": "string"
-        },
-        "level": {
-          "type": "string",
-          "format": "int64"
-        },
-        "parentId": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
-    "apiUpdateCategoryResponse": {
+    "apiLoginResponse": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "name": {
+        "sessionId": {
           "type": "string"
-        },
-        "level": {
-          "type": "string",
-          "format": "int64"
-        },
-        "parentId": {
-          "type": "string",
-          "format": "int64"
+        }
+      }
+    },
+    "apiSessionCheckResponse": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
         }
       }
     },
