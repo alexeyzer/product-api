@@ -45,6 +45,27 @@ service ProductApiService {
       get: "/v1/category"
     };
   };
+
+  rpc CreateBrand(CreateBrandRequest) returns (CreateBrandResponse) {
+    option (google.api.http) = {
+      post: "/v1/brand"
+      body: "*"
+    };
+  };
+}
+
+message CreateBrandResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string image_url = 4;
+}
+
+message CreateBrandRequest {
+  string name = 1;
+  string description = 2;
+  bytes file = 3;
+  string file_extension = 4;
 }
 
 message ListCategoryResponse {

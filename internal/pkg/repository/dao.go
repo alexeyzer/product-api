@@ -9,9 +9,11 @@ import (
 
 type DAO interface {
 	CategoryQuery() CategoryQuery
+	BrandQuery() BrandQuery
 }
 
 type dao struct {
+	brandQuery    BrandQuery
 	categoryQuery CategoryQuery
 	db            *sqlx.DB
 }
@@ -37,6 +39,13 @@ func NewDao() (DAO, error) {
 	}
 	dao.db = conn
 	return dao, nil
+}
+
+func (d *dao) BrandQuery() BrandQuery {
+	if d.brandQuery == nil {
+		d.brandQuery = NewBrandQuery(d.db)
+	}
+	return d.brandQuery
 }
 
 func (d *dao) CategoryQuery() CategoryQuery {

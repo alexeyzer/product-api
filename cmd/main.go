@@ -5,6 +5,8 @@ import (
 	"github.com/alexeyzer/product-api/internal/client"
 	"github.com/alexeyzer/product-api/internal/pkg/service"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net"
@@ -90,12 +92,15 @@ func RunServer(ctx context.Context, productApiServiceServer *product_serivce.Pro
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 		grpc_logrus.UnaryServerInterceptor(log.WithContext(ctx).WithTime(time.Time{})),
 		grpc_validator.UnaryServerInterceptor(),
-		grpc_auth.UnaryServerInterceptor(authFunc)),
+		grpc_auth.UnaryServerInterceptor(authFunc),
+		grpc_prometheus.UnaryServerInterceptor),
 	))
 	gw.RegisterProductApiServiceServer(grpcServer, productApiServiceServer)
+	grpc_prometheus.Register(grpcServer)
 
 	mux := http.NewServeMux()
 	gwmux := runtime.NewServeMux(runtime.WithMetadata(gatewayMetadataAnnotator))
+	mux.Handle("/metrics", promhttp.Handler())
 	mux.Handle("/", corsMiddleware(gwmux))
 	serveSwagger(mux)
 	opts := []grpc.DialOption{
@@ -130,14 +135,20 @@ func main() {
 		log.Fatal("Failed to connect to userAPI: ", err)
 	}
 
+	s3, err := client.NewS3Client(config.Config.S3.BucketName, config.Config.S3.ID, config.Config.S3.Key, config.Config.S3.Region, config.Config.S3.Endpoint)
+	if err != nil {
+		log.Fatal("Failed to connect to aws bucket: ", err)
+	}
+
 	dao, err := repository.NewDao()
 	if err != nil {
 		log.Fatal("Failed to connect to db: ", err)
 	}
 
+	brandService := service.NewBrandService(dao, s3)
 	categoryService := service.NewCategoryService(dao)
 
-	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService)
+	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService, brandService)
 	if err := RunServer(ctx, productApiServiceServer); err != nil {
 		log.Fatal(err)
 	}

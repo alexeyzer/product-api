@@ -12,10 +12,12 @@ database:
   user: "user-api"
   password: "password"
   ssl: "disable"
-redis:
-  host: "62.84.127.244"
-  port: "6379"
-  password: ""
+s3:
+  bucket_name: "alexeyzer-static-files"
+  id: "id_secret"
+  key: "key_secret"
+  endpoint: "https://storage.yandexcloud.net"
+  region: "ru-central1"
 app:
   http_port: "8080"
   grpc_port: "8082"

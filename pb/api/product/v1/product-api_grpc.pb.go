@@ -25,6 +25,7 @@ type ProductApiServiceClient interface {
 	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*UpdateCategoryResponse, error)
 	GetCategory(ctx context.Context, in *GetCategoryRequest, opts ...grpc.CallOption) (*GetCategoryResponse, error)
 	ListCategory(ctx context.Context, in *ListCategoryRequest, opts ...grpc.CallOption) (*ListCategoryResponse, error)
+	CreateBrand(ctx context.Context, in *CreateBrandRequest, opts ...grpc.CallOption) (*CreateBrandResponse, error)
 }
 
 type productApiServiceClient struct {
@@ -89,6 +90,15 @@ func (c *productApiServiceClient) ListCategory(ctx context.Context, in *ListCate
 	return out, nil
 }
 
+func (c *productApiServiceClient) CreateBrand(ctx context.Context, in *CreateBrandRequest, opts ...grpc.CallOption) (*CreateBrandResponse, error) {
+	out := new(CreateBrandResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/CreateBrand", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductApiServiceServer is the server API for ProductApiService service.
 // All implementations must embed UnimplementedProductApiServiceServer
 // for forward compatibility
@@ -99,6 +109,7 @@ type ProductApiServiceServer interface {
 	UpdateCategory(context.Context, *UpdateCategoryRequest) (*UpdateCategoryResponse, error)
 	GetCategory(context.Context, *GetCategoryRequest) (*GetCategoryResponse, error)
 	ListCategory(context.Context, *ListCategoryRequest) (*ListCategoryResponse, error)
+	CreateBrand(context.Context, *CreateBrandRequest) (*CreateBrandResponse, error)
 	mustEmbedUnimplementedProductApiServiceServer()
 }
 
@@ -123,6 +134,9 @@ func (UnimplementedProductApiServiceServer) GetCategory(context.Context, *GetCat
 }
 func (UnimplementedProductApiServiceServer) ListCategory(context.Context, *ListCategoryRequest) (*ListCategoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCategory not implemented")
+}
+func (UnimplementedProductApiServiceServer) CreateBrand(context.Context, *CreateBrandRequest) (*CreateBrandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateBrand not implemented")
 }
 func (UnimplementedProductApiServiceServer) mustEmbedUnimplementedProductApiServiceServer() {}
 
@@ -245,6 +259,24 @@ func _ProductApiService_ListCategory_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_CreateBrand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateBrandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).CreateBrand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/CreateBrand",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).CreateBrand(ctx, req.(*CreateBrandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductApiService_ServiceDesc is the grpc.ServiceDesc for ProductApiService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -275,6 +307,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCategory",
 			Handler:    _ProductApiService_ListCategory_Handler,
+		},
+		{
+			MethodName: "CreateBrand",
+			Handler:    _ProductApiService_CreateBrand_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

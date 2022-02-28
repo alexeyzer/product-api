@@ -28,6 +28,13 @@ type config struct {
 	GRPC struct {
 		UserAPI string `yaml:"user_api"`
 	}
+	S3 struct {
+		BucketName string `yaml:"bucket_name"`
+		ID         string `yaml:"id"`
+		Key        string `yaml:"key"`
+		Endpoint   string `yaml:"endpoint"`
+		Region     string `yaml:"region"`
+	}
 }
 
 var Config = config{}
