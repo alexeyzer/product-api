@@ -10,22 +10,22 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type BrandQuery interface {
-	Create(ctx context.Context, req datastruct.Brand) (*datastruct.Brand, error)
-	Get(ctx context.Context, ID int64) (*datastruct.Brand, error)
+type ColorQuery interface {
+	Create(ctx context.Context, req datastruct.Color) (*datastruct.Color, error)
+	Get(ctx context.Context, ID int64) (*datastruct.Color, error)
 	Delete(ctx context.Context, ID int64) error
-	List(ctx context.Context) ([]*datastruct.Brand, error)
+	List(ctx context.Context) ([]*datastruct.Color, error)
 	Exists(ctx context.Context, name string) (bool, error)
 }
 
-type brandQuery struct {
+type colorQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
 }
 
-func (q *brandQuery) Delete(ctx context.Context, ID int64) error {
+func (q *colorQuery) Delete(ctx context.Context, ID int64) error {
 	qb := q.builder.
-		Delete(datastruct.BrandTableName).
+		Delete(datastruct.ColorTableName).
 		Where(squirrel.Eq{"id": ID})
 	query, args, err := qb.ToSql()
 	if err != nil {
@@ -40,37 +40,33 @@ func (q *brandQuery) Delete(ctx context.Context, ID int64) error {
 	return nil
 }
 
-func (q *brandQuery) List(ctx context.Context) ([]*datastruct.Brand, error) {
+func (q *colorQuery) List(ctx context.Context) ([]*datastruct.Color, error) {
 	qb := q.builder.
 		Select("*").
-		From(datastruct.BrandTableName).
+		From(datastruct.ColorTableName).
 		OrderBy("name")
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return nil, err
 	}
 
-	var brands []*datastruct.Brand
+	var colors []*datastruct.Color
 
-	err = q.db.SelectContext(ctx, &brands, query, args...)
+	err = q.db.SelectContext(ctx, &colors, query, args...)
 	if err != nil {
 		return nil, err
 	}
 
-	return brands, nil
+	return colors, nil
 }
 
-func (q *brandQuery) Create(ctx context.Context, req datastruct.Brand) (*datastruct.Brand, error) {
-	qb := q.builder.Insert(datastruct.BrandTableName).
+func (q *colorQuery) Create(ctx context.Context, req datastruct.Color) (*datastruct.Color, error) {
+	qb := q.builder.Insert(datastruct.ColorTableName).
 		Columns(
 			"name",
-			"description",
-			"url",
 		).
 		Values(
 			req.Name,
-			req.Description,
-			req.Url,
 		).
 		Suffix("RETURNING *")
 	query, args, err := qb.ToSql()
@@ -78,52 +74,52 @@ func (q *brandQuery) Create(ctx context.Context, req datastruct.Brand) (*datastr
 		return nil, err
 	}
 
-	var brand datastruct.Brand
+	var color datastruct.Color
 
-	err = q.db.GetContext(ctx, &brand, query, args...)
+	err = q.db.GetContext(ctx, &color, query, args...)
 	if err != nil {
 		return nil, err
 	}
 
-	return &brand, nil
+	return &color, nil
 }
 
-func (q *brandQuery) Get(ctx context.Context, ID int64) (*datastruct.Brand, error) {
+func (q *colorQuery) Get(ctx context.Context, ID int64) (*datastruct.Color, error) {
 	qb := q.builder.
 		Select("*").
-		From(datastruct.BrandTableName).
+		From(datastruct.ColorTableName).
 		Where(squirrel.Eq{"id": ID})
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return nil, err
 	}
 
-	var brand datastruct.Brand
+	var color datastruct.Color
 
-	err = q.db.GetContext(ctx, &brand, query, args...)
+	err = q.db.GetContext(ctx, &color, query, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, status.Errorf(codes.NotFound, "brand with ID = %d doesn't exist", ID)
+			return nil, status.Errorf(codes.NotFound, "color with ID = %d doesn't exist", ID)
 		}
 		return nil, err
 	}
 
-	return &brand, nil
+	return &color, nil
 }
 
-func (q *brandQuery) Exists(ctx context.Context, name string) (bool, error) {
+func (q *colorQuery) Exists(ctx context.Context, name string) (bool, error) {
 	qb := q.builder.
 		Select("*").
-		From(datastruct.BrandTableName).
+		From(datastruct.ColorTableName).
 		Where(squirrel.Eq{"name": name})
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return false, err
 	}
 
-	var brand datastruct.Brand
+	var color datastruct.Color
 
-	err = q.db.GetContext(ctx, &brand, query, args...)
+	err = q.db.GetContext(ctx, &color, query, args...)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return false, nil
@@ -134,8 +130,8 @@ func (q *brandQuery) Exists(ctx context.Context, name string) (bool, error) {
 	return true, nil
 }
 
-func NewBrandQuery(db *sqlx.DB) BrandQuery {
-	return &brandQuery{
+func NewColorQuery(db *sqlx.DB) ColorQuery {
+	return &colorQuery{
 		db:      db,
 		builder: squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
 	}

@@ -147,8 +147,9 @@ func main() {
 
 	brandService := service.NewBrandService(dao, s3)
 	categoryService := service.NewCategoryService(dao)
+	colorService := service.NewColorService(dao)
 
-	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService, brandService)
+	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService, brandService, colorService)
 	if err := RunServer(ctx, productApiServiceServer); err != nil {
 		log.Fatal(err)
 	}

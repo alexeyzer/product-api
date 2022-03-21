@@ -10,3 +10,8 @@ type Brand struct {
 	Description sql.NullString `db:"description"`
 	Url         sql.NullString `db:"url"`
 }
+
+type BrandGroup struct {
+	GroupName string
+	Brands    []*Brand
+}

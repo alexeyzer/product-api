@@ -52,6 +52,85 @@ service ProductApiService {
       body: "*"
     };
   };
+
+  rpc GetBrand(GetBrandRequest) returns (GetBrandResponse) {
+    option (google.api.http) = {
+      get: "/v1/brand"
+    };
+  };
+
+  rpc ListBrands(google.protobuf.Empty) returns (ListBrandsResponse) {
+    option (google.api.http) = {
+      get: "/v1/brand/list"
+    };
+  };
+
+  rpc DeleteBrand(DeleteBrandRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/brand"
+    };
+  };
+
+  rpc CreateColor(CreateColorRequest) returns (CreateColorResponse) {
+    option (google.api.http) = {
+      post: "/v1/color"
+      body: "*"
+    };
+  };
+
+  rpc ListColors(google.protobuf.Empty) returns (ListColorsResponse) {
+    option (google.api.http) = {
+      get: "/v1/color/list"
+    };
+  };
+
+  rpc DeleteColor(DeleteColorRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/color"
+    };
+  };
+}
+
+message DeleteColorRequest {
+  int64 id = 1;
+}
+
+message ListColorsResponse {
+  repeated CreateColorResponse colors = 1;
+}
+
+message CreateColorRequest {
+  string name = 1;
+}
+
+message CreateColorResponse {
+  int64 id = 1;
+  string name = 2;
+}
+
+message DeleteBrandRequest {
+  int64 id = 1;
+}
+
+message ListBrandsResponse {
+  repeated  BrandGroup brand_groups = 1;
+
+  message BrandGroup {
+    string groupName = 1;
+    repeated GetBrandResponse brands = 2;
+  }
+}
+
+
+message GetBrandRequest {
+  int64 id = 1;
+}
+
+message GetBrandResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string image_url = 4;
 }
 
 message CreateBrandResponse {

@@ -17,6 +17,64 @@
   ],
   "paths": {
     "/v1/brand": {
+      "get": {
+        "operationId": "ProductApiService_GetBrand",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGetBrandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      },
+      "delete": {
+        "operationId": "ProductApiService_DeleteBrand",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      },
       "post": {
         "operationId": "ProductApiService_CreateBrand",
         "responses": {
@@ -43,6 +101,28 @@
             }
           }
         ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
+    "/v1/brand/list": {
+      "get": {
+        "operationId": "ProductApiService_ListBrands",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListBrandsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
         "tags": [
           "ProductApiService"
         ]
@@ -219,6 +299,89 @@
         ]
       }
     },
+    "/v1/color": {
+      "delete": {
+        "operationId": "ProductApiService_DeleteColor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      },
+      "post": {
+        "operationId": "ProductApiService_CreateColor",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateColorResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateColorRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
+    "/v1/color/list": {
+      "get": {
+        "operationId": "ProductApiService_ListColors",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListColorsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
     "/v1/echo": {
       "get": {
         "operationId": "ProductApiService_Echo",
@@ -251,6 +414,20 @@
     }
   },
   "definitions": {
+    "ListBrandsResponseBrandGroup": {
+      "type": "object",
+      "properties": {
+        "groupName": {
+          "type": "string"
+        },
+        "brands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiGetBrandResponse"
+          }
+        }
+      }
+    },
     "apiCategory": {
       "type": "object",
       "properties": {
@@ -343,10 +520,48 @@
         }
       }
     },
+    "apiCreateColorRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "apiCreateColorResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "apiEchoResponse": {
       "type": "object",
       "properties": {
         "message": {
+          "type": "string"
+        }
+      }
+    },
+    "apiGetBrandResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
           "type": "string"
         }
       }
@@ -371,6 +586,17 @@
         }
       }
     },
+    "apiListBrandsResponse": {
+      "type": "object",
+      "properties": {
+        "brandGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListBrandsResponseBrandGroup"
+          }
+        }
+      }
+    },
     "apiListCategoryResponse": {
       "type": "object",
       "properties": {
@@ -378,6 +604,17 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/apiCategory"
+          }
+        }
+      }
+    },
+    "apiListColorsResponse": {
+      "type": "object",
+      "properties": {
+        "colors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiCreateColorResponse"
           }
         }
       }

@@ -12,6 +12,7 @@ import (
 type ProductApiServiceServer struct {
 	brandService    service.BrandService
 	categoryService service.CategoryService
+	colorService    service.ColorService
 	desc.UnimplementedProductApiServiceServer
 }
 
@@ -26,9 +27,10 @@ func (s *ProductApiServiceServer) GetSessionIDFromContext(ctx context.Context) s
 	return ""
 }
 
-func NewProductApiServiceServer(categoryService service.CategoryService, brandService service.BrandService) *ProductApiServiceServer {
+func NewProductApiServiceServer(categoryService service.CategoryService, brandService service.BrandService, colorService service.ColorService) *ProductApiServiceServer {
 	return &ProductApiServiceServer{
 		categoryService: categoryService,
 		brandService:    brandService,
+		colorService:    colorService,
 	}
 }
