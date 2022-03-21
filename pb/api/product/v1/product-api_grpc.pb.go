@@ -32,6 +32,9 @@ type ProductApiServiceClient interface {
 	CreateColor(ctx context.Context, in *CreateColorRequest, opts ...grpc.CallOption) (*CreateColorResponse, error)
 	ListColors(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListColorsResponse, error)
 	DeleteColor(ctx context.Context, in *DeleteColorRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateSize(ctx context.Context, in *CreateSizeRequest, opts ...grpc.CallOption) (*CreateSizeResponse, error)
+	ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error)
+	DeleteSize(ctx context.Context, in *DeleteSizeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type productApiServiceClient struct {
@@ -159,6 +162,33 @@ func (c *productApiServiceClient) DeleteColor(ctx context.Context, in *DeleteCol
 	return out, nil
 }
 
+func (c *productApiServiceClient) CreateSize(ctx context.Context, in *CreateSizeRequest, opts ...grpc.CallOption) (*CreateSizeResponse, error) {
+	out := new(CreateSizeResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/CreateSize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error) {
+	out := new(ListSizesResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListSizes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) DeleteSize(ctx context.Context, in *DeleteSizeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteSize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductApiServiceServer is the server API for ProductApiService service.
 // All implementations must embed UnimplementedProductApiServiceServer
 // for forward compatibility
@@ -176,6 +206,9 @@ type ProductApiServiceServer interface {
 	CreateColor(context.Context, *CreateColorRequest) (*CreateColorResponse, error)
 	ListColors(context.Context, *emptypb.Empty) (*ListColorsResponse, error)
 	DeleteColor(context.Context, *DeleteColorRequest) (*emptypb.Empty, error)
+	CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error)
+	ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error)
+	DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedProductApiServiceServer()
 }
 
@@ -221,6 +254,15 @@ func (UnimplementedProductApiServiceServer) ListColors(context.Context, *emptypb
 }
 func (UnimplementedProductApiServiceServer) DeleteColor(context.Context, *DeleteColorRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteColor not implemented")
+}
+func (UnimplementedProductApiServiceServer) CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateSize not implemented")
+}
+func (UnimplementedProductApiServiceServer) ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListSizes not implemented")
+}
+func (UnimplementedProductApiServiceServer) DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSize not implemented")
 }
 func (UnimplementedProductApiServiceServer) mustEmbedUnimplementedProductApiServiceServer() {}
 
@@ -469,6 +511,60 @@ func _ProductApiService_DeleteColor_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_CreateSize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateSizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).CreateSize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/CreateSize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).CreateSize(ctx, req.(*CreateSizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_ListSizes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).ListSizes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/ListSizes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).ListSizes(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_DeleteSize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).DeleteSize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/DeleteSize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).DeleteSize(ctx, req.(*DeleteSizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductApiService_ServiceDesc is the grpc.ServiceDesc for ProductApiService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -527,6 +623,18 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteColor",
 			Handler:    _ProductApiService_DeleteColor_Handler,
+		},
+		{
+			MethodName: "CreateSize",
+			Handler:    _ProductApiService_CreateSize_Handler,
+		},
+		{
+			MethodName: "ListSizes",
+			Handler:    _ProductApiService_ListSizes_Handler,
+		},
+		{
+			MethodName: "DeleteSize",
+			Handler:    _ProductApiService_DeleteSize_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

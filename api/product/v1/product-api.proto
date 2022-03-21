@@ -89,6 +89,44 @@ service ProductApiService {
       delete: "/v1/color"
     };
   };
+
+  rpc CreateSize(CreateSizeRequest) returns (CreateSizeResponse) {
+    option (google.api.http) = {
+      post: "/v1/size"
+      body: "*"
+    };
+  };
+
+  rpc ListSizes(google.protobuf.Empty) returns (ListSizesResponse) {
+    option (google.api.http) = {
+      get: "/v1/size/list"
+    };
+  };
+
+  rpc DeleteSize(DeleteSizeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/size"
+    };
+  };
+}
+
+message DeleteSizeRequest {
+  int64 id = 1;
+}
+
+message ListSizesResponse {
+  repeated CreateSizeResponse sizes = 1;
+}
+
+message CreateSizeRequest {
+  string name = 1;
+  string category = 2;
+}
+
+message CreateSizeResponse {
+  int64 id = 1;
+  string name = 2;
+  string category = 3;
 }
 
 message DeleteColorRequest {

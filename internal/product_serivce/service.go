@@ -13,6 +13,7 @@ type ProductApiServiceServer struct {
 	brandService    service.BrandService
 	categoryService service.CategoryService
 	colorService    service.ColorService
+	sizeService     service.SizeService
 	desc.UnimplementedProductApiServiceServer
 }
 
@@ -27,10 +28,16 @@ func (s *ProductApiServiceServer) GetSessionIDFromContext(ctx context.Context) s
 	return ""
 }
 
-func NewProductApiServiceServer(categoryService service.CategoryService, brandService service.BrandService, colorService service.ColorService) *ProductApiServiceServer {
+func NewProductApiServiceServer(
+	categoryService service.CategoryService,
+	brandService service.BrandService,
+	colorService service.ColorService,
+	sizeService service.SizeService,
+) *ProductApiServiceServer {
 	return &ProductApiServiceServer{
 		categoryService: categoryService,
 		brandService:    brandService,
 		colorService:    colorService,
+		sizeService:     sizeService,
 	}
 }

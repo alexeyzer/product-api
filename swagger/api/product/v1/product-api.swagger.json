@@ -411,6 +411,89 @@
           "ProductApiService"
         ]
       }
+    },
+    "/v1/size": {
+      "delete": {
+        "operationId": "ProductApiService_DeleteSize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      },
+      "post": {
+        "operationId": "ProductApiService_CreateSize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateSizeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateSizeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
+    "/v1/size/list": {
+      "get": {
+        "operationId": "ProductApiService_ListSizes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListSizesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "ProductApiService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -540,6 +623,32 @@
         }
       }
     },
+    "apiCreateSizeRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        }
+      }
+    },
+    "apiCreateSizeResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        }
+      }
+    },
     "apiEchoResponse": {
       "type": "object",
       "properties": {
@@ -615,6 +724,17 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/apiCreateColorResponse"
+          }
+        }
+      }
+    },
+    "apiListSizesResponse": {
+      "type": "object",
+      "properties": {
+        "sizes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiCreateSizeResponse"
           }
         }
       }

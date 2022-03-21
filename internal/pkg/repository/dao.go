@@ -11,12 +11,14 @@ type DAO interface {
 	CategoryQuery() CategoryQuery
 	BrandQuery() BrandQuery
 	ColorQuery() ColorQuery
+	SizeQuery() SizeQuery
 }
 
 type dao struct {
 	brandQuery    BrandQuery
 	categoryQuery CategoryQuery
 	colorQuery    ColorQuery
+	sizeQuery     SizeQuery
 	db            *sqlx.DB
 }
 
@@ -62,4 +64,11 @@ func (d *dao) CategoryQuery() CategoryQuery {
 		d.categoryQuery = NewCategoryQuery(d.db)
 	}
 	return d.categoryQuery
+}
+
+func (d *dao) SizeQuery() SizeQuery {
+	if d.sizeQuery == nil {
+		d.sizeQuery = NewSizeQuery(d.db)
+	}
+	return d.sizeQuery
 }

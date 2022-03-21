@@ -35,6 +35,456 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on DeleteSizeRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *DeleteSizeRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DeleteSizeRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DeleteSizeRequestMultiError, or nil if none found.
+func (m *DeleteSizeRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DeleteSizeRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return DeleteSizeRequestMultiError(errors)
+	}
+	return nil
+}
+
+// DeleteSizeRequestMultiError is an error wrapping multiple validation errors
+// returned by DeleteSizeRequest.ValidateAll() if the designated constraints
+// aren't met.
+type DeleteSizeRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DeleteSizeRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DeleteSizeRequestMultiError) AllErrors() []error { return m }
+
+// DeleteSizeRequestValidationError is the validation error returned by
+// DeleteSizeRequest.Validate if the designated constraints aren't met.
+type DeleteSizeRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteSizeRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteSizeRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteSizeRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteSizeRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteSizeRequestValidationError) ErrorName() string {
+	return "DeleteSizeRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DeleteSizeRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteSizeRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteSizeRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteSizeRequestValidationError{}
+
+// Validate checks the field values on ListSizesResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *ListSizesResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListSizesResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListSizesResponseMultiError, or nil if none found.
+func (m *ListSizesResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListSizesResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetSizes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListSizesResponseValidationError{
+						field:  fmt.Sprintf("Sizes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListSizesResponseValidationError{
+						field:  fmt.Sprintf("Sizes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListSizesResponseValidationError{
+					field:  fmt.Sprintf("Sizes[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListSizesResponseMultiError(errors)
+	}
+	return nil
+}
+
+// ListSizesResponseMultiError is an error wrapping multiple validation errors
+// returned by ListSizesResponse.ValidateAll() if the designated constraints
+// aren't met.
+type ListSizesResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListSizesResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListSizesResponseMultiError) AllErrors() []error { return m }
+
+// ListSizesResponseValidationError is the validation error returned by
+// ListSizesResponse.Validate if the designated constraints aren't met.
+type ListSizesResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListSizesResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListSizesResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListSizesResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListSizesResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListSizesResponseValidationError) ErrorName() string {
+	return "ListSizesResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListSizesResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListSizesResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListSizesResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListSizesResponseValidationError{}
+
+// Validate checks the field values on CreateSizeRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *CreateSizeRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateSizeRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateSizeRequestMultiError, or nil if none found.
+func (m *CreateSizeRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateSizeRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Name
+
+	// no validation rules for Category
+
+	if len(errors) > 0 {
+		return CreateSizeRequestMultiError(errors)
+	}
+	return nil
+}
+
+// CreateSizeRequestMultiError is an error wrapping multiple validation errors
+// returned by CreateSizeRequest.ValidateAll() if the designated constraints
+// aren't met.
+type CreateSizeRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateSizeRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateSizeRequestMultiError) AllErrors() []error { return m }
+
+// CreateSizeRequestValidationError is the validation error returned by
+// CreateSizeRequest.Validate if the designated constraints aren't met.
+type CreateSizeRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateSizeRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateSizeRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateSizeRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateSizeRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateSizeRequestValidationError) ErrorName() string {
+	return "CreateSizeRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateSizeRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateSizeRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateSizeRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateSizeRequestValidationError{}
+
+// Validate checks the field values on CreateSizeResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CreateSizeResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateSizeResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateSizeResponseMultiError, or nil if none found.
+func (m *CreateSizeResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateSizeResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Category
+
+	if len(errors) > 0 {
+		return CreateSizeResponseMultiError(errors)
+	}
+	return nil
+}
+
+// CreateSizeResponseMultiError is an error wrapping multiple validation errors
+// returned by CreateSizeResponse.ValidateAll() if the designated constraints
+// aren't met.
+type CreateSizeResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateSizeResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateSizeResponseMultiError) AllErrors() []error { return m }
+
+// CreateSizeResponseValidationError is the validation error returned by
+// CreateSizeResponse.Validate if the designated constraints aren't met.
+type CreateSizeResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CreateSizeResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CreateSizeResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CreateSizeResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CreateSizeResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CreateSizeResponseValidationError) ErrorName() string {
+	return "CreateSizeResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CreateSizeResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCreateSizeResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CreateSizeResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CreateSizeResponseValidationError{}
+
 // Validate checks the field values on DeleteColorRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
