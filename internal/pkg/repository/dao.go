@@ -12,6 +12,7 @@ type DAO interface {
 	BrandQuery() BrandQuery
 	ColorQuery() ColorQuery
 	SizeQuery() SizeQuery
+	MediaQuery() MediaQuery
 }
 
 type dao struct {
@@ -19,6 +20,7 @@ type dao struct {
 	categoryQuery CategoryQuery
 	colorQuery    ColorQuery
 	sizeQuery     SizeQuery
+	mediaQuery    MediaQuery
 	db            *sqlx.DB
 }
 
@@ -71,4 +73,11 @@ func (d *dao) SizeQuery() SizeQuery {
 		d.sizeQuery = NewSizeQuery(d.db)
 	}
 	return d.sizeQuery
+}
+
+func (d *dao) MediaQuery() MediaQuery {
+	if d.mediaQuery == nil {
+		d.mediaQuery = NewMediaQuery(d.db)
+	}
+	return d.mediaQuery
 }
