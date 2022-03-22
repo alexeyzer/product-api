@@ -3,7 +3,7 @@
 CREATE TABLE category(
                       id SERIAL,
                       name varchar(100) not null,
-                      level bigint,
+                      level bigint not null,
                       parent_id bigint
 );
 -- +goose StatementEnd

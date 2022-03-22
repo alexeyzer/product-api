@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"fmt"
 	"github.com/alexeyzer/product-api/config"
 	"github.com/jmoiron/sqlx"
@@ -13,15 +14,20 @@ type DAO interface {
 	ColorQuery() ColorQuery
 	SizeQuery() SizeQuery
 	MediaQuery() MediaQuery
+	ProductQuery() ProductQuery
+	FinalProductQuery() FinalProductQuery
+	BeginTransaction(ctx context.Context) (*sqlx.Tx, error)
 }
 
 type dao struct {
-	brandQuery    BrandQuery
-	categoryQuery CategoryQuery
-	colorQuery    ColorQuery
-	sizeQuery     SizeQuery
-	mediaQuery    MediaQuery
-	db            *sqlx.DB
+	brandQuery        BrandQuery
+	categoryQuery     CategoryQuery
+	colorQuery        ColorQuery
+	sizeQuery         SizeQuery
+	mediaQuery        MediaQuery
+	productQuery      ProductQuery
+	finalProductQuery FinalProductQuery
+	db                *sqlx.DB
 }
 
 func NewDao() (DAO, error) {
@@ -45,6 +51,10 @@ func NewDao() (DAO, error) {
 	}
 	dao.db = conn
 	return dao, nil
+}
+
+func (d *dao) BeginTransaction(ctx context.Context) (*sqlx.Tx, error) {
+	return d.db.BeginTxx(ctx, nil)
 }
 
 func (d *dao) BrandQuery() BrandQuery {
@@ -80,4 +90,18 @@ func (d *dao) MediaQuery() MediaQuery {
 		d.mediaQuery = NewMediaQuery(d.db)
 	}
 	return d.mediaQuery
+}
+
+func (d *dao) ProductQuery() ProductQuery {
+	if d.productQuery == nil {
+		d.productQuery = NewProductQuery(d.db)
+	}
+	return d.productQuery
+}
+
+func (d *dao) FinalProductQuery() FinalProductQuery {
+	if d.finalProductQuery == nil {
+		d.finalProductQuery = NewFinalProductQuery(d.db)
+	}
+	return d.finalProductQuery
 }

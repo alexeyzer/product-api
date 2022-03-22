@@ -78,6 +78,12 @@ service ProductApiService {
     };
   };
 
+  rpc GetColor(GetColorRequest) returns (GetColorResponse) {
+    option (google.api.http) = {
+      get: "/v1/color"
+    };
+  };
+
   rpc ListColors(google.protobuf.Empty) returns (ListColorsResponse) {
     option (google.api.http) = {
       get: "/v1/color/list"
@@ -97,6 +103,12 @@ service ProductApiService {
     };
   };
 
+  rpc GetSize(GetSizeRequest) returns (GetSizeResponse) {
+    option (google.api.http) = {
+      get: "/v1/size"
+    };
+  };
+
   rpc ListSizes(google.protobuf.Empty) returns (ListSizesResponse) {
     option (google.api.http) = {
       get: "/v1/size/list"
@@ -108,6 +120,189 @@ service ProductApiService {
       delete: "/v1/size"
     };
   };
+
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/product"
+      body: "*"
+    };
+  };
+
+  rpc DeleteProduct(DeleteProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/product"
+    };
+  };
+
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse) {
+    option (google.api.http) = {
+      get: "/v1/product"
+    };
+  };
+
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/product/list"
+    };
+  };
+
+  rpc CreateFinalProduct(CreateFinalProductRequest) returns (CreateFinalProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/final-product"
+      body: "*"
+    };
+  };
+
+  rpc DeleteFinalProduct(DeleteFinalProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/final-product"
+    };
+  };
+
+  rpc GetFinalProduct(GetFinalProductRequest) returns (GetFinalProductResponse) {
+    option (google.api.http) = {
+      get: "/v1/final-product"
+    };
+  };
+
+  rpc ListFinalProducts(ListFinalProductsRequest) returns (ListFinalProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/final-product/list"
+    };
+  };
+
+  rpc GetFullProduct(GetFullProductRequest) returns (GetFullProductResponse) {
+    option (google.api.http) = {
+      get: "/v1/full-product"
+    };
+  };
+}
+
+
+message GetFullProductRequest {
+  int64 product_id = 1;
+}
+
+message GetFullProductResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string url = 4;
+  int64 brand_id = 5;
+  int64 category_id = 6;
+  repeated GetSizeResponse sizes = 7;
+  repeated GetColorResponse colors = 8;
+}
+
+message GetSizeRequest {
+  int64 id = 1;
+}
+
+message GetSizeResponse {
+  int64 id = 1;
+  string name = 2;
+  int64 category_id = 3;
+}
+
+message GetColorRequest {
+  int64 id = 1;
+}
+
+message GetColorResponse {
+  int64 id = 1;
+  string name = 2;
+}
+
+message ListFinalProductsRequest {
+  int64 product_id = 1;
+}
+
+message ListFinalProductsResponse {
+  repeated GetFinalProductResponse products = 1;
+}
+
+message GetFinalProductRequest {
+  int64 id = 1;
+}
+
+message GetFinalProductResponse {
+  int64 id = 1;
+  int64 product_id = 2;
+  int64 size_id = 3;
+  int64 color_id = 4;
+  int64 price = 5;
+  int64 sku = 6;
+  int64 amount = 7;
+}
+
+message DeleteFinalProductRequest {
+  int64 id = 1;
+}
+
+message CreateFinalProductRequest {
+  int64 product_id = 1;
+  int64 size_id = 2;
+  int64 color_id = 3;
+  int64 price = 4;
+  int64 sku = 5;
+  int64 amount = 6;
+}
+
+message CreateFinalProductResponse {
+  int64 id = 1;
+  int64 product_id = 2;
+  int64 size_id = 3;
+  int64 color_id = 4;
+  int64 price = 5;
+  int64 sku = 6;
+  int64 amount = 7;
+}
+
+message ListProductsRequest {
+  Page page = 1;
+  string name = 2;
+  google.protobuf.Int64Value category_id = 3;
+  google.protobuf.Int64Value brand_id = 4;
+}
+
+message ListProductsResponse {
+  repeated GetProductResponse products = 1;
+}
+
+message GetProductRequest {
+  int64 id = 1;
+}
+
+message GetProductResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string url = 4;
+  int64 brand_id = 5;
+  int64 category_id = 6;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string description = 2;
+  bytes image = 3;
+  string contentType = 4;
+  int64 brand_id = 5;
+  int64 category_id = 6;
+}
+
+message CreateProductResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string url = 4;
+  int64 brand_id = 5;
+  int64 category_id = 6;
+}
+
+
+message DeleteProductRequest {
+  int64 id = 1;
 }
 
 message DeleteSizeRequest {
@@ -120,13 +315,13 @@ message ListSizesResponse {
 
 message CreateSizeRequest {
   string name = 1;
-  string category = 2;
+  int64 category_id = 2;
 }
 
 message CreateSizeResponse {
   int64 id = 1;
   string name = 2;
-  string category = 3;
+  int64 category_id = 3;
 }
 
 message DeleteColorRequest {

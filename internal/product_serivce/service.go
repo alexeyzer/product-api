@@ -10,10 +10,12 @@ import (
 )
 
 type ProductApiServiceServer struct {
-	brandService    service.BrandService
-	categoryService service.CategoryService
-	colorService    service.ColorService
-	sizeService     service.SizeService
+	brandService        service.BrandService
+	categoryService     service.CategoryService
+	colorService        service.ColorService
+	sizeService         service.SizeService
+	productService      service.ProductService
+	finalProductService service.FinalProductService
 	desc.UnimplementedProductApiServiceServer
 }
 
@@ -33,11 +35,15 @@ func NewProductApiServiceServer(
 	brandService service.BrandService,
 	colorService service.ColorService,
 	sizeService service.SizeService,
+	productService service.ProductService,
+	finalProductService service.FinalProductService,
 ) *ProductApiServiceServer {
 	return &ProductApiServiceServer{
-		categoryService: categoryService,
-		brandService:    brandService,
-		colorService:    colorService,
-		sizeService:     sizeService,
+		categoryService:     categoryService,
+		brandService:        brandService,
+		colorService:        colorService,
+		sizeService:         sizeService,
+		productService:      productService,
+		finalProductService: finalProductService,
 	}
 }

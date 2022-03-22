@@ -5,8 +5,8 @@ CREATE TABLE product(
                       name varchar(100) not null,
                       description TEXT,
                       url TEXT,
-                      brand_id bigint,
-                      category_id bigint
+                      brand_id bigint not null,
+                      category_id bigint not null
 );
 -- +goose StatementEnd
 

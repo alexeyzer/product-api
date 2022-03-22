@@ -21,9 +21,9 @@ func (s *ProductApiServiceServer) sizesToProtoListSizesResponse(resp []*datastru
 	}
 	for _, item := range resp {
 		internalResp.Sizes = append(internalResp.Sizes, &desc.CreateSizeResponse{
-			Id:       item.ID,
-			Name:     item.Name,
-			Category: item.Category,
+			Id:         item.ID,
+			Name:       item.Name,
+			CategoryId: item.CategoryID,
 		})
 	}
 	return internalResp

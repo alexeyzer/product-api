@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github.com/Masterminds/squirrel"
 	"github.com/alexeyzer/product-api/internal/pkg/datastruct"
 	"github.com/jmoiron/sqlx"
@@ -94,13 +95,16 @@ func (q *categoryQuery) Update(ctx context.Context, req datastruct.Category) (*d
 }
 
 func (q *categoryQuery) Create(ctx context.Context, req datastruct.Category) (*datastruct.Category, error) {
+	fmt.Println(req)
 	qb := q.builder.Insert(datastruct.CategoryTableName).
 		Columns(
 			"name",
+			"level",
 			"parent_id",
 		).
 		Values(
 			req.Name,
+			req.Level,
 			req.ParentID,
 		).
 		Suffix("RETURNING *")

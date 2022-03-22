@@ -6,8 +6,8 @@ CREATE TABLE final_product(
                       product_id bigint not null,
                       size_id bigint not null,
                       color_id bigint not null,
-                      count bigint not null,
-                      price money not null
+                      amount bigint not null,
+                      price bigint not null
 );
 -- +goose StatementEnd
 

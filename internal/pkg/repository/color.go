@@ -16,11 +16,36 @@ type ColorQuery interface {
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context) ([]*datastruct.Color, error)
 	Exists(ctx context.Context, name string) (bool, error)
+	GetByProductID(ctx context.Context, productID int64) ([]*datastruct.Color, error)
 }
 
 type colorQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
+}
+
+func (q *colorQuery) GetByProductID(ctx context.Context, productID int64) ([]*datastruct.Color, error) {
+	qb := q.builder.
+		Select(""+
+			"ct.id",
+			"ct.name",
+		).
+		From(datastruct.ColorTableName + " as ct").
+		LeftJoin(datastruct.FinalProductTableName + " as fpt on fpt.color_id = ct.id").
+		Where(squirrel.Eq{"fpt.id": productID})
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var colors []*datastruct.Color
+
+	err = q.db.SelectContext(ctx, &colors, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return colors, nil
 }
 
 func (q *colorQuery) Delete(ctx context.Context, ID int64) error {

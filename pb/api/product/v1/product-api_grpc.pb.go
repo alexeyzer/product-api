@@ -30,11 +30,22 @@ type ProductApiServiceClient interface {
 	ListBrands(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBrandsResponse, error)
 	DeleteBrand(ctx context.Context, in *DeleteBrandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateColor(ctx context.Context, in *CreateColorRequest, opts ...grpc.CallOption) (*CreateColorResponse, error)
+	GetColor(ctx context.Context, in *GetColorRequest, opts ...grpc.CallOption) (*GetColorResponse, error)
 	ListColors(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListColorsResponse, error)
 	DeleteColor(ctx context.Context, in *DeleteColorRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateSize(ctx context.Context, in *CreateSizeRequest, opts ...grpc.CallOption) (*CreateSizeResponse, error)
+	GetSize(ctx context.Context, in *GetSizeRequest, opts ...grpc.CallOption) (*GetSizeResponse, error)
 	ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error)
 	DeleteSize(ctx context.Context, in *DeleteSizeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetProduct(ctx context.Context, in *GetProductRequest, opts ...grpc.CallOption) (*GetProductResponse, error)
+	ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
+	CreateFinalProduct(ctx context.Context, in *CreateFinalProductRequest, opts ...grpc.CallOption) (*CreateFinalProductResponse, error)
+	DeleteFinalProduct(ctx context.Context, in *DeleteFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetFinalProduct(ctx context.Context, in *GetFinalProductRequest, opts ...grpc.CallOption) (*GetFinalProductResponse, error)
+	ListFinalProducts(ctx context.Context, in *ListFinalProductsRequest, opts ...grpc.CallOption) (*ListFinalProductsResponse, error)
+	GetFullProduct(ctx context.Context, in *GetFullProductRequest, opts ...grpc.CallOption) (*GetFullProductResponse, error)
 }
 
 type productApiServiceClient struct {
@@ -144,6 +155,15 @@ func (c *productApiServiceClient) CreateColor(ctx context.Context, in *CreateCol
 	return out, nil
 }
 
+func (c *productApiServiceClient) GetColor(ctx context.Context, in *GetColorRequest, opts ...grpc.CallOption) (*GetColorResponse, error) {
+	out := new(GetColorResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetColor", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) ListColors(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListColorsResponse, error) {
 	out := new(ListColorsResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListColors", in, out, opts...)
@@ -171,6 +191,15 @@ func (c *productApiServiceClient) CreateSize(ctx context.Context, in *CreateSize
 	return out, nil
 }
 
+func (c *productApiServiceClient) GetSize(ctx context.Context, in *GetSizeRequest, opts ...grpc.CallOption) (*GetSizeResponse, error) {
+	out := new(GetSizeResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetSize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error) {
 	out := new(ListSizesResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListSizes", in, out, opts...)
@@ -183,6 +212,87 @@ func (c *productApiServiceClient) ListSizes(ctx context.Context, in *emptypb.Emp
 func (c *productApiServiceClient) DeleteSize(ctx context.Context, in *DeleteSizeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteSize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error) {
+	out := new(CreateProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/CreateProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) GetProduct(ctx context.Context, in *GetProductRequest, opts ...grpc.CallOption) (*GetProductResponse, error) {
+	out := new(GetProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error) {
+	out := new(ListProductsResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListProducts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) CreateFinalProduct(ctx context.Context, in *CreateFinalProductRequest, opts ...grpc.CallOption) (*CreateFinalProductResponse, error) {
+	out := new(CreateFinalProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/CreateFinalProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) DeleteFinalProduct(ctx context.Context, in *DeleteFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteFinalProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) GetFinalProduct(ctx context.Context, in *GetFinalProductRequest, opts ...grpc.CallOption) (*GetFinalProductResponse, error) {
+	out := new(GetFinalProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetFinalProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) ListFinalProducts(ctx context.Context, in *ListFinalProductsRequest, opts ...grpc.CallOption) (*ListFinalProductsResponse, error) {
+	out := new(ListFinalProductsResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListFinalProducts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) GetFullProduct(ctx context.Context, in *GetFullProductRequest, opts ...grpc.CallOption) (*GetFullProductResponse, error) {
+	out := new(GetFullProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetFullProduct", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -204,11 +314,22 @@ type ProductApiServiceServer interface {
 	ListBrands(context.Context, *emptypb.Empty) (*ListBrandsResponse, error)
 	DeleteBrand(context.Context, *DeleteBrandRequest) (*emptypb.Empty, error)
 	CreateColor(context.Context, *CreateColorRequest) (*CreateColorResponse, error)
+	GetColor(context.Context, *GetColorRequest) (*GetColorResponse, error)
 	ListColors(context.Context, *emptypb.Empty) (*ListColorsResponse, error)
 	DeleteColor(context.Context, *DeleteColorRequest) (*emptypb.Empty, error)
 	CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error)
+	GetSize(context.Context, *GetSizeRequest) (*GetSizeResponse, error)
 	ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error)
 	DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error)
+	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	DeleteProduct(context.Context, *DeleteProductRequest) (*emptypb.Empty, error)
+	GetProduct(context.Context, *GetProductRequest) (*GetProductResponse, error)
+	ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error)
+	CreateFinalProduct(context.Context, *CreateFinalProductRequest) (*CreateFinalProductResponse, error)
+	DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error)
+	GetFinalProduct(context.Context, *GetFinalProductRequest) (*GetFinalProductResponse, error)
+	ListFinalProducts(context.Context, *ListFinalProductsRequest) (*ListFinalProductsResponse, error)
+	GetFullProduct(context.Context, *GetFullProductRequest) (*GetFullProductResponse, error)
 	mustEmbedUnimplementedProductApiServiceServer()
 }
 
@@ -249,6 +370,9 @@ func (UnimplementedProductApiServiceServer) DeleteBrand(context.Context, *Delete
 func (UnimplementedProductApiServiceServer) CreateColor(context.Context, *CreateColorRequest) (*CreateColorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateColor not implemented")
 }
+func (UnimplementedProductApiServiceServer) GetColor(context.Context, *GetColorRequest) (*GetColorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetColor not implemented")
+}
 func (UnimplementedProductApiServiceServer) ListColors(context.Context, *emptypb.Empty) (*ListColorsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListColors not implemented")
 }
@@ -258,11 +382,41 @@ func (UnimplementedProductApiServiceServer) DeleteColor(context.Context, *Delete
 func (UnimplementedProductApiServiceServer) CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSize not implemented")
 }
+func (UnimplementedProductApiServiceServer) GetSize(context.Context, *GetSizeRequest) (*GetSizeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSize not implemented")
+}
 func (UnimplementedProductApiServiceServer) ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListSizes not implemented")
 }
 func (UnimplementedProductApiServiceServer) DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSize not implemented")
+}
+func (UnimplementedProductApiServiceServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) DeleteProduct(context.Context, *DeleteProductRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) GetProduct(context.Context, *GetProductRequest) (*GetProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListProducts not implemented")
+}
+func (UnimplementedProductApiServiceServer) CreateFinalProduct(context.Context, *CreateFinalProductRequest) (*CreateFinalProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateFinalProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteFinalProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) GetFinalProduct(context.Context, *GetFinalProductRequest) (*GetFinalProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFinalProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) ListFinalProducts(context.Context, *ListFinalProductsRequest) (*ListFinalProductsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListFinalProducts not implemented")
+}
+func (UnimplementedProductApiServiceServer) GetFullProduct(context.Context, *GetFullProductRequest) (*GetFullProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFullProduct not implemented")
 }
 func (UnimplementedProductApiServiceServer) mustEmbedUnimplementedProductApiServiceServer() {}
 
@@ -475,6 +629,24 @@ func _ProductApiService_CreateColor_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_GetColor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetColorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).GetColor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/GetColor",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).GetColor(ctx, req.(*GetColorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_ListColors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -529,6 +701,24 @@ func _ProductApiService_CreateSize_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_GetSize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).GetSize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/GetSize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).GetSize(ctx, req.(*GetSizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_ListSizes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -561,6 +751,168 @@ func _ProductApiService_DeleteSize_Handler(srv interface{}, ctx context.Context,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductApiServiceServer).DeleteSize(ctx, req.(*DeleteSizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_CreateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).CreateProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/CreateProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).CreateProduct(ctx, req.(*CreateProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_DeleteProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).DeleteProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/DeleteProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).DeleteProduct(ctx, req.(*DeleteProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_GetProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).GetProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/GetProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).GetProduct(ctx, req.(*GetProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_ListProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListProductsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).ListProducts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/ListProducts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).ListProducts(ctx, req.(*ListProductsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_CreateFinalProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFinalProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).CreateFinalProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/CreateFinalProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).CreateFinalProduct(ctx, req.(*CreateFinalProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_DeleteFinalProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteFinalProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).DeleteFinalProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/DeleteFinalProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).DeleteFinalProduct(ctx, req.(*DeleteFinalProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_GetFinalProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFinalProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).GetFinalProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/GetFinalProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).GetFinalProduct(ctx, req.(*GetFinalProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_ListFinalProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListFinalProductsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).ListFinalProducts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/ListFinalProducts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).ListFinalProducts(ctx, req.(*ListFinalProductsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_GetFullProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFullProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).GetFullProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/GetFullProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).GetFullProduct(ctx, req.(*GetFullProductRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -617,6 +969,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductApiService_CreateColor_Handler,
 		},
 		{
+			MethodName: "GetColor",
+			Handler:    _ProductApiService_GetColor_Handler,
+		},
+		{
 			MethodName: "ListColors",
 			Handler:    _ProductApiService_ListColors_Handler,
 		},
@@ -629,12 +985,52 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductApiService_CreateSize_Handler,
 		},
 		{
+			MethodName: "GetSize",
+			Handler:    _ProductApiService_GetSize_Handler,
+		},
+		{
 			MethodName: "ListSizes",
 			Handler:    _ProductApiService_ListSizes_Handler,
 		},
 		{
 			MethodName: "DeleteSize",
 			Handler:    _ProductApiService_DeleteSize_Handler,
+		},
+		{
+			MethodName: "CreateProduct",
+			Handler:    _ProductApiService_CreateProduct_Handler,
+		},
+		{
+			MethodName: "DeleteProduct",
+			Handler:    _ProductApiService_DeleteProduct_Handler,
+		},
+		{
+			MethodName: "GetProduct",
+			Handler:    _ProductApiService_GetProduct_Handler,
+		},
+		{
+			MethodName: "ListProducts",
+			Handler:    _ProductApiService_ListProducts_Handler,
+		},
+		{
+			MethodName: "CreateFinalProduct",
+			Handler:    _ProductApiService_CreateFinalProduct_Handler,
+		},
+		{
+			MethodName: "DeleteFinalProduct",
+			Handler:    _ProductApiService_DeleteFinalProduct_Handler,
+		},
+		{
+			MethodName: "GetFinalProduct",
+			Handler:    _ProductApiService_GetFinalProduct_Handler,
+		},
+		{
+			MethodName: "ListFinalProducts",
+			Handler:    _ProductApiService_ListFinalProducts_Handler,
+		},
+		{
+			MethodName: "GetFullProduct",
+			Handler:    _ProductApiService_GetFullProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

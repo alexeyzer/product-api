@@ -3,7 +3,7 @@
 CREATE TABLE size(
                         id SERIAL,
                         name varchar(100) not null,
-                        category  varchar(100) not null
+                        category_id bigint not null
 );
 -- +goose StatementEnd
 

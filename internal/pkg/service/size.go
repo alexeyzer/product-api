@@ -53,6 +53,14 @@ func (s *sizeService) CreateSize(ctx context.Context, req datastruct.Size) (*dat
 		return nil, err
 	}
 
+	_, err = s.dao.CategoryQuery().Get(ctx, req.CategoryID)
+	if err != nil {
+		if status.Code(err) == codes.NotFound {
+			return nil, status.Errorf(codes.InvalidArgument, "category with id = %d doesn`t exist", req.CategoryID)
+		}
+		return nil, err
+	}
+
 	res, err := s.dao.SizeQuery().Create(ctx, req)
 	if err != nil {
 		return nil, err
