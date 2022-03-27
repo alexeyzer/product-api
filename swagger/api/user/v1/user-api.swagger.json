@@ -16,36 +16,6 @@
     "application/json"
   ],
   "paths": {
-    "/v1/echo": {
-      "get": {
-        "operationId": "userApiService_Echo",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiEchoResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "message",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "userApiService"
-        ]
-      }
-    },
     "/v1/login": {
       "post": {
         "operationId": "userApiService_Login",
@@ -53,7 +23,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiLoginResponse"
+              "$ref": "#/definitions/apiCreateUserResponse"
             }
           },
           "default": {
@@ -110,6 +80,118 @@
         ]
       }
     },
+    "/v1/role": {
+      "get": {
+        "operationId": "userApiService_GetRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGetRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      },
+      "delete": {
+        "operationId": "userApiService_DeleteRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      },
+      "post": {
+        "operationId": "userApiService_CreateRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      }
+    },
+    "/v1/role/list": {
+      "get": {
+        "operationId": "userApiService_ListRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "userApiService"
+        ]
+      }
+    },
     "/v1/session/check": {
       "post": {
         "operationId": "userApiService_SessionCheck",
@@ -143,26 +225,6 @@
       }
     },
     "/v1/user": {
-      "get": {
-        "operationId": "userApiService_GetUserBySession",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/apiCreateUserResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "userApiService"
-        ]
-      },
       "post": {
         "operationId": "userApiService_CreateUser",
         "responses": {
@@ -193,9 +255,156 @@
           "userApiService"
         ]
       }
+    },
+    "/v1/user-role": {
+      "get": {
+        "operationId": "userApiService_GetUserRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiGetUserRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      },
+      "delete": {
+        "operationId": "userApiService_DeleteUserRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      },
+      "post": {
+        "operationId": "userApiService_CreateUserRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserRoleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiCreateUserRoleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      }
+    },
+    "/v1/user-role/list": {
+      "get": {
+        "operationId": "userApiService_ListUserRoles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListUserRolesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "userApiService"
+        ]
+      }
     }
   },
   "definitions": {
+    "apiCreateRoleRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "apiCreateRoleResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "apiCreateUserRequest": {
       "type": "object",
       "properties": {
@@ -243,11 +452,87 @@
         }
       }
     },
-    "apiEchoResponse": {
+    "apiCreateUserRoleRequest": {
       "type": "object",
       "properties": {
-        "message": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiCreateUserRoleResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiGetRoleResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
           "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "apiGetUserRoleResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "roleId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiListRolesResponse": {
+      "type": "object",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiGetRoleResponse"
+          }
+        }
+      }
+    },
+    "apiListUserRolesResponse": {
+      "type": "object",
+      "properties": {
+        "userRoles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -262,19 +547,17 @@
         }
       }
     },
-    "apiLoginResponse": {
-      "type": "object",
-      "properties": {
-        "sessionId": {
-          "type": "string"
-        }
-      }
-    },
     "apiSessionCheckResponse": {
       "type": "object",
       "properties": {
-        "username": {
+        "email": {
           "type": "string"
+        },
+        "userRoles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

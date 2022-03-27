@@ -1,9 +1,8 @@
 version: 3
 
 auth:
+  user_info_key: "x-user-info"
   session_key: "x-session-id"
-  logout_key: "logout"
-  working: false
 database:
   dsn: "host=%s port=%s dbname=%s user=%s password=%s sslmode=%s"
   dbname: "user-api"

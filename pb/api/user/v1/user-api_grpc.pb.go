@@ -20,11 +20,17 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserApiServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
-	GetUserBySession(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CreateUserResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	Logout(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SessionCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*SessionCheckResponse, error)
-	Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error)
+	CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleResponse, error)
+	DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error)
+	ListRoles(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListRolesResponse, error)
+	CreateUserRole(ctx context.Context, in *CreateUserRoleRequest, opts ...grpc.CallOption) (*CreateUserRoleResponse, error)
+	GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error)
+	DeleteUserRole(ctx context.Context, in *DeleteUserRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListUserRoles(ctx context.Context, in *ListUserRolesRequest, opts ...grpc.CallOption) (*ListUserRolesResponse, error)
 }
 
 type userApiServiceClient struct {
@@ -44,17 +50,8 @@ func (c *userApiServiceClient) CreateUser(ctx context.Context, in *CreateUserReq
 	return out, nil
 }
 
-func (c *userApiServiceClient) GetUserBySession(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+func (c *userApiServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
 	out := new(CreateUserResponse)
-	err := c.cc.Invoke(ctx, "/user.api.userApiService/GetUserBySession", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userApiServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, "/user.api.userApiService/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -80,9 +77,72 @@ func (c *userApiServiceClient) SessionCheck(ctx context.Context, in *emptypb.Emp
 	return out, nil
 }
 
-func (c *userApiServiceClient) Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error) {
-	out := new(EchoResponse)
-	err := c.cc.Invoke(ctx, "/user.api.userApiService/Echo", in, out, opts...)
+func (c *userApiServiceClient) CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleResponse, error) {
+	out := new(CreateRoleResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/CreateRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/DeleteRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error) {
+	out := new(GetRoleResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/GetRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) ListRoles(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListRolesResponse, error) {
+	out := new(ListRolesResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListRoles", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) CreateUserRole(ctx context.Context, in *CreateUserRoleRequest, opts ...grpc.CallOption) (*CreateUserRoleResponse, error) {
+	out := new(CreateUserRoleResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/CreateUserRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error) {
+	out := new(GetUserRoleResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/GetUserRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) DeleteUserRole(ctx context.Context, in *DeleteUserRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/DeleteUserRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) ListUserRoles(ctx context.Context, in *ListUserRolesRequest, opts ...grpc.CallOption) (*ListUserRolesResponse, error) {
+	out := new(ListUserRolesResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListUserRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,11 +154,17 @@ func (c *userApiServiceClient) Echo(ctx context.Context, in *EchoRequest, opts .
 // for forward compatibility
 type UserApiServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	GetUserBySession(context.Context, *emptypb.Empty) (*CreateUserResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
+	Login(context.Context, *LoginRequest) (*CreateUserResponse, error)
 	Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	SessionCheck(context.Context, *emptypb.Empty) (*SessionCheckResponse, error)
-	Echo(context.Context, *EchoRequest) (*EchoResponse, error)
+	CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error)
+	DeleteRole(context.Context, *DeleteRoleRequest) (*emptypb.Empty, error)
+	GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error)
+	ListRoles(context.Context, *emptypb.Empty) (*ListRolesResponse, error)
+	CreateUserRole(context.Context, *CreateUserRoleRequest) (*CreateUserRoleResponse, error)
+	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
+	DeleteUserRole(context.Context, *DeleteUserRoleRequest) (*emptypb.Empty, error)
+	ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error)
 	mustEmbedUnimplementedUserApiServiceServer()
 }
 
@@ -109,10 +175,7 @@ type UnimplementedUserApiServiceServer struct {
 func (UnimplementedUserApiServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedUserApiServiceServer) GetUserBySession(context.Context, *emptypb.Empty) (*CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUserBySession not implemented")
-}
-func (UnimplementedUserApiServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
+func (UnimplementedUserApiServiceServer) Login(context.Context, *LoginRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedUserApiServiceServer) Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
@@ -121,8 +184,29 @@ func (UnimplementedUserApiServiceServer) Logout(context.Context, *emptypb.Empty)
 func (UnimplementedUserApiServiceServer) SessionCheck(context.Context, *emptypb.Empty) (*SessionCheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SessionCheck not implemented")
 }
-func (UnimplementedUserApiServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
+func (UnimplementedUserApiServiceServer) CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) DeleteRole(context.Context, *DeleteRoleRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) ListRoles(context.Context, *emptypb.Empty) (*ListRolesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListRoles not implemented")
+}
+func (UnimplementedUserApiServiceServer) CreateUserRole(context.Context, *CreateUserRoleRequest) (*CreateUserRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUserRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) DeleteUserRole(context.Context, *DeleteUserRoleRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUserRoles not implemented")
 }
 func (UnimplementedUserApiServiceServer) mustEmbedUnimplementedUserApiServiceServer() {}
 
@@ -151,24 +235,6 @@ func _UserApiService_CreateUser_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserApiServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserApiService_GetUserBySession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserApiServiceServer).GetUserBySession(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/user.api.userApiService/GetUserBySession",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServiceServer).GetUserBySession(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -227,20 +293,146 @@ func _UserApiService_SessionCheck_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserApiService_Echo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EchoRequest)
+func _UserApiService_CreateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRoleRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserApiServiceServer).Echo(ctx, in)
+		return srv.(UserApiServiceServer).CreateRole(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.api.userApiService/Echo",
+		FullMethod: "/user.api.userApiService/CreateRole",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserApiServiceServer).Echo(ctx, req.(*EchoRequest))
+		return srv.(UserApiServiceServer).CreateRole(ctx, req.(*CreateRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_DeleteRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).DeleteRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/DeleteRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).DeleteRole(ctx, req.(*DeleteRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_GetRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).GetRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/GetRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).GetRole(ctx, req.(*GetRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListRoles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListRoles(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_CreateUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).CreateUserRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/CreateUserRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).CreateUserRole(ctx, req.(*CreateUserRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_GetUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).GetUserRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/GetUserRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).GetUserRole(ctx, req.(*GetUserRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_DeleteUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteUserRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).DeleteUserRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/DeleteUserRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).DeleteUserRole(ctx, req.(*DeleteUserRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListUserRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListUserRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListUserRoles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListUserRoles(ctx, req.(*ListUserRolesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -257,10 +449,6 @@ var UserApiService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserApiService_CreateUser_Handler,
 		},
 		{
-			MethodName: "GetUserBySession",
-			Handler:    _UserApiService_GetUserBySession_Handler,
-		},
-		{
 			MethodName: "Login",
 			Handler:    _UserApiService_Login_Handler,
 		},
@@ -273,8 +461,36 @@ var UserApiService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserApiService_SessionCheck_Handler,
 		},
 		{
-			MethodName: "Echo",
-			Handler:    _UserApiService_Echo_Handler,
+			MethodName: "CreateRole",
+			Handler:    _UserApiService_CreateRole_Handler,
+		},
+		{
+			MethodName: "DeleteRole",
+			Handler:    _UserApiService_DeleteRole_Handler,
+		},
+		{
+			MethodName: "GetRole",
+			Handler:    _UserApiService_GetRole_Handler,
+		},
+		{
+			MethodName: "ListRoles",
+			Handler:    _UserApiService_ListRoles_Handler,
+		},
+		{
+			MethodName: "CreateUserRole",
+			Handler:    _UserApiService_CreateUserRole_Handler,
+		},
+		{
+			MethodName: "GetUserRole",
+			Handler:    _UserApiService_GetUserRole_Handler,
+		},
+		{
+			MethodName: "DeleteUserRole",
+			Handler:    _UserApiService_DeleteUserRole_Handler,
+		},
+		{
+			MethodName: "ListUserRoles",
+			Handler:    _UserApiService_ListUserRoles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

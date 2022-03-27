@@ -4,9 +4,13 @@ import (
 	"context"
 	"github.com/alexeyzer/product-api/internal/pkg/datastruct"
 	desc "github.com/alexeyzer/product-api/pb/api/product/v1"
+	log "github.com/sirupsen/logrus"
 )
 
 func (s *ProductApiServiceServer) GetBrand(ctx context.Context, req *desc.GetBrandRequest) (*desc.GetBrandResponse, error) {
+	info, err := s.GetUserInfoFromContext(ctx)
+	log.Info("here:", info, err)
+
 	resp, err := s.brandService.GetBrand(ctx, req.GetId())
 	if err != nil {
 		return nil, err

@@ -45,12 +45,12 @@ func (s *sizeService) ListSizes(ctx context.Context) ([]*datastruct.Size, error)
 }
 
 func (s *sizeService) CreateSize(ctx context.Context, req datastruct.Size) (*datastruct.Size, error) {
-	_, err := s.dao.SizeQuery().Exists(ctx, req.Name)
+	exists, err := s.dao.SizeQuery().Exists(ctx, req.Name)
 	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, status.Errorf(codes.InvalidArgument, "size with name = %s already exist", req.Name)
-		}
 		return nil, err
+	}
+	if exists {
+		return nil, status.Errorf(codes.InvalidArgument, "size with name = %s already exist", req.Name)
 	}
 
 	_, err = s.dao.CategoryQuery().Get(ctx, req.CategoryID)

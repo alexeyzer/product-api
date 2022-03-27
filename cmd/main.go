@@ -2,13 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/alexeyzer/product-api/internal/client"
 	"github.com/alexeyzer/product-api/internal/pkg/service"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"net"
 	"net/http"
 	"time"
@@ -28,42 +26,30 @@ import (
 
 var userAPIClient client.UserAPIClient
 
-func authFunc(ctx context.Context) (context.Context, error) {
-	log.Info("Auth func")
-	if !config.Config.Auth.Working {
-		return ctx, nil
-	}
-	md, ok := metadata.FromIncomingContext(ctx)
-	if ok {
-		val := md.Get(config.Config.Auth.SessionKey)
-		if len(val) > 0 {
-			ctx := metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, val[0])
-			res, err := userAPIClient.SessionCheck(ctx)
-			if err != nil {
-				return nil, status.Error(codes.Unauthenticated, err.Error())
-			}
-			log.Info(res)
-		} else {
-			return nil, status.Error(codes.Unauthenticated, "SessionID doesn't exist")
-		}
-	} else {
-		return nil, status.Error(codes.Unauthenticated, "SessionID doesn't exist")
-	}
-	return ctx, nil
-}
-
 func serveSwagger(mux *http.ServeMux) {
 	prefix := "/swagger/"
 	sh := http.StripPrefix(prefix, http.FileServer(http.Dir("./swagger/")))
 	mux.Handle(prefix, sh)
 }
 
-// look up session and pass sessionId in to context if it exists
-func gatewayMetadataAnnotator(_ context.Context, r *http.Request) metadata.MD {
-	SessionID, ok := r.Cookie(config.Config.Auth.SessionKey)
+// look up session in cookie and pass sessionId in to context if it exists
+func gatewayMetadataAnnotator(ctx context.Context, r *http.Request) metadata.MD {
+	sessionID, ok := r.Cookie(config.Config.Auth.SessionKey)
 	if ok == nil {
-		log.Println(SessionID, ok)
-		return metadata.Pairs(config.Config.Auth.SessionKey, SessionID.Value)
+		md := metadata.Pairs(config.Config.Auth.SessionKey, sessionID.Value)
+		ctx = metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, sessionID.Value)
+		res, err := userAPIClient.SessionCheck(ctx)
+		if err != nil {
+			log.Info("failed to enrich metadata from user-api")
+		} else {
+			byte, err := json.Marshal(res)
+			if err != nil {
+				log.Info("failed to convert userinfo to byte")
+			}
+			md = metadata.Pairs(config.Config.Auth.UserInfoKey, string(byte))
+		}
+
+		return md
 	}
 	log.Println("No Cookie")
 	return metadata.Pairs()
@@ -92,7 +78,6 @@ func RunServer(ctx context.Context, productApiServiceServer *product_serivce.Pro
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 		grpc_logrus.UnaryServerInterceptor(log.WithContext(ctx).WithTime(time.Time{})),
 		grpc_validator.UnaryServerInterceptor(),
-		grpc_auth.UnaryServerInterceptor(authFunc),
 		grpc_prometheus.UnaryServerInterceptor),
 	))
 	gw.RegisterProductApiServiceServer(grpcServer, productApiServiceServer)

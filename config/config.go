@@ -8,9 +8,8 @@ import (
 
 type config struct {
 	Auth struct {
-		SessionKey string `yaml:"session_key"`
-		LogoutKey  string `yaml:"logout_key"`
-		Working    bool   `yaml:"working"`
+		UserInfoKey string `yaml:"user_info_key"`
+		SessionKey  string `yaml:"session_key"`
 	}
 	Database struct {
 		Dsn      string `yaml:"dsn"`
