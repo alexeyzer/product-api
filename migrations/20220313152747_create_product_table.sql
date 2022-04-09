@@ -6,7 +6,9 @@ CREATE TABLE product(
                       description TEXT,
                       url TEXT,
                       brand_id bigint not null,
-                      category_id bigint not null
+                      category_id bigint not null,
+                      price double precision not null,
+                      color string not null,
 );
 -- +goose StatementEnd
 

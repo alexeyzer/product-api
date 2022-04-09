@@ -7,6 +7,7 @@ type FullProduct struct {
 	Url         string
 	BrandID     int64
 	CategoryID  int64
-	Colors      []*Color
+	Price       float64
+	Color       string
 	Sizes       []*Size
 }

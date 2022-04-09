@@ -20,8 +20,6 @@ func (s *ProductApiServiceServer) finalProductToProtoGetFinalProductResponse(res
 		Id:        resp.ID,
 		ProductId: resp.ProductID,
 		SizeId:    resp.SizeID,
-		ColorId:   resp.ColorID,
-		Price:     resp.Price,
 		Sku:       resp.Sku,
 		Amount:    resp.Amount,
 	}

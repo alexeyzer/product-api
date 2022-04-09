@@ -5,9 +5,7 @@ CREATE TABLE final_product(
                       sku bigint not null,
                       product_id bigint not null,
                       size_id bigint not null,
-                      color_id bigint not null,
                       amount bigint not null,
-                      price bigint not null
 );
 -- +goose StatementEnd
 

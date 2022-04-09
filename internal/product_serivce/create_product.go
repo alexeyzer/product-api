@@ -23,6 +23,8 @@ func (s *ProductApiServiceServer) protoCreateProductRequestToProduct(req *desc.C
 		ContentType: req.GetContentType(),
 		BrandID:     req.GetBrandId(),
 		CategoryID:  req.GetCategoryId(),
+		Price:       req.GetPrice(),
+		Color:       req.GetColor(),
 	}
 }
 
@@ -31,8 +33,10 @@ func (s *ProductApiServiceServer) productToProtoCreateProductResponse(resp *data
 		Id:          resp.ID,
 		Name:        resp.Name,
 		Description: resp.Description,
+		Url:         resp.Url,
 		BrandId:     resp.BrandID,
 		CategoryId:  resp.CategoryID,
-		Url:         resp.Url,
+		Color:       resp.Color,
+		Price:       resp.Price,
 	}
 }

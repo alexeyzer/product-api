@@ -12,7 +12,7 @@ database:
   password: "password"
   ssl: "disable"
 s3:
-  bucket_name: "alexeyzer-static-files"
+  bucket_name: "wearel-photo"
   id: "id_secret"
   key: "key_secret"
   endpoint: "https://storage.yandexcloud.net"

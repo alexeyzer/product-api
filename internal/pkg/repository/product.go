@@ -80,6 +80,8 @@ func (q *productQuery) Create(ctx context.Context, req datastruct.Product) (*dat
 			"url",
 			"brand_id",
 			"category_id",
+			"price",
+			"color",
 		).
 		Values(
 			req.Name,
@@ -87,6 +89,8 @@ func (q *productQuery) Create(ctx context.Context, req datastruct.Product) (*dat
 			req.Url,
 			req.BrandID,
 			req.CategoryID,
+			req.Price,
+			req.Color,
 		).
 		Suffix("RETURNING *")
 	query, args, err := qb.ToSql()

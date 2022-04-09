@@ -22,14 +22,9 @@ func (s *ProductApiServiceServer) fullProductToProtoGetFullProductResponse(resp 
 		Url:         resp.Url,
 		BrandId:     resp.BrandID,
 		CategoryId:  resp.CategoryID,
+		Price:       resp.Price,
+		Color:       resp.Color,
 		Sizes:       make([]*desc.GetSizeResponse, 0, len(resp.Sizes)),
-		Colors:      make([]*desc.GetColorResponse, 0, len(resp.Colors)),
-	}
-	for _, item := range resp.Colors {
-		internalResp.Colors = append(internalResp.Colors, &desc.GetColorResponse{
-			Id:   item.ID,
-			Name: item.Name,
-		})
 	}
 	for _, item := range resp.Sizes {
 		internalResp.Sizes = append(internalResp.Sizes, &desc.GetSizeResponse{

@@ -77,21 +77,11 @@ func (s *finalProductService) CreateFinalProduct(ctx context.Context, req datast
 		return nil, err
 	}
 
-	_, err = s.dao.ColorQuery().Get(ctx, req.ColorID)
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, status.Errorf(codes.InvalidArgument, "color with id = %d doesnt exist", req.ColorID)
-		}
-		return nil, err
-	}
-
 	finalProduct := datastruct.FinalProduct{
 		ProductID: req.ProductID,
 		SizeID:    req.SizeID,
-		ColorID:   req.ColorID,
 		Amount:    req.Amount,
 		Sku:       req.Sku,
-		Price:     req.Price,
 	}
 	createdFinalProduct, err := s.dao.FinalProductQuery().Create(ctx, finalProduct)
 	if err != nil {

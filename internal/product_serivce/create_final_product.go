@@ -19,10 +19,8 @@ func (s *ProductApiServiceServer) protoCreateFinalProductRequestToFinalProduct(r
 	return datastruct.FinalProduct{
 		ProductID: req.GetProductId(),
 		SizeID:    req.GetSizeId(),
-		ColorID:   req.GetColorId(),
 		Amount:    req.GetAmount(),
 		Sku:       req.GetSku(),
-		Price:     req.GetPrice(),
 	}
 }
 
@@ -31,8 +29,6 @@ func (s *ProductApiServiceServer) finalProductToProtoCreateFinalProductResponse(
 		Id:        resp.ID,
 		ProductId: resp.ProductID,
 		SizeId:    resp.SizeID,
-		ColorId:   resp.ColorID,
-		Price:     resp.Price,
 		Sku:       resp.Sku,
 		Amount:    resp.Amount,
 	}

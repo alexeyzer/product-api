@@ -23,5 +23,7 @@ func (s *ProductApiServiceServer) productToProtoGetProductResponse(resp *datastr
 		Url:         resp.Url,
 		BrandId:     resp.BrandID,
 		CategoryId:  resp.CategoryID,
+		Color:       resp.Color,
+		Price:       resp.Price,
 	}
 }

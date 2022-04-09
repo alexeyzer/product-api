@@ -8,12 +8,6 @@ import "validate/validate.proto";
 import "google/protobuf/wrappers.proto";
 
 service ProductApiService {
-  rpc Echo(EchoRequest) returns (EchoResponse) {
-    option (google.api.http) = {
-      get: "/v1/echo"
-    };
-  };
-
   rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {
     option (google.api.http) = {
       post: "/v1/category"
@@ -68,31 +62,6 @@ service ProductApiService {
   rpc DeleteBrand(DeleteBrandRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/brand"
-    };
-  };
-
-  rpc CreateColor(CreateColorRequest) returns (CreateColorResponse) {
-    option (google.api.http) = {
-      post: "/v1/color"
-      body: "*"
-    };
-  };
-
-  rpc GetColor(GetColorRequest) returns (GetColorResponse) {
-    option (google.api.http) = {
-      get: "/v1/color"
-    };
-  };
-
-  rpc ListColors(google.protobuf.Empty) returns (ListColorsResponse) {
-    option (google.api.http) = {
-      get: "/v1/color/list"
-    };
-  };
-
-  rpc DeleteColor(DeleteColorRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
-      delete: "/v1/color"
     };
   };
 
@@ -190,8 +159,9 @@ message GetFullProductResponse {
   string url = 4;
   int64 brand_id = 5;
   int64 category_id = 6;
-  repeated GetSizeResponse sizes = 7;
-  repeated GetColorResponse colors = 8;
+  string color = 7;
+  double price = 8;
+  repeated GetSizeResponse sizes = 9;
 }
 
 message GetSizeRequest {
@@ -202,15 +172,6 @@ message GetSizeResponse {
   int64 id = 1;
   string name = 2;
   int64 category_id = 3;
-}
-
-message GetColorRequest {
-  int64 id = 1;
-}
-
-message GetColorResponse {
-  int64 id = 1;
-  string name = 2;
 }
 
 message ListFinalProductsRequest {
@@ -229,10 +190,8 @@ message GetFinalProductResponse {
   int64 id = 1;
   int64 product_id = 2;
   int64 size_id = 3;
-  int64 color_id = 4;
-  int64 price = 5;
-  int64 sku = 6;
-  int64 amount = 7;
+  int64 sku = 4;
+  int64 amount = 5;
 }
 
 message DeleteFinalProductRequest {
@@ -242,20 +201,17 @@ message DeleteFinalProductRequest {
 message CreateFinalProductRequest {
   int64 product_id = 1;
   int64 size_id = 2;
-  int64 color_id = 3;
-  int64 price = 4;
-  int64 sku = 5;
-  int64 amount = 6;
+  int64 price = 3;
+  int64 sku = 4;
+  int64 amount = 5;
 }
 
 message CreateFinalProductResponse {
   int64 id = 1;
   int64 product_id = 2;
   int64 size_id = 3;
-  int64 color_id = 4;
-  int64 price = 5;
-  int64 sku = 6;
-  int64 amount = 7;
+  int64 sku = 4;
+  int64 amount = 5;
 }
 
 message ListProductsRequest {
@@ -280,6 +236,8 @@ message GetProductResponse {
   string url = 4;
   int64 brand_id = 5;
   int64 category_id = 6;
+  string color = 7;
+  double price = 8;
 }
 
 message CreateProductRequest {
@@ -289,6 +247,8 @@ message CreateProductRequest {
   string contentType = 4;
   int64 brand_id = 5;
   int64 category_id = 6;
+  string color = 7;
+  double price = 8;
 }
 
 message CreateProductResponse {
@@ -298,6 +258,8 @@ message CreateProductResponse {
   string url = 4;
   int64 brand_id = 5;
   int64 category_id = 6;
+  string color = 7;
+  double price = 8;
 }
 
 
@@ -322,23 +284,6 @@ message CreateSizeResponse {
   int64 id = 1;
   string name = 2;
   int64 category_id = 3;
-}
-
-message DeleteColorRequest {
-  int64 id = 1;
-}
-
-message ListColorsResponse {
-  repeated CreateColorResponse colors = 1;
-}
-
-message CreateColorRequest {
-  string name = 1;
-}
-
-message CreateColorResponse {
-  int64 id = 1;
-  string name = 2;
 }
 
 message DeleteBrandRequest {
@@ -443,13 +388,4 @@ message CreateCategoryResponse {
   string name = 2;
   int64 level = 3;
   google.protobuf.Int64Value parent_id = 4;
-}
-
-
-message EchoRequest {
-  string message = 1;
-}
-
-message EchoResponse {
-  string message = 1;
 }

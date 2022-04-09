@@ -84,17 +84,13 @@ func (q *finalProductQuery) Create(ctx context.Context, req datastruct.FinalProd
 		Columns(
 			"product_id",
 			"size_id",
-			"color_id",
 			"amount",
-			"price",
 			"sku",
 		).
 		Values(
 			req.ProductID,
 			req.SizeID,
-			req.ColorID,
 			req.Amount,
-			req.Price,
 			req.Sku,
 		).
 		Suffix("RETURNING *")

@@ -15,7 +15,6 @@ import (
 type ProductApiServiceServer struct {
 	brandService        service.BrandService
 	categoryService     service.CategoryService
-	colorService        service.ColorService
 	sizeService         service.SizeService
 	productService      service.ProductService
 	finalProductService service.FinalProductService
@@ -42,7 +41,6 @@ func (s *ProductApiServiceServer) GetUserInfoFromContext(ctx context.Context) (*
 func NewProductApiServiceServer(
 	categoryService service.CategoryService,
 	brandService service.BrandService,
-	colorService service.ColorService,
 	sizeService service.SizeService,
 	productService service.ProductService,
 	finalProductService service.FinalProductService,
@@ -50,7 +48,6 @@ func NewProductApiServiceServer(
 	return &ProductApiServiceServer{
 		categoryService:     categoryService,
 		brandService:        brandService,
-		colorService:        colorService,
 		sizeService:         sizeService,
 		productService:      productService,
 		finalProductService: finalProductService,

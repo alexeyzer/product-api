@@ -33,10 +33,6 @@ func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastr
 	if err != nil {
 		return nil, err
 	}
-	colors, err := s.dao.ColorQuery().GetByProductID(ctx, ID)
-	if err != nil {
-		return nil, err
-	}
 
 	return &datastruct.FullProduct{
 		ID:          product.ID,
@@ -45,7 +41,8 @@ func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastr
 		Url:         product.Url,
 		BrandID:     0,
 		CategoryID:  0,
-		Colors:      colors,
+		Price:       product.Price,
+		Color:       product.Color,
 		Sizes:       sizes,
 	}, nil
 }
@@ -122,9 +119,11 @@ func (s *productService) CreateProduct(ctx context.Context, req datastruct.Creat
 		Description: req.Description,
 		BrandID:     req.BrandID,
 		CategoryID:  req.CategoryID,
+		Price:       req.Price,
+		Color:       req.Color,
 	}
 	if len(req.Image) > 0 && req.ContentType != "" {
-		res, err := s.s3.UploadFileD(ctx, uuid.New().String(), bytes.NewReader(req.Image), req.ContentType)
+		res, err := s.s3.UploadFileD(ctx, uuid.New().String()+req.ContentType, bytes.NewReader(req.Image), req.ContentType)
 		if err != nil {
 			return nil, err
 		}

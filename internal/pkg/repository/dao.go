@@ -11,7 +11,6 @@ import (
 type DAO interface {
 	CategoryQuery() CategoryQuery
 	BrandQuery() BrandQuery
-	ColorQuery() ColorQuery
 	SizeQuery() SizeQuery
 	MediaQuery() MediaQuery
 	ProductQuery() ProductQuery
@@ -22,7 +21,6 @@ type DAO interface {
 type dao struct {
 	brandQuery        BrandQuery
 	categoryQuery     CategoryQuery
-	colorQuery        ColorQuery
 	sizeQuery         SizeQuery
 	mediaQuery        MediaQuery
 	productQuery      ProductQuery
@@ -62,13 +60,6 @@ func (d *dao) BrandQuery() BrandQuery {
 		d.brandQuery = NewBrandQuery(d.db)
 	}
 	return d.brandQuery
-}
-
-func (d *dao) ColorQuery() ColorQuery {
-	if d.colorQuery == nil {
-		d.colorQuery = NewColorQuery(d.db)
-	}
-	return d.colorQuery
 }
 
 func (d *dao) CategoryQuery() CategoryQuery {

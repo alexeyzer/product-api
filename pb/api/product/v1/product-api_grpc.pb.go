@@ -19,7 +19,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductApiServiceClient interface {
-	Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error)
 	CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error)
 	DeleteCategory(ctx context.Context, in *DeleteCategoryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateCategory(ctx context.Context, in *UpdateCategoryRequest, opts ...grpc.CallOption) (*UpdateCategoryResponse, error)
@@ -29,10 +28,6 @@ type ProductApiServiceClient interface {
 	GetBrand(ctx context.Context, in *GetBrandRequest, opts ...grpc.CallOption) (*GetBrandResponse, error)
 	ListBrands(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBrandsResponse, error)
 	DeleteBrand(ctx context.Context, in *DeleteBrandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	CreateColor(ctx context.Context, in *CreateColorRequest, opts ...grpc.CallOption) (*CreateColorResponse, error)
-	GetColor(ctx context.Context, in *GetColorRequest, opts ...grpc.CallOption) (*GetColorResponse, error)
-	ListColors(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListColorsResponse, error)
-	DeleteColor(ctx context.Context, in *DeleteColorRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateSize(ctx context.Context, in *CreateSizeRequest, opts ...grpc.CallOption) (*CreateSizeResponse, error)
 	GetSize(ctx context.Context, in *GetSizeRequest, opts ...grpc.CallOption) (*GetSizeResponse, error)
 	ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error)
@@ -54,15 +49,6 @@ type productApiServiceClient struct {
 
 func NewProductApiServiceClient(cc grpc.ClientConnInterface) ProductApiServiceClient {
 	return &productApiServiceClient{cc}
-}
-
-func (c *productApiServiceClient) Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error) {
-	out := new(EchoResponse)
-	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/Echo", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *productApiServiceClient) CreateCategory(ctx context.Context, in *CreateCategoryRequest, opts ...grpc.CallOption) (*CreateCategoryResponse, error) {
@@ -140,42 +126,6 @@ func (c *productApiServiceClient) ListBrands(ctx context.Context, in *emptypb.Em
 func (c *productApiServiceClient) DeleteBrand(ctx context.Context, in *DeleteBrandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteBrand", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productApiServiceClient) CreateColor(ctx context.Context, in *CreateColorRequest, opts ...grpc.CallOption) (*CreateColorResponse, error) {
-	out := new(CreateColorResponse)
-	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/CreateColor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productApiServiceClient) GetColor(ctx context.Context, in *GetColorRequest, opts ...grpc.CallOption) (*GetColorResponse, error) {
-	out := new(GetColorResponse)
-	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetColor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productApiServiceClient) ListColors(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListColorsResponse, error) {
-	out := new(ListColorsResponse)
-	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListColors", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *productApiServiceClient) DeleteColor(ctx context.Context, in *DeleteColorRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteColor", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -303,7 +253,6 @@ func (c *productApiServiceClient) GetFullProduct(ctx context.Context, in *GetFul
 // All implementations must embed UnimplementedProductApiServiceServer
 // for forward compatibility
 type ProductApiServiceServer interface {
-	Echo(context.Context, *EchoRequest) (*EchoResponse, error)
 	CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error)
 	DeleteCategory(context.Context, *DeleteCategoryRequest) (*emptypb.Empty, error)
 	UpdateCategory(context.Context, *UpdateCategoryRequest) (*UpdateCategoryResponse, error)
@@ -313,10 +262,6 @@ type ProductApiServiceServer interface {
 	GetBrand(context.Context, *GetBrandRequest) (*GetBrandResponse, error)
 	ListBrands(context.Context, *emptypb.Empty) (*ListBrandsResponse, error)
 	DeleteBrand(context.Context, *DeleteBrandRequest) (*emptypb.Empty, error)
-	CreateColor(context.Context, *CreateColorRequest) (*CreateColorResponse, error)
-	GetColor(context.Context, *GetColorRequest) (*GetColorResponse, error)
-	ListColors(context.Context, *emptypb.Empty) (*ListColorsResponse, error)
-	DeleteColor(context.Context, *DeleteColorRequest) (*emptypb.Empty, error)
 	CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error)
 	GetSize(context.Context, *GetSizeRequest) (*GetSizeResponse, error)
 	ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error)
@@ -337,9 +282,6 @@ type ProductApiServiceServer interface {
 type UnimplementedProductApiServiceServer struct {
 }
 
-func (UnimplementedProductApiServiceServer) Echo(context.Context, *EchoRequest) (*EchoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
-}
 func (UnimplementedProductApiServiceServer) CreateCategory(context.Context, *CreateCategoryRequest) (*CreateCategoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
 }
@@ -366,18 +308,6 @@ func (UnimplementedProductApiServiceServer) ListBrands(context.Context, *emptypb
 }
 func (UnimplementedProductApiServiceServer) DeleteBrand(context.Context, *DeleteBrandRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBrand not implemented")
-}
-func (UnimplementedProductApiServiceServer) CreateColor(context.Context, *CreateColorRequest) (*CreateColorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateColor not implemented")
-}
-func (UnimplementedProductApiServiceServer) GetColor(context.Context, *GetColorRequest) (*GetColorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetColor not implemented")
-}
-func (UnimplementedProductApiServiceServer) ListColors(context.Context, *emptypb.Empty) (*ListColorsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListColors not implemented")
-}
-func (UnimplementedProductApiServiceServer) DeleteColor(context.Context, *DeleteColorRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteColor not implemented")
 }
 func (UnimplementedProductApiServiceServer) CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSize not implemented")
@@ -429,24 +359,6 @@ type UnsafeProductApiServiceServer interface {
 
 func RegisterProductApiServiceServer(s grpc.ServiceRegistrar, srv ProductApiServiceServer) {
 	s.RegisterService(&ProductApiService_ServiceDesc, srv)
-}
-
-func _ProductApiService_Echo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EchoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductApiServiceServer).Echo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/product.api.ProductApiService/Echo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductApiServiceServer).Echo(ctx, req.(*EchoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _ProductApiService_CreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -607,78 +519,6 @@ func _ProductApiService_DeleteBrand_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductApiServiceServer).DeleteBrand(ctx, req.(*DeleteBrandRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductApiService_CreateColor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateColorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductApiServiceServer).CreateColor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/product.api.ProductApiService/CreateColor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductApiServiceServer).CreateColor(ctx, req.(*CreateColorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductApiService_GetColor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetColorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductApiServiceServer).GetColor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/product.api.ProductApiService/GetColor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductApiServiceServer).GetColor(ctx, req.(*GetColorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductApiService_ListColors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductApiServiceServer).ListColors(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/product.api.ProductApiService/ListColors",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductApiServiceServer).ListColors(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ProductApiService_DeleteColor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteColorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProductApiServiceServer).DeleteColor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/product.api.ProductApiService/DeleteColor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProductApiServiceServer).DeleteColor(ctx, req.(*DeleteColorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -925,10 +765,6 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ProductApiServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Echo",
-			Handler:    _ProductApiService_Echo_Handler,
-		},
-		{
 			MethodName: "CreateCategory",
 			Handler:    _ProductApiService_CreateCategory_Handler,
 		},
@@ -963,22 +799,6 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteBrand",
 			Handler:    _ProductApiService_DeleteBrand_Handler,
-		},
-		{
-			MethodName: "CreateColor",
-			Handler:    _ProductApiService_CreateColor_Handler,
-		},
-		{
-			MethodName: "GetColor",
-			Handler:    _ProductApiService_GetColor_Handler,
-		},
-		{
-			MethodName: "ListColors",
-			Handler:    _ProductApiService_ListColors_Handler,
-		},
-		{
-			MethodName: "DeleteColor",
-			Handler:    _ProductApiService_DeleteColor_Handler,
 		},
 		{
 			MethodName: "CreateSize",
