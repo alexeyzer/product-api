@@ -171,6 +171,7 @@ message ListFullFinalProductsResponse {
     double price = 8;
     string size = 9;
     int64 amount = 10;
+    int64 sku = 11;
   }
 }
 

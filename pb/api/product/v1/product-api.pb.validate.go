@@ -4991,6 +4991,8 @@ func (m *ListFullFinalProductsResponse_FullFinalProduct) validate(all bool) erro
 
 	// no validation rules for Amount
 
+	// no validation rules for Sku
+
 	if len(errors) > 0 {
 		return ListFullFinalProductsResponse_FullFinalProductMultiError(errors)
 	}

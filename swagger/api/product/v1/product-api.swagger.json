@@ -797,6 +797,10 @@
         "amount": {
           "type": "string",
           "format": "int64"
+        },
+        "sku": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
