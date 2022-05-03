@@ -15,6 +15,7 @@ type FinalProductQuery interface {
 	Get(ctx context.Context, ID int64) (*datastruct.FinalProduct, error)
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context, productID int64) ([]*datastruct.FinalProduct, error)
+	ListFull(ctx context.Context, productIds []int64) ([]*datastruct.FullFinalProduct, error)
 	Exists(ctx context.Context, sku int64) (bool, error)
 	DeleteByProductID(ctx context.Context, productID int64) error
 }
@@ -77,6 +78,43 @@ func (q *finalProductQuery) List(ctx context.Context, productID int64) ([]*datas
 	}
 
 	return finalProduct, nil
+}
+
+func (q *finalProductQuery) ListFull(ctx context.Context, productIds []int64) ([]*datastruct.FullFinalProduct, error) {
+	qb := q.builder.
+		Select(
+			"fptn.id",
+			"fptn.amount",
+			"fptn.sku",
+			"ptn.name",
+			"ptn.description",
+			"ptn.url",
+			"btn.name as brand_name",
+			"ctn.name as category_name",
+			"ptn.price",
+			"ptn.color",
+			"stn.name as size_name",
+		).
+		From(datastruct.FinalProductTableName + " as fptn").
+		Where(squirrel.Eq{"fptn.id": productIds}).
+		LeftJoin(datastruct.ProductTableName + " as ptn on ptn.id = fptn.product_id").
+		LeftJoin(datastruct.SizeTableName + " as stn on stn.id = fptn.size_id").
+		LeftJoin(datastruct.BrandTableName + " as btn on btn.id = ptn.brand_id").
+		LeftJoin(datastruct.CategoryTableName + " as ctn on ctn.id = ptn.category_id")
+
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var fullFinalProduct []*datastruct.FullFinalProduct
+
+	err = q.db.SelectContext(ctx, &fullFinalProduct, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return fullFinalProduct, nil
 }
 
 func (q *finalProductQuery) Create(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error) {

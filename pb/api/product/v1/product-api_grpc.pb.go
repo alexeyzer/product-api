@@ -40,6 +40,7 @@ type ProductApiServiceClient interface {
 	DeleteFinalProduct(ctx context.Context, in *DeleteFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetFinalProduct(ctx context.Context, in *GetFinalProductRequest, opts ...grpc.CallOption) (*GetFinalProductResponse, error)
 	ListFinalProducts(ctx context.Context, in *ListFinalProductsRequest, opts ...grpc.CallOption) (*ListFinalProductsResponse, error)
+	ListFullFinalProducts(ctx context.Context, in *ListFullFinalProductsRequest, opts ...grpc.CallOption) (*ListFullFinalProductsResponse, error)
 	GetFullProduct(ctx context.Context, in *GetFullProductRequest, opts ...grpc.CallOption) (*GetFullProductResponse, error)
 }
 
@@ -240,6 +241,15 @@ func (c *productApiServiceClient) ListFinalProducts(ctx context.Context, in *Lis
 	return out, nil
 }
 
+func (c *productApiServiceClient) ListFullFinalProducts(ctx context.Context, in *ListFullFinalProductsRequest, opts ...grpc.CallOption) (*ListFullFinalProductsResponse, error) {
+	out := new(ListFullFinalProductsResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListFullFinalProducts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) GetFullProduct(ctx context.Context, in *GetFullProductRequest, opts ...grpc.CallOption) (*GetFullProductResponse, error) {
 	out := new(GetFullProductResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/GetFullProduct", in, out, opts...)
@@ -274,6 +284,7 @@ type ProductApiServiceServer interface {
 	DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error)
 	GetFinalProduct(context.Context, *GetFinalProductRequest) (*GetFinalProductResponse, error)
 	ListFinalProducts(context.Context, *ListFinalProductsRequest) (*ListFinalProductsResponse, error)
+	ListFullFinalProducts(context.Context, *ListFullFinalProductsRequest) (*ListFullFinalProductsResponse, error)
 	GetFullProduct(context.Context, *GetFullProductRequest) (*GetFullProductResponse, error)
 	mustEmbedUnimplementedProductApiServiceServer()
 }
@@ -344,6 +355,9 @@ func (UnimplementedProductApiServiceServer) GetFinalProduct(context.Context, *Ge
 }
 func (UnimplementedProductApiServiceServer) ListFinalProducts(context.Context, *ListFinalProductsRequest) (*ListFinalProductsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListFinalProducts not implemented")
+}
+func (UnimplementedProductApiServiceServer) ListFullFinalProducts(context.Context, *ListFullFinalProductsRequest) (*ListFullFinalProductsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListFullFinalProducts not implemented")
 }
 func (UnimplementedProductApiServiceServer) GetFullProduct(context.Context, *GetFullProductRequest) (*GetFullProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFullProduct not implemented")
@@ -739,6 +753,24 @@ func _ProductApiService_ListFinalProducts_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_ListFullFinalProducts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListFullFinalProductsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).ListFullFinalProducts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/ListFullFinalProducts",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).ListFullFinalProducts(ctx, req.(*ListFullFinalProductsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_GetFullProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFullProductRequest)
 	if err := dec(in); err != nil {
@@ -847,6 +879,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListFinalProducts",
 			Handler:    _ProductApiService_ListFinalProducts_Handler,
+		},
+		{
+			MethodName: "ListFullFinalProducts",
+			Handler:    _ProductApiService_ListFullFinalProducts_Handler,
 		},
 		{
 			MethodName: "GetFullProduct",

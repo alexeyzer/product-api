@@ -140,6 +140,12 @@ service ProductApiService {
     };
   };
 
+  rpc ListFullFinalProducts(ListFullFinalProductsRequest) returns (ListFullFinalProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/final-product/list/full"
+    };
+  };
+
   rpc GetFullProduct(GetFullProductRequest) returns (GetFullProductResponse) {
     option (google.api.http) = {
       get: "/v1/full-product"
@@ -147,6 +153,26 @@ service ProductApiService {
   };
 }
 
+message ListFullFinalProductsRequest {
+  repeated int64 ids = 1;
+}
+
+message ListFullFinalProductsResponse {
+  repeated FullFinalProduct products = 1;
+
+  message FullFinalProduct {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    string url = 4;
+    string brand_name = 5;
+    string category_name = 6;
+    string color = 7;
+    double price = 8;
+    string size = 9;
+    int64 amount = 10;
+  }
+}
 
 message GetFullProductRequest {
   int64 product_id = 1;

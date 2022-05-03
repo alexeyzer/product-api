@@ -15,6 +15,7 @@ type FinalProductService interface {
 	GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProduct, error)
 	DeleteFinalProduct(ctx context.Context, ID int64) error
 	ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProduct, error)
+	ListFullFinalProducts(ctx context.Context, finalProductIds []int64) ([]*datastruct.FullFinalProduct, error)
 }
 
 type finalProductService struct {
@@ -39,6 +40,15 @@ func (s *finalProductService) GetFinalProduct(ctx context.Context, ID int64) (*d
 
 func (s *finalProductService) ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProduct, error) {
 	products, err := s.dao.FinalProductQuery().List(ctx, productID)
+	if err != nil {
+		return nil, err
+	}
+
+	return products, nil
+}
+
+func (s *finalProductService) ListFullFinalProducts(ctx context.Context, finalProductIds []int64) ([]*datastruct.FullFinalProduct, error) {
+	products, err := s.dao.FinalProductQuery().ListFull(ctx, finalProductIds)
 	if err != nil {
 		return nil, err
 	}
@@ -96,5 +106,7 @@ func (s *finalProductService) CreateFinalProduct(ctx context.Context, req datast
 }
 
 func NewFinalProductService(dao repository.DAO) FinalProductService {
-	return &finalProductService{dao: dao}
+	return &finalProductService{
+		dao: dao,
+	}
 }

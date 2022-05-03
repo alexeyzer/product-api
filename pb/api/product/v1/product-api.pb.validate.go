@@ -35,6 +35,244 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on ListFullFinalProductsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListFullFinalProductsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListFullFinalProductsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListFullFinalProductsRequestMultiError, or nil if none found.
+func (m *ListFullFinalProductsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListFullFinalProductsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ListFullFinalProductsRequestMultiError(errors)
+	}
+	return nil
+}
+
+// ListFullFinalProductsRequestMultiError is an error wrapping multiple
+// validation errors returned by ListFullFinalProductsRequest.ValidateAll() if
+// the designated constraints aren't met.
+type ListFullFinalProductsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListFullFinalProductsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListFullFinalProductsRequestMultiError) AllErrors() []error { return m }
+
+// ListFullFinalProductsRequestValidationError is the validation error returned
+// by ListFullFinalProductsRequest.Validate if the designated constraints
+// aren't met.
+type ListFullFinalProductsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListFullFinalProductsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListFullFinalProductsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListFullFinalProductsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListFullFinalProductsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListFullFinalProductsRequestValidationError) ErrorName() string {
+	return "ListFullFinalProductsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListFullFinalProductsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListFullFinalProductsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListFullFinalProductsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListFullFinalProductsRequestValidationError{}
+
+// Validate checks the field values on ListFullFinalProductsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListFullFinalProductsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListFullFinalProductsResponse with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// ListFullFinalProductsResponseMultiError, or nil if none found.
+func (m *ListFullFinalProductsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListFullFinalProductsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetProducts() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListFullFinalProductsResponseValidationError{
+						field:  fmt.Sprintf("Products[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListFullFinalProductsResponseValidationError{
+						field:  fmt.Sprintf("Products[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListFullFinalProductsResponseValidationError{
+					field:  fmt.Sprintf("Products[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListFullFinalProductsResponseMultiError(errors)
+	}
+	return nil
+}
+
+// ListFullFinalProductsResponseMultiError is an error wrapping multiple
+// validation errors returned by ListFullFinalProductsResponse.ValidateAll()
+// if the designated constraints aren't met.
+type ListFullFinalProductsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListFullFinalProductsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListFullFinalProductsResponseMultiError) AllErrors() []error { return m }
+
+// ListFullFinalProductsResponseValidationError is the validation error
+// returned by ListFullFinalProductsResponse.Validate if the designated
+// constraints aren't met.
+type ListFullFinalProductsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListFullFinalProductsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListFullFinalProductsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListFullFinalProductsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListFullFinalProductsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListFullFinalProductsResponseValidationError) ErrorName() string {
+	return "ListFullFinalProductsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListFullFinalProductsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListFullFinalProductsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListFullFinalProductsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListFullFinalProductsResponseValidationError{}
+
 // Validate checks the field values on GetFullProductRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -4708,6 +4946,134 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateCategoryResponseValidationError{}
+
+// Validate checks the field values on
+// ListFullFinalProductsResponse_FullFinalProduct with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *ListFullFinalProductsResponse_FullFinalProduct) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// ListFullFinalProductsResponse_FullFinalProduct with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in
+// ListFullFinalProductsResponse_FullFinalProductMultiError, or nil if none found.
+func (m *ListFullFinalProductsResponse_FullFinalProduct) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListFullFinalProductsResponse_FullFinalProduct) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Description
+
+	// no validation rules for Url
+
+	// no validation rules for BrandName
+
+	// no validation rules for CategoryName
+
+	// no validation rules for Color
+
+	// no validation rules for Price
+
+	// no validation rules for Size
+
+	// no validation rules for Amount
+
+	if len(errors) > 0 {
+		return ListFullFinalProductsResponse_FullFinalProductMultiError(errors)
+	}
+	return nil
+}
+
+// ListFullFinalProductsResponse_FullFinalProductMultiError is an error
+// wrapping multiple validation errors returned by
+// ListFullFinalProductsResponse_FullFinalProduct.ValidateAll() if the
+// designated constraints aren't met.
+type ListFullFinalProductsResponse_FullFinalProductMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListFullFinalProductsResponse_FullFinalProductMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListFullFinalProductsResponse_FullFinalProductMultiError) AllErrors() []error { return m }
+
+// ListFullFinalProductsResponse_FullFinalProductValidationError is the
+// validation error returned by
+// ListFullFinalProductsResponse_FullFinalProduct.Validate if the designated
+// constraints aren't met.
+type ListFullFinalProductsResponse_FullFinalProductValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListFullFinalProductsResponse_FullFinalProductValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListFullFinalProductsResponse_FullFinalProductValidationError) Reason() string {
+	return e.reason
+}
+
+// Cause function returns cause value.
+func (e ListFullFinalProductsResponse_FullFinalProductValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListFullFinalProductsResponse_FullFinalProductValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListFullFinalProductsResponse_FullFinalProductValidationError) ErrorName() string {
+	return "ListFullFinalProductsResponse_FullFinalProductValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListFullFinalProductsResponse_FullFinalProductValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListFullFinalProductsResponse_FullFinalProduct.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListFullFinalProductsResponse_FullFinalProductValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListFullFinalProductsResponse_FullFinalProductValidationError{}
 
 // Validate checks the field values on ListBrandsResponse_BrandGroup with the
 // rules defined in the proto definition for this message. If any rules are

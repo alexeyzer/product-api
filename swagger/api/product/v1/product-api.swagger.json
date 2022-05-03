@@ -420,6 +420,41 @@
         ]
       }
     },
+    "/v1/final-product/list/full": {
+      "get": {
+        "operationId": "ProductApiService_ListFullFinalProducts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListFullFinalProductsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
     "/v1/full-product": {
       "get": {
         "operationId": "ProductApiService_GetFullProduct",
@@ -724,6 +759,44 @@
           "items": {
             "$ref": "#/definitions/apiGetBrandResponse"
           }
+        }
+      }
+    },
+    "ListFullFinalProductsResponseFullFinalProduct": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "brandName": {
+          "type": "string"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "size": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -1143,6 +1216,17 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/apiGetFinalProductResponse"
+          }
+        }
+      }
+    },
+    "apiListFullFinalProductsResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ListFullFinalProductsResponseFullFinalProduct"
           }
         }
       }
