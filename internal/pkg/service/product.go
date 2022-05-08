@@ -17,11 +17,25 @@ type ProductService interface {
 	GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error)
 	DeleteProduct(ctx context.Context, ID int64) error
 	ListProducts(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
+	ListProductsByPhoto(ctx context.Context, image []byte) ([]*datastruct.Product, error)
 }
 
 type productService struct {
-	dao repository.DAO
-	s3  client.S3Client
+	dao                repository.DAO
+	s3                 client.S3Client
+	recognizeAPIClient client.RecognizeAPIClient
+}
+
+func (s *productService) ListProductsByPhoto(ctx context.Context, image []byte) ([]*datastruct.Product, error) {
+	res, err := s.recognizeAPIClient.RecognizePhoto(ctx, image)
+	if err != nil {
+		return nil, err
+	}
+	products, err := s.dao.ProductQuery().ListByCategoryID(ctx, res)
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
 }
 
 func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error) {
@@ -141,6 +155,10 @@ func (s *productService) CreateProduct(ctx context.Context, req datastruct.Creat
 	return createdProduct, nil
 }
 
-func NewProductService(dao repository.DAO, s3 client.S3Client) ProductService {
-	return &productService{dao: dao, s3: s3}
+func NewProductService(dao repository.DAO, s3 client.S3Client, recognizeAPIClient client.RecognizeAPIClient) ProductService {
+	return &productService{
+		dao:                dao,
+		s3:                 s3,
+		recognizeAPIClient: recognizeAPIClient,
+	}
 }

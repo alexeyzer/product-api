@@ -115,6 +115,13 @@ service ProductApiService {
     };
   };
 
+  rpc ListProductsByPhoto(ListProductsByPhotoRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {
+      post: "/v1/product/list-by-photo"
+      body: "*"
+    };
+  };
+
   rpc CreateFinalProduct(CreateFinalProductRequest) returns (CreateFinalProductResponse) {
     option (google.api.http) = {
       post: "/v1/final-product"
@@ -151,6 +158,10 @@ service ProductApiService {
       get: "/v1/full-product"
     };
   };
+}
+
+message ListProductsByPhotoRequest {
+  bytes image = 1;
 }
 
 message ListFullFinalProductsRequest {

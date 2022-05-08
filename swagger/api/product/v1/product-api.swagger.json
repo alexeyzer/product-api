@@ -634,6 +634,38 @@
         ]
       }
     },
+    "/v1/product/list-by-photo": {
+      "post": {
+        "operationId": "ProductApiService_ListProductsByPhoto",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListProductsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiListProductsByPhotoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
     "/v1/size": {
       "get": {
         "operationId": "ProductApiService_GetSize",
@@ -1232,6 +1264,15 @@
           "items": {
             "$ref": "#/definitions/ListFullFinalProductsResponseFullFinalProduct"
           }
+        }
+      }
+    },
+    "apiListProductsByPhotoRequest": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string",
+          "format": "byte"
         }
       }
     },

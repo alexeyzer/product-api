@@ -25,7 +25,8 @@ type config struct {
 		GrpcPort string `yaml:"grpc_port"`
 	}
 	GRPC struct {
-		UserAPI string `yaml:"user_api"`
+		UserAPI      string `yaml:"user_api"`
+		RecognizeAPI string `yaml:"recognize_api"`
 	}
 	S3 struct {
 		BucketName string `yaml:"bucket_name"`

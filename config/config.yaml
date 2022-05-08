@@ -22,3 +22,4 @@ app:
   grpc_port: "8082"
 grpc:
   user_api: "62.84.114.46:8082"
+  recognize_api: "51.250.74.132:8082"

@@ -120,6 +120,11 @@ func main() {
 		log.Fatal("Failed to connect to userAPI: ", err)
 	}
 
+	recognizeApiClien, err := client.NewRecognizeApiClient(config.Config.GRPC.RecognizeAPI)
+	if err != nil {
+		log.Fatal("Failed to connect to recognizeAPI: ", err)
+	}
+
 	s3, err := client.NewS3Client(config.Config.S3.BucketName, config.Config.S3.ID, config.Config.S3.Key, config.Config.S3.Region, config.Config.S3.Endpoint)
 	if err != nil {
 		log.Fatal("Failed to connect to aws bucket: ", err)
@@ -134,7 +139,7 @@ func main() {
 	categoryService := service.NewCategoryService(dao)
 	sizeService := service.NewSizeService(dao)
 	_ = service.NewMediaService(dao, s3)
-	productService := service.NewProductService(dao, s3)
+	productService := service.NewProductService(dao, s3, recognizeApiClien)
 	finalProductService := service.NewFinalProductService(dao)
 
 	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService, brandService, sizeService, productService, finalProductService)

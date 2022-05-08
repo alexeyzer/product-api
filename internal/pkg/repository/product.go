@@ -15,12 +15,34 @@ type ProductQuery interface {
 	Get(ctx context.Context, ID int64) (*datastruct.Product, error)
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
+	ListByCategoryID(ctx context.Context, categoryID int64) ([]*datastruct.Product, error)
 	Exists(ctx context.Context, name string) (bool, error)
 }
 
 type productQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
+}
+
+func (q *productQuery) ListByCategoryID(ctx context.Context, categoryID int64) ([]*datastruct.Product, error) {
+	qb := q.builder.
+		Select("*").
+		From(datastruct.ProductTableName).
+		Where(squirrel.Eq{"category_id": categoryID})
+
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var products []*datastruct.Product
+
+	err = q.db.SelectContext(ctx, &products, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return products, nil
 }
 
 func (q *productQuery) Delete(ctx context.Context, ID int64) error {
