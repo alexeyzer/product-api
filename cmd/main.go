@@ -34,10 +34,11 @@ func serveSwagger(mux *http.ServeMux) {
 
 // look up session in cookie and pass sessionId in to context if it exists
 func gatewayMetadataAnnotator(ctx context.Context, r *http.Request) metadata.MD {
-	sessionID, ok := r.Cookie(config.Config.Auth.SessionKey)
-	if ok == nil {
-		md := metadata.Pairs(config.Config.Auth.SessionKey, sessionID.Value)
-		ctx = metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, sessionID.Value)
+	//sessionID, ok := r.Cookie(config.Config.Auth.SessionKey)
+	sessionID := r.Header.Get(config.Config.Auth.SessionKey)
+	if sessionID != "" {
+		md := metadata.Pairs(config.Config.Auth.SessionKey, sessionID)
+		ctx = metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, sessionID)
 		res, err := userAPIClient.SessionCheck(ctx)
 		if err != nil {
 			log.Info("failed to enrich metadata from user-api")
@@ -61,7 +62,7 @@ func corsMiddleware(h http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("origin"))
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, ResponseType")
+		w.Header().Set("Access-Control-Allow-Headers", "sessionid, Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, ResponseType")
 		if (*r).Method == "OPTIONS" {
 			return
 		}
@@ -101,7 +102,7 @@ func RunServer(ctx context.Context, productApiServiceServer *product_serivce.Pro
 		log.Fatal(err)
 	}()
 	log.Println("app started")
-	err = http.ListenAndServeTLS(":"+config.Config.App.HttpPort, "./keys/server.crt", "./keys/server.key", mux)
+	err = http.ListenAndServe(":"+config.Config.App.HttpPort, mux)
 	return err
 }
 
