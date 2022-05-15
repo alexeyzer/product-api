@@ -161,6 +161,12 @@
             "format": "int64"
           },
           {
+            "name": "page.isAll",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
             "name": "name",
             "in": "query",
             "required": false,
@@ -607,6 +613,12 @@
             "required": false,
             "type": "string",
             "format": "int64"
+          },
+          {
+            "name": "page.isAll",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
           },
           {
             "name": "name",
@@ -1308,6 +1320,9 @@
         "limit": {
           "type": "string",
           "format": "int64"
+        },
+        "isAll": {
+          "type": "boolean"
         }
       }
     },

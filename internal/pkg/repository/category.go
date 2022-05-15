@@ -29,9 +29,12 @@ type categoryQuery struct {
 func (q *categoryQuery) List(ctx context.Context, req datastruct.ListCategoryRequest) ([]datastruct.Category, error) {
 	qb := q.builder.
 		Select("*").
-		Offset(uint64(req.Offset)).
-		Limit(uint64(req.Limit)).
 		From(datastruct.CategoryTableName)
+
+	if !req.IsAll {
+		qb = qb.Offset(uint64(req.Offset)).
+			Limit(uint64(req.Limit))
+	}
 
 	if req.Name.Valid {
 		qb = qb.Where(squirrel.ILike{"name": "%" + strings.ToLower(req.Name.String) + "%"})

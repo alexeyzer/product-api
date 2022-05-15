@@ -35,6 +35,7 @@ func (s *categoryService) protoListCategoryToDatastruct(req *desc.ListCategoryRe
 	internalReq := datastruct.ListCategoryRequest{
 		Offset: req.Page.Limit * (req.Page.Number - 1),
 		Limit:  req.Page.Limit,
+		IsAll:  req.Page.IsAll,
 	}
 	if req.Name != nil {
 		internalReq.Name = sql.NullString{String: req.Name.Value, Valid: true}

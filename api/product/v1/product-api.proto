@@ -383,6 +383,7 @@ message ListCategoryRequest {
 message Page {
   int64 number = 1;
   int64 limit = 2;
+  bool is_all = 3;
 }
 
 message GetCategoryResponse {

@@ -4090,6 +4090,8 @@ func (m *Page) validate(all bool) error {
 
 	// no validation rules for Limit
 
+	// no validation rules for IsAll
+
 	if len(errors) > 0 {
 		return PageMultiError(errors)
 	}

@@ -14,6 +14,7 @@ type Category struct {
 type ListCategoryRequest struct {
 	Offset int64
 	Limit  int64
+	IsAll  bool
 	Level  sql.NullInt64
 	Name   sql.NullString
 }
