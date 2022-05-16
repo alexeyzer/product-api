@@ -26,11 +26,14 @@ type ProductApiServiceClient interface {
 	ListCategory(ctx context.Context, in *ListCategoryRequest, opts ...grpc.CallOption) (*ListCategoryResponse, error)
 	CreateBrand(ctx context.Context, in *CreateBrandRequest, opts ...grpc.CallOption) (*CreateBrandResponse, error)
 	GetBrand(ctx context.Context, in *GetBrandRequest, opts ...grpc.CallOption) (*GetBrandResponse, error)
+	ListBrandsGrouped(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBrandsGroupedResponse, error)
 	ListBrands(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBrandsResponse, error)
 	DeleteBrand(ctx context.Context, in *DeleteBrandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateBrand(ctx context.Context, in *UpdateBrandRequest, opts ...grpc.CallOption) (*UpdateBrandResponse, error)
 	CreateSize(ctx context.Context, in *CreateSizeRequest, opts ...grpc.CallOption) (*CreateSizeResponse, error)
 	GetSize(ctx context.Context, in *GetSizeRequest, opts ...grpc.CallOption) (*GetSizeResponse, error)
 	ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error)
+	UpdateSize(ctx context.Context, in *UpdateSizeRequest, opts ...grpc.CallOption) (*UpdateSizeResponse, error)
 	DeleteSize(ctx context.Context, in *DeleteSizeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
 	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -116,6 +119,15 @@ func (c *productApiServiceClient) GetBrand(ctx context.Context, in *GetBrandRequ
 	return out, nil
 }
 
+func (c *productApiServiceClient) ListBrandsGrouped(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBrandsGroupedResponse, error) {
+	out := new(ListBrandsGroupedResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListBrandsGrouped", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) ListBrands(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListBrandsResponse, error) {
 	out := new(ListBrandsResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListBrands", in, out, opts...)
@@ -128,6 +140,15 @@ func (c *productApiServiceClient) ListBrands(ctx context.Context, in *emptypb.Em
 func (c *productApiServiceClient) DeleteBrand(ctx context.Context, in *DeleteBrandRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteBrand", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) UpdateBrand(ctx context.Context, in *UpdateBrandRequest, opts ...grpc.CallOption) (*UpdateBrandResponse, error) {
+	out := new(UpdateBrandResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/UpdateBrand", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -155,6 +176,15 @@ func (c *productApiServiceClient) GetSize(ctx context.Context, in *GetSizeReques
 func (c *productApiServiceClient) ListSizes(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListSizesResponse, error) {
 	out := new(ListSizesResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListSizes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) UpdateSize(ctx context.Context, in *UpdateSizeRequest, opts ...grpc.CallOption) (*UpdateSizeResponse, error) {
+	out := new(UpdateSizeResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/UpdateSize", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -280,11 +310,14 @@ type ProductApiServiceServer interface {
 	ListCategory(context.Context, *ListCategoryRequest) (*ListCategoryResponse, error)
 	CreateBrand(context.Context, *CreateBrandRequest) (*CreateBrandResponse, error)
 	GetBrand(context.Context, *GetBrandRequest) (*GetBrandResponse, error)
+	ListBrandsGrouped(context.Context, *emptypb.Empty) (*ListBrandsGroupedResponse, error)
 	ListBrands(context.Context, *emptypb.Empty) (*ListBrandsResponse, error)
 	DeleteBrand(context.Context, *DeleteBrandRequest) (*emptypb.Empty, error)
+	UpdateBrand(context.Context, *UpdateBrandRequest) (*UpdateBrandResponse, error)
 	CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error)
 	GetSize(context.Context, *GetSizeRequest) (*GetSizeResponse, error)
 	ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error)
+	UpdateSize(context.Context, *UpdateSizeRequest) (*UpdateSizeResponse, error)
 	DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error)
 	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
 	DeleteProduct(context.Context, *DeleteProductRequest) (*emptypb.Empty, error)
@@ -325,11 +358,17 @@ func (UnimplementedProductApiServiceServer) CreateBrand(context.Context, *Create
 func (UnimplementedProductApiServiceServer) GetBrand(context.Context, *GetBrandRequest) (*GetBrandResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetBrand not implemented")
 }
+func (UnimplementedProductApiServiceServer) ListBrandsGrouped(context.Context, *emptypb.Empty) (*ListBrandsGroupedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListBrandsGrouped not implemented")
+}
 func (UnimplementedProductApiServiceServer) ListBrands(context.Context, *emptypb.Empty) (*ListBrandsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListBrands not implemented")
 }
 func (UnimplementedProductApiServiceServer) DeleteBrand(context.Context, *DeleteBrandRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBrand not implemented")
+}
+func (UnimplementedProductApiServiceServer) UpdateBrand(context.Context, *UpdateBrandRequest) (*UpdateBrandResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateBrand not implemented")
 }
 func (UnimplementedProductApiServiceServer) CreateSize(context.Context, *CreateSizeRequest) (*CreateSizeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSize not implemented")
@@ -339,6 +378,9 @@ func (UnimplementedProductApiServiceServer) GetSize(context.Context, *GetSizeReq
 }
 func (UnimplementedProductApiServiceServer) ListSizes(context.Context, *emptypb.Empty) (*ListSizesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListSizes not implemented")
+}
+func (UnimplementedProductApiServiceServer) UpdateSize(context.Context, *UpdateSizeRequest) (*UpdateSizeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSize not implemented")
 }
 func (UnimplementedProductApiServiceServer) DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSize not implemented")
@@ -515,6 +557,24 @@ func _ProductApiService_GetBrand_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_ListBrandsGrouped_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).ListBrandsGrouped(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/ListBrandsGrouped",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).ListBrandsGrouped(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_ListBrands_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -547,6 +607,24 @@ func _ProductApiService_DeleteBrand_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductApiServiceServer).DeleteBrand(ctx, req.(*DeleteBrandRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_UpdateBrand_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBrandRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).UpdateBrand(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/UpdateBrand",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).UpdateBrand(ctx, req.(*UpdateBrandRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -601,6 +679,24 @@ func _ProductApiService_ListSizes_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductApiServiceServer).ListSizes(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_UpdateSize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).UpdateSize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/UpdateSize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).UpdateSize(ctx, req.(*UpdateSizeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -857,12 +953,20 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductApiService_GetBrand_Handler,
 		},
 		{
+			MethodName: "ListBrandsGrouped",
+			Handler:    _ProductApiService_ListBrandsGrouped_Handler,
+		},
+		{
 			MethodName: "ListBrands",
 			Handler:    _ProductApiService_ListBrands_Handler,
 		},
 		{
 			MethodName: "DeleteBrand",
 			Handler:    _ProductApiService_DeleteBrand_Handler,
+		},
+		{
+			MethodName: "UpdateBrand",
+			Handler:    _ProductApiService_UpdateBrand_Handler,
 		},
 		{
 			MethodName: "CreateSize",
@@ -875,6 +979,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListSizes",
 			Handler:    _ProductApiService_ListSizes_Handler,
+		},
+		{
+			MethodName: "UpdateSize",
+			Handler:    _ProductApiService_UpdateSize_Handler,
 		},
 		{
 			MethodName: "DeleteSize",

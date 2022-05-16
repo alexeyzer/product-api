@@ -53,6 +53,12 @@ service ProductApiService {
     };
   };
 
+  rpc ListBrandsGrouped(google.protobuf.Empty) returns (ListBrandsGroupedResponse) {
+    option (google.api.http) = {
+      get: "/v1/brand/list/grouped"
+    };
+  };
+
   rpc ListBrands(google.protobuf.Empty) returns (ListBrandsResponse) {
     option (google.api.http) = {
       get: "/v1/brand/list"
@@ -62,6 +68,13 @@ service ProductApiService {
   rpc DeleteBrand(DeleteBrandRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/brand"
+    };
+  };
+
+  rpc UpdateBrand(UpdateBrandRequest) returns (UpdateBrandResponse) {
+    option (google.api.http) = {
+      put: "/v1/brand"
+      body: "*"
     };
   };
 
@@ -81,6 +94,13 @@ service ProductApiService {
   rpc ListSizes(google.protobuf.Empty) returns (ListSizesResponse) {
     option (google.api.http) = {
       get: "/v1/size/list"
+    };
+  };
+
+  rpc UpdateSize(UpdateSizeRequest) returns (UpdateSizeResponse) {
+    option (google.api.http) = {
+      put: "/v1/size"
+      body: "*"
     };
   };
 
@@ -158,6 +178,33 @@ service ProductApiService {
       get: "/v1/full-product"
     };
   };
+}
+
+message UpdateBrandRequest {
+  int64 id = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue description = 3;
+  google.protobuf.BytesValue file = 4;
+  google.protobuf.StringValue file_extension = 5;
+}
+
+message UpdateBrandResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  string image_url = 4;
+}
+
+message UpdateSizeRequest {
+  int64 id = 1;
+  string name = 2;
+  int64 category_id = 3;
+}
+
+message UpdateSizeResponse {
+  int64 id = 1;
+  string name = 2;
+  int64 category_id = 3;
 }
 
 message ListProductsByPhotoRequest {
@@ -310,7 +357,13 @@ message DeleteSizeRequest {
 }
 
 message ListSizesResponse {
-  repeated CreateSizeResponse sizes = 1;
+  repeated Size sizes = 1;
+
+  message Size {
+    int64 id = 1;
+    string name = 2;
+    string category_name = 3;
+  }
 }
 
 message CreateSizeRequest {
@@ -329,6 +382,10 @@ message DeleteBrandRequest {
 }
 
 message ListBrandsResponse {
+  repeated GetBrandResponse brands = 1;
+}
+
+message ListBrandsGroupedResponse {
   repeated  BrandGroup brand_groups = 1;
 
   message BrandGroup {

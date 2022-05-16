@@ -104,6 +104,36 @@
         "tags": [
           "ProductApiService"
         ]
+      },
+      "put": {
+        "operationId": "ProductApiService_UpdateBrand",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUpdateBrandResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateBrandRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
       }
     },
     "/v1/brand/list": {
@@ -114,6 +144,28 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/apiListBrandsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
+    "/v1/brand/list/grouped": {
+      "get": {
+        "operationId": "ProductApiService_ListBrandsGrouped",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListBrandsGroupedResponse"
             }
           },
           "default": {
@@ -766,6 +818,36 @@
         "tags": [
           "ProductApiService"
         ]
+      },
+      "put": {
+        "operationId": "ProductApiService_UpdateSize",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUpdateSizeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateSizeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
       }
     },
     "/v1/size/list": {
@@ -792,7 +874,7 @@
     }
   },
   "definitions": {
-    "ListBrandsResponseBrandGroup": {
+    "ListBrandsGroupedResponseBrandGroup": {
       "type": "object",
       "properties": {
         "groupName": {
@@ -845,6 +927,21 @@
         "sku": {
           "type": "string",
           "format": "int64"
+        }
+      }
+    },
+    "ListSizesResponseSize": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "categoryName": {
+          "type": "string"
         }
       }
     },
@@ -1235,13 +1332,24 @@
         }
       }
     },
-    "apiListBrandsResponse": {
+    "apiListBrandsGroupedResponse": {
       "type": "object",
       "properties": {
         "brandGroups": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ListBrandsResponseBrandGroup"
+            "$ref": "#/definitions/ListBrandsGroupedResponseBrandGroup"
+          }
+        }
+      }
+    },
+    "apiListBrandsResponse": {
+      "type": "object",
+      "properties": {
+        "brands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/apiGetBrandResponse"
           }
         }
       }
@@ -1305,7 +1413,7 @@
         "sizes": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiCreateSizeResponse"
+            "$ref": "#/definitions/ListSizesResponseSize"
           }
         }
       }
@@ -1323,6 +1431,46 @@
         },
         "isAll": {
           "type": "boolean"
+        }
+      }
+    },
+    "apiUpdateBrandRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string",
+          "format": "byte"
+        },
+        "fileExtension": {
+          "type": "string"
+        }
+      }
+    },
+    "apiUpdateBrandResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
         }
       }
     },
@@ -1361,6 +1509,38 @@
           "format": "int64"
         },
         "parentId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiUpdateSizeRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiUpdateSizeResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "categoryId": {
           "type": "string",
           "format": "int64"
         }

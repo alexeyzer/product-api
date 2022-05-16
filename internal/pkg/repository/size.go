@@ -15,13 +15,35 @@ type SizeQuery interface {
 	Get(ctx context.Context, ID int64) (*datastruct.Size, error)
 	GetByProductID(ctx context.Context, productID int64) ([]*datastruct.Size, error)
 	Delete(ctx context.Context, ID int64) error
-	List(ctx context.Context) ([]*datastruct.Size, error)
+	List(ctx context.Context) ([]*datastruct.SizeWithCategoryName, error)
 	Exists(ctx context.Context, name string) (bool, error)
+	Update(ctx context.Context, req datastruct.Size) (*datastruct.Size, error)
 }
 
 type sizeQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
+}
+
+func (q *sizeQuery) Update(ctx context.Context, req datastruct.Size) (*datastruct.Size, error) {
+	qb := q.builder.Update(datastruct.SizeTableName).
+		Set("name", req.Name).
+		Set("category_id", req.CategoryID).
+		Where(squirrel.Eq{"id": req.ID}).
+		Suffix("RETURNING *")
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var size datastruct.Size
+
+	err = q.db.GetContext(ctx, &size, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &size, nil
 }
 
 func (q *sizeQuery) GetByProductID(ctx context.Context, productID int64) ([]*datastruct.Size, error) {
@@ -66,17 +88,18 @@ func (q *sizeQuery) Delete(ctx context.Context, ID int64) error {
 	return nil
 }
 
-func (q *sizeQuery) List(ctx context.Context) ([]*datastruct.Size, error) {
+func (q *sizeQuery) List(ctx context.Context) ([]*datastruct.SizeWithCategoryName, error) {
 	qb := q.builder.
-		Select("*").
-		From(datastruct.SizeTableName).
-		OrderBy("name")
+		Select("stn.id", "stn.name", "ctn.name as category_name").
+		From(datastruct.SizeTableName + " as stn").
+		OrderBy("category_id").
+		LeftJoin(datastruct.CategoryTableName + " as ctn on ctn.id = stn.category_id")
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return nil, err
 	}
 
-	var sizes []*datastruct.Size
+	var sizes []*datastruct.SizeWithCategoryName
 
 	err = q.db.SelectContext(ctx, &sizes, query, args...)
 	if err != nil {

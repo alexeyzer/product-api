@@ -14,13 +14,44 @@ type BrandQuery interface {
 	Create(ctx context.Context, req datastruct.Brand) (*datastruct.Brand, error)
 	Get(ctx context.Context, ID int64) (*datastruct.Brand, error)
 	Delete(ctx context.Context, ID int64) error
-	List(ctx context.Context) ([]*datastruct.Brand, error)
+	Update(ctx context.Context, req datastruct.UpdateBrand) (*datastruct.Brand, error)
+	List(ctx context.Context, byName bool) ([]*datastruct.Brand, error)
 	Exists(ctx context.Context, name string) (bool, error)
 }
 
 type brandQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
+}
+
+func (q *brandQuery) Update(ctx context.Context, req datastruct.UpdateBrand) (*datastruct.Brand, error) {
+	qb := q.builder.Update(datastruct.BrandTableName).
+		Where(squirrel.Eq{"id": req.ID}).
+		Suffix("RETURNING *")
+
+	if req.Name.Valid {
+		qb = qb.Set("name", req.Name.String)
+	}
+	if req.Description.Valid {
+		qb = qb.Set("description", req.Description.String)
+	}
+	if req.Url.Valid {
+		qb = qb.Set("url", req.Url.String)
+	}
+
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var brand datastruct.Brand
+
+	err = q.db.GetContext(ctx, &brand, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &brand, nil
 }
 
 func (q *brandQuery) Delete(ctx context.Context, ID int64) error {
@@ -40,11 +71,13 @@ func (q *brandQuery) Delete(ctx context.Context, ID int64) error {
 	return nil
 }
 
-func (q *brandQuery) List(ctx context.Context) ([]*datastruct.Brand, error) {
+func (q *brandQuery) List(ctx context.Context, byName bool) ([]*datastruct.Brand, error) {
 	qb := q.builder.
 		Select("*").
-		From(datastruct.BrandTableName).
-		OrderBy("name")
+		From(datastruct.BrandTableName)
+	if byName {
+		qb = qb.OrderBy("name")
+	}
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return nil, err

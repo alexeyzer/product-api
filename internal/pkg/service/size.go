@@ -12,11 +12,25 @@ type SizeService interface {
 	CreateSize(ctx context.Context, req datastruct.Size) (*datastruct.Size, error)
 	GetSize(ctx context.Context, ID int64) (*datastruct.Size, error)
 	DeleteSize(ctx context.Context, ID int64) error
-	ListSizes(ctx context.Context) ([]*datastruct.Size, error)
+	UpdateSize(ctx context.Context, req datastruct.Size) (*datastruct.Size, error)
+	ListSizes(ctx context.Context) ([]*datastruct.SizeWithCategoryName, error)
 }
 
 type sizeService struct {
 	dao repository.DAO
+}
+
+func (s *sizeService) UpdateSize(ctx context.Context, req datastruct.Size) (*datastruct.Size, error) {
+	_, err := s.dao.SizeQuery().Get(ctx, req.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	size, err := s.dao.SizeQuery().Update(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return size, nil
 }
 
 func (s *sizeService) DeleteSize(ctx context.Context, ID int64) error {
@@ -35,7 +49,7 @@ func (s *sizeService) GetSize(ctx context.Context, ID int64) (*datastruct.Size, 
 	return size, nil
 }
 
-func (s *sizeService) ListSizes(ctx context.Context) ([]*datastruct.Size, error) {
+func (s *sizeService) ListSizes(ctx context.Context) ([]*datastruct.SizeWithCategoryName, error) {
 	sizes, err := s.dao.SizeQuery().List(ctx)
 	if err != nil {
 		return nil, err

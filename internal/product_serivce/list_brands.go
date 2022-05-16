@@ -3,8 +3,9 @@ package product_serivce
 import (
 	"context"
 	"github.com/alexeyzer/product-api/internal/pkg/datastruct"
-	desc "github.com/alexeyzer/product-api/pb/api/product/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
+
+	desc "github.com/alexeyzer/product-api/pb/api/product/v1"
 )
 
 func (s *ProductApiServiceServer) ListBrands(ctx context.Context, _ *emptypb.Empty) (*desc.ListBrandsResponse, error) {
@@ -12,21 +13,15 @@ func (s *ProductApiServiceServer) ListBrands(ctx context.Context, _ *emptypb.Emp
 	if err != nil {
 		return nil, err
 	}
-	return s.brandGroupToProtoListBrandsResponse(resp), nil
+	return s.brandsToProtoListBrandsResponse(resp), nil
 }
-func (s *ProductApiServiceServer) brandGroupToProtoListBrandsResponse(resp []*datastruct.BrandGroup) *desc.ListBrandsResponse {
-	result := &desc.ListBrandsResponse{
-		BrandGroups: make([]*desc.ListBrandsResponse_BrandGroup, 0, len(resp)),
+
+func (s *ProductApiServiceServer) brandsToProtoListBrandsResponse(brands []*datastruct.Brand) *desc.ListBrandsResponse {
+	resp := &desc.ListBrandsResponse{
+		Brands: make([]*desc.GetBrandResponse, 0, len(brands)),
 	}
-	for _, item := range resp {
-		group := &desc.ListBrandsResponse_BrandGroup{
-			GroupName: item.GroupName,
-			Brands:    make([]*desc.GetBrandResponse, 0, len(item.Brands)),
-		}
-		for _, brand := range item.Brands {
-			group.Brands = append(group.Brands, s.brandToProtoGetBrandResponse(brand))
-		}
-		result.BrandGroups = append(result.BrandGroups, group)
+	for _, brand := range brands {
+		resp.Brands = append(resp.Brands, s.brandToProtoGetBrandResponse(brand))
 	}
-	return result
+	return resp
 }

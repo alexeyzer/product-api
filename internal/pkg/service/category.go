@@ -86,6 +86,7 @@ func (s *categoryService) UpdateCategory(ctx context.Context, req *desc.UpdateCa
 
 func (s *categoryService) serviceUpdateReqToDaoCategory(req *desc.UpdateCategoryRequest) datastruct.Category {
 	internalCategory := datastruct.Category{
+		ID:    req.Id,
 		Name:  req.Name,
 		Level: req.Level,
 	}
