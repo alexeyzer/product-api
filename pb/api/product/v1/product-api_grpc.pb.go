@@ -36,11 +36,13 @@ type ProductApiServiceClient interface {
 	UpdateSize(ctx context.Context, in *UpdateSizeRequest, opts ...grpc.CallOption) (*UpdateSizeResponse, error)
 	DeleteSize(ctx context.Context, in *DeleteSizeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
+	UpdateProduct(ctx context.Context, in *UpdateProductRequest, opts ...grpc.CallOption) (*UpdateProductResponse, error)
 	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetProduct(ctx context.Context, in *GetProductRequest, opts ...grpc.CallOption) (*GetProductResponse, error)
 	ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	ListProductsByPhoto(ctx context.Context, in *ListProductsByPhotoRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	CreateFinalProduct(ctx context.Context, in *CreateFinalProductRequest, opts ...grpc.CallOption) (*CreateFinalProductResponse, error)
+	UpdateFinalProduct(ctx context.Context, in *UpdateFinalProductRequest, opts ...grpc.CallOption) (*UpdateFinalProductResponse, error)
 	DeleteFinalProduct(ctx context.Context, in *DeleteFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetFinalProduct(ctx context.Context, in *GetFinalProductRequest, opts ...grpc.CallOption) (*GetFinalProductResponse, error)
 	ListFinalProducts(ctx context.Context, in *ListFinalProductsRequest, opts ...grpc.CallOption) (*ListFinalProductsResponse, error)
@@ -209,6 +211,15 @@ func (c *productApiServiceClient) CreateProduct(ctx context.Context, in *CreateP
 	return out, nil
 }
 
+func (c *productApiServiceClient) UpdateProduct(ctx context.Context, in *UpdateProductRequest, opts ...grpc.CallOption) (*UpdateProductResponse, error) {
+	out := new(UpdateProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/UpdateProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteProduct", in, out, opts...)
@@ -248,6 +259,15 @@ func (c *productApiServiceClient) ListProductsByPhoto(ctx context.Context, in *L
 func (c *productApiServiceClient) CreateFinalProduct(ctx context.Context, in *CreateFinalProductRequest, opts ...grpc.CallOption) (*CreateFinalProductResponse, error) {
 	out := new(CreateFinalProductResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/CreateFinalProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productApiServiceClient) UpdateFinalProduct(ctx context.Context, in *UpdateFinalProductRequest, opts ...grpc.CallOption) (*UpdateFinalProductResponse, error) {
+	out := new(UpdateFinalProductResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/UpdateFinalProduct", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -320,11 +340,13 @@ type ProductApiServiceServer interface {
 	UpdateSize(context.Context, *UpdateSizeRequest) (*UpdateSizeResponse, error)
 	DeleteSize(context.Context, *DeleteSizeRequest) (*emptypb.Empty, error)
 	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
+	UpdateProduct(context.Context, *UpdateProductRequest) (*UpdateProductResponse, error)
 	DeleteProduct(context.Context, *DeleteProductRequest) (*emptypb.Empty, error)
 	GetProduct(context.Context, *GetProductRequest) (*GetProductResponse, error)
 	ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error)
 	ListProductsByPhoto(context.Context, *ListProductsByPhotoRequest) (*ListProductsResponse, error)
 	CreateFinalProduct(context.Context, *CreateFinalProductRequest) (*CreateFinalProductResponse, error)
+	UpdateFinalProduct(context.Context, *UpdateFinalProductRequest) (*UpdateFinalProductResponse, error)
 	DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error)
 	GetFinalProduct(context.Context, *GetFinalProductRequest) (*GetFinalProductResponse, error)
 	ListFinalProducts(context.Context, *ListFinalProductsRequest) (*ListFinalProductsResponse, error)
@@ -388,6 +410,9 @@ func (UnimplementedProductApiServiceServer) DeleteSize(context.Context, *DeleteS
 func (UnimplementedProductApiServiceServer) CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProduct not implemented")
 }
+func (UnimplementedProductApiServiceServer) UpdateProduct(context.Context, *UpdateProductRequest) (*UpdateProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProduct not implemented")
+}
 func (UnimplementedProductApiServiceServer) DeleteProduct(context.Context, *DeleteProductRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProduct not implemented")
 }
@@ -402,6 +427,9 @@ func (UnimplementedProductApiServiceServer) ListProductsByPhoto(context.Context,
 }
 func (UnimplementedProductApiServiceServer) CreateFinalProduct(context.Context, *CreateFinalProductRequest) (*CreateFinalProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateFinalProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) UpdateFinalProduct(context.Context, *UpdateFinalProductRequest) (*UpdateFinalProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateFinalProduct not implemented")
 }
 func (UnimplementedProductApiServiceServer) DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFinalProduct not implemented")
@@ -737,6 +765,24 @@ func _ProductApiService_CreateProduct_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_UpdateProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).UpdateProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/UpdateProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).UpdateProduct(ctx, req.(*UpdateProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_DeleteProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteProductRequest)
 	if err := dec(in); err != nil {
@@ -823,6 +869,24 @@ func _ProductApiService_CreateFinalProduct_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductApiServiceServer).CreateFinalProduct(ctx, req.(*CreateFinalProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductApiService_UpdateFinalProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateFinalProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).UpdateFinalProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/UpdateFinalProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).UpdateFinalProduct(ctx, req.(*UpdateFinalProductRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -993,6 +1057,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ProductApiService_CreateProduct_Handler,
 		},
 		{
+			MethodName: "UpdateProduct",
+			Handler:    _ProductApiService_UpdateProduct_Handler,
+		},
+		{
 			MethodName: "DeleteProduct",
 			Handler:    _ProductApiService_DeleteProduct_Handler,
 		},
@@ -1011,6 +1079,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateFinalProduct",
 			Handler:    _ProductApiService_CreateFinalProduct_Handler,
+		},
+		{
+			MethodName: "UpdateFinalProduct",
+			Handler:    _ProductApiService_UpdateFinalProduct_Handler,
 		},
 		{
 			MethodName: "DeleteFinalProduct",

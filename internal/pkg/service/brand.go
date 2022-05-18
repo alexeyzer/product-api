@@ -17,7 +17,7 @@ import (
 
 type BrandService interface {
 	CreateBrand(ctx context.Context, req datastruct.Brand, image []byte, contentType string) (*datastruct.Brand, error)
-	UpdateBrand(ctx context.Context, req datastruct.UpdateBrand, image []byte, contentType string) (*datastruct.Brand, error)
+	UpdateBrand(ctx context.Context, req datastruct.UpdateBrand, image []byte, contentType string, deletePhoto bool) (*datastruct.Brand, error)
 	GetBrand(ctx context.Context, ID int64) (*datastruct.Brand, error)
 	DeleteBrand(ctx context.Context, ID int64) error
 	ListBrands(ctx context.Context) ([]*datastruct.Brand, error)
@@ -29,7 +29,7 @@ type brandService struct {
 	s3  client.S3Client
 }
 
-func (s *brandService) UpdateBrand(ctx context.Context, req datastruct.UpdateBrand, image []byte, contentType string) (*datastruct.Brand, error) {
+func (s *brandService) UpdateBrand(ctx context.Context, req datastruct.UpdateBrand, image []byte, contentType string, deletePhoto bool) (*datastruct.Brand, error) {
 	_, err := s.dao.BrandQuery().Get(ctx, req.ID)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (s *brandService) UpdateBrand(ctx context.Context, req datastruct.UpdateBra
 			return nil, err
 		}
 		req.Url = sql.NullString{String: res.Location, Valid: true}
-	} else {
+	} else if deletePhoto {
 		req.Url = sql.NullString{String: "", Valid: true}
 	}
 	res, err := s.dao.BrandQuery().Update(ctx, req)

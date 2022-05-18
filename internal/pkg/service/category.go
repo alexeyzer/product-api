@@ -55,7 +55,7 @@ func (s *categoryService) GetCategoryByID(ctx context.Context, ID int64) (*datas
 }
 
 func (s *categoryService) CreateCategory(ctx context.Context, req *desc.CreateCategoryRequest) (*datastruct.Category, error) {
-	exists, err := s.dao.CategoryQuery().Exists(ctx, req.Name)
+	exists, err := s.dao.CategoryQuery().Exists(ctx, req.Name, req.ParentId.GetValue())
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,17 @@ import "database/sql"
 
 const ProductTableName = "product"
 
+type UpdateProduct struct {
+	ID          int64          `db:"id"`
+	Name        string         `db:"name"`
+	Description string         `db:"description"`
+	Url         sql.NullString `db:"url"`
+	BrandID     int64          `db:"brand_id"`
+	CategoryID  int64          `db:"category_id"`
+	Price       float64        `db:"price"`
+	Color       string         `db:"color"`
+}
+
 type Product struct {
 	ID          int64   `db:"id"`
 	Name        string  `db:"name"`
@@ -29,6 +40,7 @@ type CreateProduct struct {
 type ListProductRequest struct {
 	Offset     int64
 	Limit      int64
+	IsAll      bool
 	CategoryID sql.NullInt64
 	BrandID    sql.NullInt64
 	Name       string

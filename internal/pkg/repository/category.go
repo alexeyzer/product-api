@@ -18,7 +18,7 @@ type CategoryQuery interface {
 	List(ctx context.Context, req datastruct.ListCategoryRequest) ([]datastruct.Category, error)
 	Delete(ctx context.Context, ID int64) error
 	Get(ctx context.Context, ID int64) (*datastruct.Category, error)
-	Exists(ctx context.Context, name string) (bool, error)
+	Exists(ctx context.Context, name string, parentID int64) (bool, error)
 }
 
 type categoryQuery struct {
@@ -29,7 +29,8 @@ type categoryQuery struct {
 func (q *categoryQuery) List(ctx context.Context, req datastruct.ListCategoryRequest) ([]datastruct.Category, error) {
 	qb := q.builder.
 		Select("*").
-		From(datastruct.CategoryTableName)
+		From(datastruct.CategoryTableName).
+		OrderBy("level ASC, parent_id ASC")
 
 	if !req.IsAll {
 		qb = qb.Offset(uint64(req.Offset)).
@@ -149,11 +150,11 @@ func (q *categoryQuery) Get(ctx context.Context, ID int64) (*datastruct.Category
 	return &category, nil
 }
 
-func (q *categoryQuery) Exists(ctx context.Context, name string) (bool, error) {
+func (q *categoryQuery) Exists(ctx context.Context, name string, parentID int64) (bool, error) {
 	qb := q.builder.
 		Select("*").
 		From(datastruct.CategoryTableName).
-		Where(squirrel.Eq{"name": name})
+		Where(squirrel.And{squirrel.Eq{"name": name}, squirrel.Eq{"parent_id": parentID}})
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return false, err

@@ -12,6 +12,7 @@ import (
 
 type ProductQuery interface {
 	Create(ctx context.Context, req datastruct.Product) (*datastruct.Product, error)
+	Update(ctx context.Context, req datastruct.UpdateProduct) (*datastruct.Product, error)
 	Get(ctx context.Context, ID int64) (*datastruct.Product, error)
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
@@ -22,6 +23,35 @@ type ProductQuery interface {
 type productQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
+}
+
+func (q *productQuery) Update(ctx context.Context, req datastruct.UpdateProduct) (*datastruct.Product, error) {
+	qb := q.builder.Update(datastruct.ProductTableName).
+		Set("name", req.Name).
+		Set("description", req.Description).
+		Set("color", req.Color).
+		Set("price", req.Price).
+		Set("category_id", req.CategoryID).
+		Set("brand_id", req.BrandID).
+		Where(squirrel.Eq{"id": req.ID}).
+		Suffix("RETURNING *")
+
+	if req.Url.Valid {
+		qb = qb.Set("url", req.Url.String)
+	}
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var product datastruct.Product
+
+	err = q.db.GetContext(ctx, &product, query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &product, nil
 }
 
 func (q *productQuery) ListByCategoryID(ctx context.Context, categoryID int64) ([]*datastruct.Product, error) {
@@ -65,9 +95,12 @@ func (q *productQuery) Delete(ctx context.Context, ID int64) error {
 func (q *productQuery) List(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error) {
 	qb := q.builder.
 		Select("*").
-		From(datastruct.ProductTableName).
-		Offset(uint64(req.Offset)).
-		Limit(uint64(req.Limit))
+		From(datastruct.ProductTableName)
+
+	if !req.IsAll {
+		qb = qb.Offset(uint64(req.Offset)).
+			Limit(uint64(req.Limit))
+	}
 
 	if req.Name != "" {
 		qb = qb.Where(squirrel.ILike{"name": "%" + req.Name + "%"})

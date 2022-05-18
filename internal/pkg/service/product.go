@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"github.com/alexeyzer/product-api/internal/client"
 	"github.com/alexeyzer/product-api/internal/pkg/datastruct"
 	"github.com/alexeyzer/product-api/internal/pkg/repository"
@@ -13,6 +14,7 @@ import (
 
 type ProductService interface {
 	CreateProduct(ctx context.Context, req datastruct.CreateProduct) (*datastruct.Product, error)
+	UpdateProduct(ctx context.Context, req datastruct.UpdateProduct, image []byte, contentType string, deletePhoto bool) (*datastruct.Product, error)
 	GetProduct(ctx context.Context, ID int64) (*datastruct.Product, error)
 	GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error)
 	DeleteProduct(ctx context.Context, ID int64) error
@@ -36,6 +38,50 @@ func (s *productService) ListProductsByPhoto(ctx context.Context, image []byte) 
 		return nil, err
 	}
 	return products, nil
+}
+
+func (s *productService) UpdateProduct(ctx context.Context, req datastruct.UpdateProduct, image []byte, contentType string, deletePhoto bool) (*datastruct.Product, error) {
+	_, err := s.dao.ProductQuery().Get(ctx, req.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.dao.BrandQuery().Get(ctx, req.BrandID)
+	if err != nil {
+		if status.Code(err) == codes.NotFound {
+			return nil, status.Errorf(codes.InvalidArgument, "brand with ID = % doesn`t exist", req.BrandID)
+		}
+		return nil, err
+	}
+	_, err = s.dao.CategoryQuery().Get(ctx, req.CategoryID)
+	if err != nil {
+		if status.Code(err) == codes.NotFound {
+			return nil, status.Errorf(codes.InvalidArgument, "category with ID = % doesn`t exist", req.CategoryID)
+		}
+		return nil, err
+	}
+
+	if len(image) > 0 && contentType != "" {
+		res, err := s.s3.UploadFileD(ctx, uuid.New().String()+contentType, bytes.NewReader(image), contentType)
+		if err != nil {
+			return nil, err
+		}
+		req.Url = sql.NullString{
+			String: res.Location,
+			Valid:  true,
+		}
+	} else if deletePhoto {
+		req.Url = sql.NullString{
+			String: "",
+			Valid:  true,
+		}
+	}
+
+	resp, err := s.dao.ProductQuery().Update(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error) {

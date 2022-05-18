@@ -14,7 +14,7 @@ func (s *ProductApiServiceServer) ListFinalProducts(ctx context.Context, req *de
 	return s.productsToProtoListFinalProductsResponse(resp), nil
 }
 
-func (s *ProductApiServiceServer) productsToProtoListFinalProductsResponse(resp []*datastruct.FinalProduct) *desc.ListFinalProductsResponse {
+func (s *ProductApiServiceServer) productsToProtoListFinalProductsResponse(resp []*datastruct.FinalProductWithSizeName) *desc.ListFinalProductsResponse {
 	internalResp := &desc.ListFinalProductsResponse{
 		Products: make([]*desc.GetFinalProductResponse, 0, len(resp)),
 	}

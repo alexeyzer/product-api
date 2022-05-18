@@ -15,11 +15,12 @@ func (s *ProductApiServiceServer) GetFinalProduct(ctx context.Context, req *desc
 	return s.finalProductToProtoGetFinalProductResponse(resp), nil
 }
 
-func (s *ProductApiServiceServer) finalProductToProtoGetFinalProductResponse(resp *datastruct.FinalProduct) *desc.GetFinalProductResponse {
+func (s *ProductApiServiceServer) finalProductToProtoGetFinalProductResponse(resp *datastruct.FinalProductWithSizeName) *desc.GetFinalProductResponse {
 	return &desc.GetFinalProductResponse{
 		Id:        resp.ID,
 		ProductId: resp.ProductID,
 		SizeId:    resp.SizeID,
+		SizeName:  resp.SizeName,
 		Sku:       resp.Sku,
 		Amount:    resp.Amount,
 	}

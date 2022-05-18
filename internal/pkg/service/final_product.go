@@ -12,14 +12,28 @@ import (
 
 type FinalProductService interface {
 	CreateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
-	GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProduct, error)
+	UpdateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
+	GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProductWithSizeName, error)
 	DeleteFinalProduct(ctx context.Context, ID int64) error
-	ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProduct, error)
+	ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProductWithSizeName, error)
 	ListFullFinalProducts(ctx context.Context, finalProductIds []int64) ([]*datastruct.FullFinalProduct, error)
 }
 
 type finalProductService struct {
 	dao repository.DAO
+}
+
+func (s *finalProductService) UpdateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error) {
+	_, err := s.dao.FinalProductQuery().Get(ctx, req.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.dao.FinalProductQuery().Update(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (s *finalProductService) DeleteFinalProduct(ctx context.Context, ID int64) error {
@@ -30,7 +44,7 @@ func (s *finalProductService) DeleteFinalProduct(ctx context.Context, ID int64) 
 	return nil
 }
 
-func (s *finalProductService) GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProduct, error) {
+func (s *finalProductService) GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProductWithSizeName, error) {
 	product, err := s.dao.FinalProductQuery().Get(ctx, ID)
 	if err != nil {
 		return nil, err
@@ -38,7 +52,7 @@ func (s *finalProductService) GetFinalProduct(ctx context.Context, ID int64) (*d
 	return product, nil
 }
 
-func (s *finalProductService) ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProduct, error) {
+func (s *finalProductService) ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProductWithSizeName, error) {
 	products, err := s.dao.FinalProductQuery().List(ctx, productID)
 	if err != nil {
 		return nil, err

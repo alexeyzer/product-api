@@ -15,9 +15,9 @@ func (s *ProductApiServiceServer) UpdateBrand(ctx context.Context, req *desc.Upd
 		internalReq.Name = sql.NullString{String: req.GetName().GetValue(), Valid: true}
 	}
 	if req.GetDescription() != nil {
-		internalReq.Name = sql.NullString{String: req.GetName().GetValue(), Valid: true}
+		internalReq.Description = sql.NullString{String: req.GetDescription().GetValue(), Valid: true}
 	}
-	res, err := s.brandService.UpdateBrand(ctx, internalReq, req.GetFile().GetValue(), req.GetDescription().GetValue())
+	res, err := s.brandService.UpdateBrand(ctx, internalReq, req.GetFile().GetValue(), req.GetFileExtension().GetValue(), req.GetDeletePhoto())
 	if err != nil {
 		return nil, err
 	}

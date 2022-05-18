@@ -19,6 +19,7 @@ func (s *ProductApiServiceServer) listProductsRequestToListRequest(req *desc.Lis
 	internalReq := datastruct.ListProductRequest{
 		Offset: req.GetPage().GetLimit() * (req.GetPage().GetNumber() - 1),
 		Limit:  req.GetPage().GetLimit(),
+		IsAll:  req.GetPage().GetIsAll(),
 		Name:   req.GetName(),
 	}
 	if req.BrandId != nil {

@@ -445,6 +445,36 @@
         "tags": [
           "ProductApiService"
         ]
+      },
+      "put": {
+        "operationId": "ProductApiService_UpdateFinalProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUpdateFinalProductResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateFinalProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
       }
     },
     "/v1/final-product/list": {
@@ -626,6 +656,36 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/apiCreateProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      },
+      "put": {
+        "operationId": "ProductApiService_UpdateProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiUpdateProductResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiUpdateProductRequest"
             }
           }
         ],
@@ -1241,6 +1301,9 @@
         "amount": {
           "type": "string",
           "format": "int64"
+        },
+        "sizeName": {
+          "type": "string"
         }
       }
     },
@@ -1453,6 +1516,9 @@
         },
         "fileExtension": {
           "type": "string"
+        },
+        "deletePhoto": {
+          "type": "boolean"
         }
       }
     },
@@ -1511,6 +1577,125 @@
         "parentId": {
           "type": "string",
           "format": "int64"
+        }
+      }
+    },
+    "apiUpdateFinalProductRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sizeId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sku": {
+          "type": "string",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiUpdateFinalProductResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "productId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sizeId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sku": {
+          "type": "string",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiUpdateProductRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string",
+          "format": "byte"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "brandId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "color": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "deletePhoto": {
+          "type": "boolean"
+        }
+      }
+    },
+    "apiUpdateProductResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "brandId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "categoryId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "color": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
