@@ -84,6 +84,7 @@ func RunServer(ctx context.Context, productApiServiceServer *product_serivce.Pro
 	))
 	gw.RegisterProductApiServiceServer(grpcServer, productApiServiceServer)
 	grpc_prometheus.Register(grpcServer)
+	grpc_prometheus.EnableHandlingTimeHistogram()
 
 	mux := http.NewServeMux()
 	gwmux := runtime.NewServeMux(runtime.WithMetadata(gatewayMetadataAnnotator))
