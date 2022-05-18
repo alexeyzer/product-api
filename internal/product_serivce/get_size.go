@@ -17,8 +17,7 @@ func (s *ProductApiServiceServer) GetSize(ctx context.Context, req *desc.GetSize
 
 func (s *ProductApiServiceServer) sizeToProtoGetSizeResponse(resp *datastruct.Size) *desc.GetSizeResponse {
 	return &desc.GetSizeResponse{
-		Id:         resp.ID,
-		Name:       resp.Name,
-		CategoryId: resp.CategoryID,
+		Id:   resp.ID,
+		Name: resp.Name,
 	}
 }

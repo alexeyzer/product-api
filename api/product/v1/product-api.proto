@@ -252,13 +252,11 @@ message UpdateBrandResponse {
 message UpdateSizeRequest {
   int64 id = 1;
   string name = 2;
-  int64 category_id = 3;
 }
 
 message UpdateSizeResponse {
   int64 id = 1;
   string name = 2;
-  int64 category_id = 3;
 }
 
 message ListProductsByPhotoRequest {
@@ -310,7 +308,6 @@ message GetSizeRequest {
 message GetSizeResponse {
   int64 id = 1;
   string name = 2;
-  int64 category_id = 3;
 }
 
 message ListFinalProductsRequest {
@@ -417,19 +414,16 @@ message ListSizesResponse {
   message Size {
     int64 id = 1;
     string name = 2;
-    string category_name = 3;
   }
 }
 
 message CreateSizeRequest {
   string name = 1;
-  int64 category_id = 2;
 }
 
 message CreateSizeResponse {
   int64 id = 1;
   string name = 2;
-  int64 category_id = 3;
 }
 
 message DeleteBrandRequest {

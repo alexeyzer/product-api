@@ -16,15 +16,13 @@ func (s *ProductApiServiceServer) CreateSize(ctx context.Context, req *desc.Crea
 
 func (s *ProductApiServiceServer) protoCreateSizeRequestToSize(req *desc.CreateSizeRequest) datastruct.Size {
 	return datastruct.Size{
-		Name:       req.GetName(),
-		CategoryID: req.GetCategoryId(),
+		Name: req.GetName(),
 	}
 }
 
 func (s *ProductApiServiceServer) sizeToProtoCreateSizeResponse(resp *datastruct.Size) *desc.CreateSizeResponse {
 	return &desc.CreateSizeResponse{
-		Id:         resp.ID,
-		Name:       resp.Name,
-		CategoryId: resp.CategoryID,
+		Id:   resp.ID,
+		Name: resp.Name,
 	}
 }

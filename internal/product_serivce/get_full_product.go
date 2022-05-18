@@ -28,9 +28,8 @@ func (s *ProductApiServiceServer) fullProductToProtoGetFullProductResponse(resp 
 	}
 	for _, item := range resp.Sizes {
 		internalResp.Sizes = append(internalResp.Sizes, &desc.GetSizeResponse{
-			Id:         item.ID,
-			Name:       item.Name,
-			CategoryId: item.CategoryID,
+			Id:   item.ID,
+			Name: item.Name,
 		})
 	}
 	return internalResp

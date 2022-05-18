@@ -999,9 +999,6 @@
         },
         "name": {
           "type": "string"
-        },
-        "categoryName": {
-          "type": "string"
         }
       }
     },
@@ -1218,10 +1215,6 @@
       "properties": {
         "name": {
           "type": "string"
-        },
-        "categoryId": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -1234,10 +1227,6 @@
         },
         "name": {
           "type": "string"
-        },
-        "categoryId": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -1388,10 +1377,6 @@
         },
         "name": {
           "type": "string"
-        },
-        "categoryId": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -1708,10 +1693,6 @@
         },
         "name": {
           "type": "string"
-        },
-        "categoryId": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -1724,10 +1705,6 @@
         },
         "name": {
           "type": "string"
-        },
-        "categoryId": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },

@@ -15,15 +15,14 @@ func (s *ProductApiServiceServer) ListSizes(ctx context.Context, _ *emptypb.Empt
 	return s.sizesToProtoListSizesResponse(resp), nil
 }
 
-func (s *ProductApiServiceServer) sizesToProtoListSizesResponse(resp []*datastruct.SizeWithCategoryName) *desc.ListSizesResponse {
+func (s *ProductApiServiceServer) sizesToProtoListSizesResponse(resp []*datastruct.Size) *desc.ListSizesResponse {
 	internalResp := &desc.ListSizesResponse{
 		Sizes: make([]*desc.ListSizesResponse_Size, 0, len(resp)),
 	}
 	for _, item := range resp {
 		internalResp.Sizes = append(internalResp.Sizes, &desc.ListSizesResponse_Size{
-			Id:           item.ID,
-			Name:         item.Name,
-			CategoryName: item.CategoryName,
+			Id:   item.ID,
+			Name: item.Name,
 		})
 	}
 	return internalResp

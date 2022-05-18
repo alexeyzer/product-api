@@ -13,7 +13,7 @@ type SizeService interface {
 	GetSize(ctx context.Context, ID int64) (*datastruct.Size, error)
 	DeleteSize(ctx context.Context, ID int64) error
 	UpdateSize(ctx context.Context, req datastruct.Size) (*datastruct.Size, error)
-	ListSizes(ctx context.Context) ([]*datastruct.SizeWithCategoryName, error)
+	ListSizes(ctx context.Context) ([]*datastruct.Size, error)
 }
 
 type sizeService struct {
@@ -49,7 +49,7 @@ func (s *sizeService) GetSize(ctx context.Context, ID int64) (*datastruct.Size, 
 	return size, nil
 }
 
-func (s *sizeService) ListSizes(ctx context.Context) ([]*datastruct.SizeWithCategoryName, error) {
+func (s *sizeService) ListSizes(ctx context.Context) ([]*datastruct.Size, error) {
 	sizes, err := s.dao.SizeQuery().List(ctx)
 	if err != nil {
 		return nil, err
@@ -65,14 +65,6 @@ func (s *sizeService) CreateSize(ctx context.Context, req datastruct.Size) (*dat
 	}
 	if exists {
 		return nil, status.Errorf(codes.InvalidArgument, "size with name = %s already exist", req.Name)
-	}
-
-	_, err = s.dao.CategoryQuery().Get(ctx, req.CategoryID)
-	if err != nil {
-		if status.Code(err) == codes.NotFound {
-			return nil, status.Errorf(codes.InvalidArgument, "category with id = %d doesn`t exist", req.CategoryID)
-		}
-		return nil, err
 	}
 
 	res, err := s.dao.SizeQuery().Create(ctx, req)

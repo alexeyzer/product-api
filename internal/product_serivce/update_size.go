@@ -9,16 +9,14 @@ import (
 
 func (s *ProductApiServiceServer) UpdateSize(ctx context.Context, req *desc.UpdateSizeRequest) (*desc.UpdateSizeResponse, error) {
 	res, err := s.sizeService.UpdateSize(ctx, datastruct.Size{
-		ID:         req.GetId(),
-		Name:       req.GetName(),
-		CategoryID: req.GetCategoryId(),
+		ID:   req.GetId(),
+		Name: req.GetName(),
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &desc.UpdateSizeResponse{
-		Id:         res.ID,
-		Name:       res.Name,
-		CategoryId: res.CategoryID,
+		Id:   res.ID,
+		Name: res.Name,
 	}, nil
 }

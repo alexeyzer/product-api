@@ -849,8 +849,6 @@ func (m *UpdateSizeRequest) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for CategoryId
-
 	if len(errors) > 0 {
 		return UpdateSizeRequestMultiError(errors)
 	}
@@ -955,8 +953,6 @@ func (m *UpdateSizeResponse) validate(all bool) error {
 	// no validation rules for Id
 
 	// no validation rules for Name
-
-	// no validation rules for CategoryId
 
 	if len(errors) > 0 {
 		return UpdateSizeResponseMultiError(errors)
@@ -1758,8 +1754,6 @@ func (m *GetSizeResponse) validate(all bool) error {
 	// no validation rules for Id
 
 	// no validation rules for Name
-
-	// no validation rules for CategoryId
 
 	if len(errors) > 0 {
 		return GetSizeResponseMultiError(errors)
@@ -3761,8 +3755,6 @@ func (m *CreateSizeRequest) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for CategoryId
-
 	if len(errors) > 0 {
 		return CreateSizeRequestMultiError(errors)
 	}
@@ -3867,8 +3859,6 @@ func (m *CreateSizeResponse) validate(all bool) error {
 	// no validation rules for Id
 
 	// no validation rules for Name
-
-	// no validation rules for CategoryId
 
 	if len(errors) > 0 {
 		return CreateSizeResponseMultiError(errors)
@@ -6346,8 +6336,6 @@ func (m *ListSizesResponse_Size) validate(all bool) error {
 	// no validation rules for Id
 
 	// no validation rules for Name
-
-	// no validation rules for CategoryName
 
 	if len(errors) > 0 {
 		return ListSizesResponse_SizeMultiError(errors)
