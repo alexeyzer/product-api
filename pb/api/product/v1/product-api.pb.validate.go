@@ -1507,9 +1507,9 @@ func (m *GetFullProductResponse) validate(all bool) error {
 
 	// no validation rules for Url
 
-	// no validation rules for BrandId
+	// no validation rules for BrandName
 
-	// no validation rules for CategoryId
+	// no validation rules for CategoryName
 
 	// no validation rules for Color
 

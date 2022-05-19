@@ -14,6 +14,7 @@ type ProductQuery interface {
 	Create(ctx context.Context, req datastruct.Product) (*datastruct.Product, error)
 	Update(ctx context.Context, req datastruct.UpdateProduct) (*datastruct.Product, error)
 	Get(ctx context.Context, ID int64) (*datastruct.Product, error)
+	GetFull(ctx context.Context, ID int64) (*datastruct.FullProduct, error)
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
 	ListByCategoryID(ctx context.Context, categoryID int64) ([]*datastruct.Product, error)
@@ -157,6 +158,31 @@ func (q *productQuery) Create(ctx context.Context, req datastruct.Product) (*dat
 
 	err = q.db.GetContext(ctx, &product, query, args...)
 	if err != nil {
+		return nil, err
+	}
+
+	return &product, nil
+}
+
+func (q *productQuery) GetFull(ctx context.Context, ID int64) (*datastruct.FullProduct, error) {
+	qb := q.builder.
+		Select("ptn.id, ptn.name, ptn.description, ptn.color, ptn.url, ptn.price, btn.name as brand_name, ctn.name as category_name").
+		From(datastruct.ProductTableName + " as ptn").
+		Where(squirrel.Eq{"ptn.id": ID}).
+		LeftJoin(datastruct.CategoryTableName + " as ctn on ctn.id = ptn.category_id").
+		LeftJoin(datastruct.BrandTableName + " as btn on btn.id = ptn.category_id")
+	query, args, err := qb.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	var product datastruct.FullProduct
+
+	err = q.db.GetContext(ctx, &product, query, args...)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, status.Errorf(codes.NotFound, "product with ID = %d doesn't exist", ID)
+		}
 		return nil, err
 	}
 

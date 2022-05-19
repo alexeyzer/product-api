@@ -1,13 +1,13 @@
 package datastruct
 
 type FullProduct struct {
-	ID          int64
-	Name        string
-	Description string
-	Url         string
-	BrandID     int64
-	CategoryID  int64
-	Price       float64
-	Color       string
-	Sizes       []*Size
+	ID           int64   `db:"id"`
+	Name         string  `db:"name"`
+	Description  string  `db:"description"`
+	Url          string  `db:"url"`
+	BrandName    string  `db:"brand_name"`
+	CategoryName string  `db:"category_name"`
+	Price        float64 `db:"price"`
+	Color        string  `db:"color"`
+	Sizes        []*Size
 }

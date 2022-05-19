@@ -85,7 +85,7 @@ func (s *productService) UpdateProduct(ctx context.Context, req datastruct.Updat
 }
 
 func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error) {
-	product, err := s.dao.ProductQuery().Get(ctx, ID)
+	product, err := s.dao.ProductQuery().GetFull(ctx, ID)
 	if err != nil {
 		return nil, err
 	}
@@ -93,18 +93,9 @@ func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastr
 	if err != nil {
 		return nil, err
 	}
+	product.Sizes = sizes
 
-	return &datastruct.FullProduct{
-		ID:          product.ID,
-		Name:        product.Name,
-		Description: product.Description,
-		Url:         product.Url,
-		BrandID:     0,
-		CategoryID:  0,
-		Price:       product.Price,
-		Color:       product.Color,
-		Sizes:       sizes,
-	}, nil
+	return product, nil
 }
 
 func (s *productService) DeleteProduct(ctx context.Context, ID int64) error {

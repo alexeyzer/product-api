@@ -1312,13 +1312,11 @@
         "url": {
           "type": "string"
         },
-        "brandId": {
-          "type": "string",
-          "format": "int64"
+        "brandName": {
+          "type": "string"
         },
-        "categoryId": {
-          "type": "string",
-          "format": "int64"
+        "categoryName": {
+          "type": "string"
         },
         "color": {
           "type": "string"
