@@ -53,7 +53,7 @@ func (q *sizeQuery) GetByProductID(ctx context.Context, productID int64) ([]*dat
 		).
 		From(datastruct.SizeTableName + " as st").
 		LeftJoin(datastruct.FinalProductTableName + " as fpt on fpt.size_id = st.id").
-		Where(squirrel.Eq{"fpt.id": productID})
+		Where(squirrel.Eq{"fpt.product_id": productID})
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return nil, err
