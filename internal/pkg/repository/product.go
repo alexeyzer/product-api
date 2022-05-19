@@ -170,7 +170,7 @@ func (q *productQuery) GetFull(ctx context.Context, ID int64) (*datastruct.FullP
 		From(datastruct.ProductTableName + " as ptn").
 		Where(squirrel.Eq{"ptn.id": ID}).
 		LeftJoin(datastruct.CategoryTableName + " as ctn on ctn.id = ptn.category_id").
-		LeftJoin(datastruct.BrandTableName + " as btn on btn.id = ptn.category_id")
+		LeftJoin(datastruct.BrandTableName + " as btn on btn.id = ptn.brand_id")
 	query, args, err := qb.ToSql()
 	if err != nil {
 		return nil, err
