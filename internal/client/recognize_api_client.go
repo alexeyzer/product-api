@@ -46,9 +46,9 @@ func NewRecognizeApiClient(address string) (RecognizeAPIClient, error) {
 
 	client := &recognizeAPIClient{
 		classMap: map[string]int64{
-			"Hoodie": 6,
-			"Skirt":  7,
-			"Tee":    5,
+			"Hoodie": 6, //худи
+			"Skirt":  9,
+			"Tee":    8,
 		},
 		conn:   conn,
 		client: c,
