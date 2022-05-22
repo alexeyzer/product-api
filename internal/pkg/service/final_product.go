@@ -12,6 +12,7 @@ import (
 
 type FinalProductService interface {
 	CreateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
+	BatchUpdateFinalProduct(ctx context.Context, req []datastruct.FinalProduct) error
 	UpdateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
 	GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProductWithSizeName, error)
 	DeleteFinalProduct(ctx context.Context, ID int64) error
@@ -21,6 +22,14 @@ type FinalProductService interface {
 
 type finalProductService struct {
 	dao repository.DAO
+}
+
+func (s *finalProductService) BatchUpdateFinalProduct(ctx context.Context, req []datastruct.FinalProduct) error {
+	err := s.dao.FinalProductQuery().ButchUpdate(ctx, req)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *finalProductService) UpdateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error) {

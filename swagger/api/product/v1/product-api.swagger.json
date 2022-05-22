@@ -477,6 +477,38 @@
         ]
       }
     },
+    "/v1/final-product/batch": {
+      "put": {
+        "operationId": "ProductApiService_BatchUpdateFinalProduct",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/apiBatchUpdateFinalProductRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
     "/v1/final-product/list": {
       "get": {
         "operationId": "ProductApiService_ListFinalProducts",
@@ -934,6 +966,19 @@
     }
   },
   "definitions": {
+    "BatchUpdateFinalProductRequestItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "ListBrandsGroupedResponseBrandGroup": {
       "type": "object",
       "properties": {
@@ -999,6 +1044,17 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "apiBatchUpdateFinalProductRequest": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BatchUpdateFinalProductRequestItem"
+          }
         }
       }
     },

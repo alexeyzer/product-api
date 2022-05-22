@@ -163,6 +163,13 @@ service ProductApiService {
     };
   };
 
+  rpc BatchUpdateFinalProduct(BatchUpdateFinalProductRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/final-product/batch"
+      body: "*"
+    };
+  };
+
   rpc DeleteFinalProduct(DeleteFinalProductRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/final-product"
@@ -216,6 +223,15 @@ message UpdateProductResponse {
   int64 category_id = 6;
   string color = 7;
   double price = 8;
+}
+
+message BatchUpdateFinalProductRequest {
+  repeated Item items = 1;
+
+  message Item {
+    int64 id = 1;
+    int64 amount = 2;
+  }
 }
 
 message UpdateFinalProductRequest {

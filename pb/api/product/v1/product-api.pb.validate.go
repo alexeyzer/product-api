@@ -273,6 +273,142 @@ var _ interface {
 	ErrorName() string
 } = UpdateProductResponseValidationError{}
 
+// Validate checks the field values on BatchUpdateFinalProductRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *BatchUpdateFinalProductRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BatchUpdateFinalProductRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the result is a list of violation errors wrapped in
+// BatchUpdateFinalProductRequestMultiError, or nil if none found.
+func (m *BatchUpdateFinalProductRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BatchUpdateFinalProductRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, BatchUpdateFinalProductRequestValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, BatchUpdateFinalProductRequestValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return BatchUpdateFinalProductRequestValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return BatchUpdateFinalProductRequestMultiError(errors)
+	}
+	return nil
+}
+
+// BatchUpdateFinalProductRequestMultiError is an error wrapping multiple
+// validation errors returned by BatchUpdateFinalProductRequest.ValidateAll()
+// if the designated constraints aren't met.
+type BatchUpdateFinalProductRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BatchUpdateFinalProductRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BatchUpdateFinalProductRequestMultiError) AllErrors() []error { return m }
+
+// BatchUpdateFinalProductRequestValidationError is the validation error
+// returned by BatchUpdateFinalProductRequest.Validate if the designated
+// constraints aren't met.
+type BatchUpdateFinalProductRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BatchUpdateFinalProductRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BatchUpdateFinalProductRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BatchUpdateFinalProductRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BatchUpdateFinalProductRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BatchUpdateFinalProductRequestValidationError) ErrorName() string {
+	return "BatchUpdateFinalProductRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BatchUpdateFinalProductRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBatchUpdateFinalProductRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BatchUpdateFinalProductRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BatchUpdateFinalProductRequestValidationError{}
+
 // Validate checks the field values on UpdateFinalProductRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -6180,6 +6316,114 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateCategoryResponseValidationError{}
+
+// Validate checks the field values on BatchUpdateFinalProductRequest_Item with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *BatchUpdateFinalProductRequest_Item) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on BatchUpdateFinalProductRequest_Item
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// BatchUpdateFinalProductRequest_ItemMultiError, or nil if none found.
+func (m *BatchUpdateFinalProductRequest_Item) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *BatchUpdateFinalProductRequest_Item) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Amount
+
+	if len(errors) > 0 {
+		return BatchUpdateFinalProductRequest_ItemMultiError(errors)
+	}
+	return nil
+}
+
+// BatchUpdateFinalProductRequest_ItemMultiError is an error wrapping multiple
+// validation errors returned by
+// BatchUpdateFinalProductRequest_Item.ValidateAll() if the designated
+// constraints aren't met.
+type BatchUpdateFinalProductRequest_ItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m BatchUpdateFinalProductRequest_ItemMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m BatchUpdateFinalProductRequest_ItemMultiError) AllErrors() []error { return m }
+
+// BatchUpdateFinalProductRequest_ItemValidationError is the validation error
+// returned by BatchUpdateFinalProductRequest_Item.Validate if the designated
+// constraints aren't met.
+type BatchUpdateFinalProductRequest_ItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e BatchUpdateFinalProductRequest_ItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e BatchUpdateFinalProductRequest_ItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e BatchUpdateFinalProductRequest_ItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e BatchUpdateFinalProductRequest_ItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e BatchUpdateFinalProductRequest_ItemValidationError) ErrorName() string {
+	return "BatchUpdateFinalProductRequest_ItemValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e BatchUpdateFinalProductRequest_ItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sBatchUpdateFinalProductRequest_Item.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = BatchUpdateFinalProductRequest_ItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = BatchUpdateFinalProductRequest_ItemValidationError{}
 
 // Validate checks the field values on
 // ListFullFinalProductsResponse_FullFinalProduct with the rules defined in

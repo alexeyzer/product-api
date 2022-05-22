@@ -43,6 +43,7 @@ type ProductApiServiceClient interface {
 	ListProductsByPhoto(ctx context.Context, in *ListProductsByPhotoRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	CreateFinalProduct(ctx context.Context, in *CreateFinalProductRequest, opts ...grpc.CallOption) (*CreateFinalProductResponse, error)
 	UpdateFinalProduct(ctx context.Context, in *UpdateFinalProductRequest, opts ...grpc.CallOption) (*UpdateFinalProductResponse, error)
+	BatchUpdateFinalProduct(ctx context.Context, in *BatchUpdateFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteFinalProduct(ctx context.Context, in *DeleteFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetFinalProduct(ctx context.Context, in *GetFinalProductRequest, opts ...grpc.CallOption) (*GetFinalProductResponse, error)
 	ListFinalProducts(ctx context.Context, in *ListFinalProductsRequest, opts ...grpc.CallOption) (*ListFinalProductsResponse, error)
@@ -274,6 +275,15 @@ func (c *productApiServiceClient) UpdateFinalProduct(ctx context.Context, in *Up
 	return out, nil
 }
 
+func (c *productApiServiceClient) BatchUpdateFinalProduct(ctx context.Context, in *BatchUpdateFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/BatchUpdateFinalProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) DeleteFinalProduct(ctx context.Context, in *DeleteFinalProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/DeleteFinalProduct", in, out, opts...)
@@ -347,6 +357,7 @@ type ProductApiServiceServer interface {
 	ListProductsByPhoto(context.Context, *ListProductsByPhotoRequest) (*ListProductsResponse, error)
 	CreateFinalProduct(context.Context, *CreateFinalProductRequest) (*CreateFinalProductResponse, error)
 	UpdateFinalProduct(context.Context, *UpdateFinalProductRequest) (*UpdateFinalProductResponse, error)
+	BatchUpdateFinalProduct(context.Context, *BatchUpdateFinalProductRequest) (*emptypb.Empty, error)
 	DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error)
 	GetFinalProduct(context.Context, *GetFinalProductRequest) (*GetFinalProductResponse, error)
 	ListFinalProducts(context.Context, *ListFinalProductsRequest) (*ListFinalProductsResponse, error)
@@ -430,6 +441,9 @@ func (UnimplementedProductApiServiceServer) CreateFinalProduct(context.Context, 
 }
 func (UnimplementedProductApiServiceServer) UpdateFinalProduct(context.Context, *UpdateFinalProductRequest) (*UpdateFinalProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFinalProduct not implemented")
+}
+func (UnimplementedProductApiServiceServer) BatchUpdateFinalProduct(context.Context, *BatchUpdateFinalProductRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BatchUpdateFinalProduct not implemented")
 }
 func (UnimplementedProductApiServiceServer) DeleteFinalProduct(context.Context, *DeleteFinalProductRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteFinalProduct not implemented")
@@ -891,6 +905,24 @@ func _ProductApiService_UpdateFinalProduct_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_BatchUpdateFinalProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchUpdateFinalProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).BatchUpdateFinalProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/BatchUpdateFinalProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).BatchUpdateFinalProduct(ctx, req.(*BatchUpdateFinalProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_DeleteFinalProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteFinalProductRequest)
 	if err := dec(in); err != nil {
@@ -1083,6 +1115,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateFinalProduct",
 			Handler:    _ProductApiService_UpdateFinalProduct_Handler,
+		},
+		{
+			MethodName: "BatchUpdateFinalProduct",
+			Handler:    _ProductApiService_BatchUpdateFinalProduct_Handler,
 		},
 		{
 			MethodName: "DeleteFinalProduct",

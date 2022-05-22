@@ -13,6 +13,7 @@ import (
 type FinalProductQuery interface {
 	Create(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
 	Update(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
+	ButchUpdate(ctx context.Context, req []datastruct.FinalProduct) error
 	Get(ctx context.Context, ID int64) (*datastruct.FinalProductWithSizeName, error)
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context, productID int64) ([]*datastruct.FinalProductWithSizeName, error)
@@ -24,6 +25,26 @@ type FinalProductQuery interface {
 type finalProductQuery struct {
 	builder squirrel.StatementBuilderType
 	db      *sqlx.DB
+}
+
+func (q *finalProductQuery) ButchUpdate(ctx context.Context, req []datastruct.FinalProduct) error {
+	for _, item := range req {
+		qb := q.builder.Update(datastruct.FinalProductTableName).
+			Set("amount", item.Amount).
+			Where(squirrel.Eq{"id": item.ID}).
+			Suffix("RETURNING *")
+		query, args, err := qb.ToSql()
+		if err != nil {
+			return err
+		}
+
+		_, err = q.db.ExecContext(ctx, query, args...)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (q *finalProductQuery) Update(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error) {
