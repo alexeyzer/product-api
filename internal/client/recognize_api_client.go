@@ -9,28 +9,28 @@ import (
 )
 
 type RecognizeAPIClient interface {
-	RecognizePhoto(ctx context.Context, image []byte) (int64, error)
+	RecognizePhoto(ctx context.Context, image []byte) ([]int64, error)
 }
 
 type recognizeAPIClient struct {
-	classMap map[string]int64
+	classMap map[string][]int64
 	conn     *grpc.ClientConn
 	client   pb.RecognizeApiServiceClient
 }
 
-func (r *recognizeAPIClient) RecognizePhoto(ctx context.Context, image []byte) (int64, error) {
+func (r *recognizeAPIClient) RecognizePhoto(ctx context.Context, image []byte) ([]int64, error) {
 	res, err := r.client.RecognizePhoto(ctx, &pb.RecognizePhotoRequest{
 		Image: image,
 	})
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	category, ok := r.classMap[res.Category]
+	categories, ok := r.classMap[res.Category]
 	if !ok {
-		return 0, status.Errorf(codes.Internal, "unknown category: %s", res.Category)
+		return nil, status.Errorf(codes.Internal, "unknown category: %s", res.Category)
 	}
 
-	return category, nil
+	return categories, nil
 }
 
 func (r *recognizeAPIClient) classMapper() {
@@ -45,10 +45,13 @@ func NewRecognizeApiClient(address string) (RecognizeAPIClient, error) {
 	c := pb.NewRecognizeApiServiceClient(conn)
 
 	client := &recognizeAPIClient{
-		classMap: map[string]int64{
-			"Hoodie": 6, //худи
-			"Skirt":  9,
-			"Tee":    8,
+		classMap: map[string][]int64{
+			"Hoodie":  []int64{6, 5}, //худи
+			"Skirt":   []int64{9},
+			"Tee":     []int64{8, 7},
+			"Sweater": []int64{6, 5},
+			"Jacket":  []int64{13, 14},
+			"Dress":   []int64{10},
 		},
 		conn:   conn,
 		client: c,

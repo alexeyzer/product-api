@@ -18,7 +18,7 @@ type ProductQuery interface {
 	Delete(ctx context.Context, ID int64) error
 	List(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
 	ListByIds(ctx context.Context, ids []int64) ([]*datastruct.Product, error)
-	ListByCategoryID(ctx context.Context, categoryID int64) ([]*datastruct.Product, error)
+	ListByCategoryID(ctx context.Context, categoryID []int64) ([]*datastruct.Product, error)
 	Exists(ctx context.Context, name string) (bool, error)
 }
 
@@ -77,7 +77,7 @@ func (q *productQuery) Update(ctx context.Context, req datastruct.UpdateProduct)
 	return &product, nil
 }
 
-func (q *productQuery) ListByCategoryID(ctx context.Context, categoryID int64) ([]*datastruct.Product, error) {
+func (q *productQuery) ListByCategoryID(ctx context.Context, categoryID []int64) ([]*datastruct.Product, error) {
 	qb := q.builder.
 		Select("*").
 		From(datastruct.ProductTableName).
