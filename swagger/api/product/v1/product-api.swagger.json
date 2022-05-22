@@ -822,6 +822,41 @@
         ]
       }
     },
+    "/v1/product/list/id": {
+      "get": {
+        "operationId": "ProductApiService_ListProductsById",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiListProductsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "tags": [
+          "ProductApiService"
+        ]
+      }
+    },
     "/v1/size": {
       "get": {
         "operationId": "ProductApiService_GetSize",

@@ -19,6 +19,7 @@ type ProductService interface {
 	GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error)
 	DeleteProduct(ctx context.Context, ID int64) error
 	ListProducts(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
+	ListProductsByIds(ctx context.Context, ids []int64) ([]*datastruct.Product, error)
 	ListProductsByPhoto(ctx context.Context, image []byte) ([]*datastruct.Product, error)
 }
 
@@ -26,6 +27,14 @@ type productService struct {
 	dao                repository.DAO
 	s3                 client.S3Client
 	recognizeAPIClient client.RecognizeAPIClient
+}
+
+func (s *productService) ListProductsByIds(ctx context.Context, ids []int64) ([]*datastruct.Product, error) {
+	resp, err := s.dao.ProductQuery().ListByIds(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (s *productService) ListProductsByPhoto(ctx context.Context, image []byte) ([]*datastruct.Product, error) {

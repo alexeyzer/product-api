@@ -142,6 +142,12 @@ service ProductApiService {
     };
   };
 
+  rpc ListProductsById(ListProductsByIdRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/product/list/id"
+    };
+  };
+
   rpc ListProductsByPhoto(ListProductsByPhotoRequest) returns (ListProductsResponse) {
     option (google.api.http) = {
       post: "/v1/product/list-by-photo"
@@ -199,6 +205,10 @@ service ProductApiService {
       get: "/v1/full-product"
     };
   };
+}
+
+message ListProductsByIdRequest {
+  repeated int64 ids = 1;
 }
 
 message UpdateProductRequest {

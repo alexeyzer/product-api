@@ -40,6 +40,7 @@ type ProductApiServiceClient interface {
 	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetProduct(ctx context.Context, in *GetProductRequest, opts ...grpc.CallOption) (*GetProductResponse, error)
 	ListProducts(ctx context.Context, in *ListProductsRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
+	ListProductsById(ctx context.Context, in *ListProductsByIdRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	ListProductsByPhoto(ctx context.Context, in *ListProductsByPhotoRequest, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	CreateFinalProduct(ctx context.Context, in *CreateFinalProductRequest, opts ...grpc.CallOption) (*CreateFinalProductResponse, error)
 	UpdateFinalProduct(ctx context.Context, in *UpdateFinalProductRequest, opts ...grpc.CallOption) (*UpdateFinalProductResponse, error)
@@ -248,6 +249,15 @@ func (c *productApiServiceClient) ListProducts(ctx context.Context, in *ListProd
 	return out, nil
 }
 
+func (c *productApiServiceClient) ListProductsById(ctx context.Context, in *ListProductsByIdRequest, opts ...grpc.CallOption) (*ListProductsResponse, error) {
+	out := new(ListProductsResponse)
+	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListProductsById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *productApiServiceClient) ListProductsByPhoto(ctx context.Context, in *ListProductsByPhotoRequest, opts ...grpc.CallOption) (*ListProductsResponse, error) {
 	out := new(ListProductsResponse)
 	err := c.cc.Invoke(ctx, "/product.api.ProductApiService/ListProductsByPhoto", in, out, opts...)
@@ -354,6 +364,7 @@ type ProductApiServiceServer interface {
 	DeleteProduct(context.Context, *DeleteProductRequest) (*emptypb.Empty, error)
 	GetProduct(context.Context, *GetProductRequest) (*GetProductResponse, error)
 	ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error)
+	ListProductsById(context.Context, *ListProductsByIdRequest) (*ListProductsResponse, error)
 	ListProductsByPhoto(context.Context, *ListProductsByPhotoRequest) (*ListProductsResponse, error)
 	CreateFinalProduct(context.Context, *CreateFinalProductRequest) (*CreateFinalProductResponse, error)
 	UpdateFinalProduct(context.Context, *UpdateFinalProductRequest) (*UpdateFinalProductResponse, error)
@@ -432,6 +443,9 @@ func (UnimplementedProductApiServiceServer) GetProduct(context.Context, *GetProd
 }
 func (UnimplementedProductApiServiceServer) ListProducts(context.Context, *ListProductsRequest) (*ListProductsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListProducts not implemented")
+}
+func (UnimplementedProductApiServiceServer) ListProductsById(context.Context, *ListProductsByIdRequest) (*ListProductsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListProductsById not implemented")
 }
 func (UnimplementedProductApiServiceServer) ListProductsByPhoto(context.Context, *ListProductsByPhotoRequest) (*ListProductsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListProductsByPhoto not implemented")
@@ -851,6 +865,24 @@ func _ProductApiService_ListProducts_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductApiService_ListProductsById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListProductsByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductApiServiceServer).ListProductsById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.api.ProductApiService/ListProductsById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductApiServiceServer).ListProductsById(ctx, req.(*ListProductsByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ProductApiService_ListProductsByPhoto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListProductsByPhotoRequest)
 	if err := dec(in); err != nil {
@@ -1103,6 +1135,10 @@ var ProductApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListProducts",
 			Handler:    _ProductApiService_ListProducts_Handler,
+		},
+		{
+			MethodName: "ListProductsById",
+			Handler:    _ProductApiService_ListProductsById_Handler,
 		},
 		{
 			MethodName: "ListProductsByPhoto",

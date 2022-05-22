@@ -44,4 +44,5 @@ type ListProductRequest struct {
 	CategoryID sql.NullInt64
 	BrandID    sql.NullInt64
 	Name       string
+	ids        []int64
 }

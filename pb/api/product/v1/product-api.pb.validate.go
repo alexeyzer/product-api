@@ -35,6 +35,107 @@ var (
 	_ = sort.Sort
 )
 
+// Validate checks the field values on ListProductsByIdRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListProductsByIdRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListProductsByIdRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListProductsByIdRequestMultiError, or nil if none found.
+func (m *ListProductsByIdRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListProductsByIdRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return ListProductsByIdRequestMultiError(errors)
+	}
+	return nil
+}
+
+// ListProductsByIdRequestMultiError is an error wrapping multiple validation
+// errors returned by ListProductsByIdRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ListProductsByIdRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListProductsByIdRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListProductsByIdRequestMultiError) AllErrors() []error { return m }
+
+// ListProductsByIdRequestValidationError is the validation error returned by
+// ListProductsByIdRequest.Validate if the designated constraints aren't met.
+type ListProductsByIdRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListProductsByIdRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListProductsByIdRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListProductsByIdRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListProductsByIdRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListProductsByIdRequestValidationError) ErrorName() string {
+	return "ListProductsByIdRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListProductsByIdRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListProductsByIdRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListProductsByIdRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListProductsByIdRequestValidationError{}
+
 // Validate checks the field values on UpdateProductRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
