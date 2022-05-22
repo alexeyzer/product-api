@@ -10,4 +10,6 @@ type FullProduct struct {
 	Price        float64 `db:"price"`
 	Color        string  `db:"color"`
 	Sizes        []*Size
+	IsFavorite   bool
+	UserQuantity int64
 }

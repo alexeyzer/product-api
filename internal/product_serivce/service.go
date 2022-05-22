@@ -8,6 +8,7 @@ import (
 	"github.com/alexeyzer/product-api/internal/pkg/service"
 	desc "github.com/alexeyzer/product-api/pb/api/product/v1"
 	userapi "github.com/alexeyzer/product-api/pb/api/user/v1"
+	log "github.com/sirupsen/logrus"
 
 	"google.golang.org/grpc/metadata"
 )
@@ -19,6 +20,19 @@ type ProductApiServiceServer struct {
 	productService      service.ProductService
 	finalProductService service.FinalProductService
 	desc.UnimplementedProductApiServiceServer
+}
+
+func (s *ProductApiServiceServer) GetSessionIDFromContext(ctx context.Context) string {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		val := md.Get(config.Config.Auth.SessionKey)
+		if len(val) > 0 {
+			return val[0]
+		}
+		log.Info("no value with key:", config.Config.Auth.SessionKey)
+	}
+	log.Info("no metadata")
+	return ""
 }
 
 func (s *ProductApiServiceServer) GetUserInfoFromContext(ctx context.Context) (*userapi.SessionCheckResponse, error) {

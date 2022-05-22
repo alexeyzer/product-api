@@ -7,7 +7,8 @@ import (
 )
 
 func (s *ProductApiServiceServer) GetFullProduct(ctx context.Context, req *desc.GetFullProductRequest) (*desc.GetFullProductResponse, error) {
-	resp, err := s.productService.GetFullProduct(ctx, req.GetProductId())
+	session := s.GetSessionIDFromContext(ctx)
+	resp, err := s.productService.GetFullProduct(ctx, req.GetProductId(), session)
 	if err != nil {
 		return nil, err
 	}
@@ -22,9 +23,11 @@ func (s *ProductApiServiceServer) fullProductToProtoGetFullProductResponse(resp 
 		Url:          resp.Url,
 		BrandName:    resp.BrandName,
 		CategoryName: resp.CategoryName,
-		Price:        resp.Price,
 		Color:        resp.Color,
+		Price:        resp.Price,
 		Sizes:        make([]*desc.GetSizeResponse, 0, len(resp.Sizes)),
+		IsFavorite:   resp.IsFavorite,
+		UserQuantity: resp.UserQuantity,
 	}
 	for _, item := range resp.Sizes {
 		internalResp.Sizes = append(internalResp.Sizes, &desc.GetSizeResponse{

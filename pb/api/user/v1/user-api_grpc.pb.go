@@ -19,11 +19,18 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserApiServiceClient interface {
+	AddItemToFavorite(ctx context.Context, in *AddItemToFavoriteRequest, opts ...grpc.CallOption) (*AddItemToFavoriteResponse, error)
+	ListFavorite(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFavoriteResponse, error)
+	GetUserInfoAboutProduct(ctx context.Context, in *GetUserInfoAboutProductRequest, opts ...grpc.CallOption) (*GetUserInfoAboutProductResponse, error)
+	DeleteItemFromFavorite(ctx context.Context, in *DeleteItemFromFavoriteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListUsersResponse, error)
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
+	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Logout(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	SessionCheck(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*SessionCheckResponse, error)
 	CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleResponse, error)
+	UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*UpdateRoleResponse, error)
 	DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error)
 	ListRoles(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListRolesResponse, error)
@@ -31,6 +38,14 @@ type UserApiServiceClient interface {
 	GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error)
 	DeleteUserRole(ctx context.Context, in *DeleteUserRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListUserRoles(ctx context.Context, in *ListUserRolesRequest, opts ...grpc.CallOption) (*ListUserRolesResponse, error)
+	AddToCart(ctx context.Context, in *AddToCartRequest, opts ...grpc.CallOption) (*AddToCartResponse, error)
+	UpdateCart(ctx context.Context, in *UpdateCartRequest, opts ...grpc.CallOption) (*UpdateCartResponse, error)
+	DeleteFromCart(ctx context.Context, in *DeleteFromCartRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListCartItems(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListCartItemsResponse, error)
+	DeleteAllFromCart(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateOrder(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CreateOrderResponse, error)
+	ListOrder(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListOrderResponse, error)
+	ListOrderByUserId(ctx context.Context, in *ListOrderByUserIdRequest, opts ...grpc.CallOption) (*ListOrderResponse, error)
 }
 
 type userApiServiceClient struct {
@@ -39,6 +54,42 @@ type userApiServiceClient struct {
 
 func NewUserApiServiceClient(cc grpc.ClientConnInterface) UserApiServiceClient {
 	return &userApiServiceClient{cc}
+}
+
+func (c *userApiServiceClient) AddItemToFavorite(ctx context.Context, in *AddItemToFavoriteRequest, opts ...grpc.CallOption) (*AddItemToFavoriteResponse, error) {
+	out := new(AddItemToFavoriteResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/addItemToFavorite", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) ListFavorite(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListFavoriteResponse, error) {
+	out := new(ListFavoriteResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListFavorite", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) GetUserInfoAboutProduct(ctx context.Context, in *GetUserInfoAboutProductRequest, opts ...grpc.CallOption) (*GetUserInfoAboutProductResponse, error) {
+	out := new(GetUserInfoAboutProductResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/GetUserInfoAboutProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) DeleteItemFromFavorite(ctx context.Context, in *DeleteItemFromFavoriteRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/deleteItemFromFavorite", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *userApiServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
@@ -50,8 +101,26 @@ func (c *userApiServiceClient) CreateUser(ctx context.Context, in *CreateUserReq
 	return out, nil
 }
 
-func (c *userApiServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
-	out := new(CreateUserResponse)
+func (c *userApiServiceClient) ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListUsersResponse, error) {
+	out := new(ListUsersResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
+	out := new(GetUserResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/GetUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, "/user.api.userApiService/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -80,6 +149,15 @@ func (c *userApiServiceClient) SessionCheck(ctx context.Context, in *emptypb.Emp
 func (c *userApiServiceClient) CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleResponse, error) {
 	out := new(CreateRoleResponse)
 	err := c.cc.Invoke(ctx, "/user.api.userApiService/CreateRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*UpdateRoleResponse, error) {
+	out := new(UpdateRoleResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/UpdateRole", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -149,15 +227,94 @@ func (c *userApiServiceClient) ListUserRoles(ctx context.Context, in *ListUserRo
 	return out, nil
 }
 
+func (c *userApiServiceClient) AddToCart(ctx context.Context, in *AddToCartRequest, opts ...grpc.CallOption) (*AddToCartResponse, error) {
+	out := new(AddToCartResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/AddToCart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) UpdateCart(ctx context.Context, in *UpdateCartRequest, opts ...grpc.CallOption) (*UpdateCartResponse, error) {
+	out := new(UpdateCartResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/updateCart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) DeleteFromCart(ctx context.Context, in *DeleteFromCartRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/DeleteFromCart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) ListCartItems(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListCartItemsResponse, error) {
+	out := new(ListCartItemsResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListCartItems", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) DeleteAllFromCart(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/deleteAllFromCart", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) CreateOrder(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*CreateOrderResponse, error) {
+	out := new(CreateOrderResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/CreateOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) ListOrder(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListOrderResponse, error) {
+	out := new(ListOrderResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userApiServiceClient) ListOrderByUserId(ctx context.Context, in *ListOrderByUserIdRequest, opts ...grpc.CallOption) (*ListOrderResponse, error) {
+	out := new(ListOrderResponse)
+	err := c.cc.Invoke(ctx, "/user.api.userApiService/ListOrderByUserId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserApiServiceServer is the server API for UserApiService service.
 // All implementations must embed UnimplementedUserApiServiceServer
 // for forward compatibility
 type UserApiServiceServer interface {
+	AddItemToFavorite(context.Context, *AddItemToFavoriteRequest) (*AddItemToFavoriteResponse, error)
+	ListFavorite(context.Context, *emptypb.Empty) (*ListFavoriteResponse, error)
+	GetUserInfoAboutProduct(context.Context, *GetUserInfoAboutProductRequest) (*GetUserInfoAboutProductResponse, error)
+	DeleteItemFromFavorite(context.Context, *DeleteItemFromFavoriteRequest) (*emptypb.Empty, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
-	Login(context.Context, *LoginRequest) (*CreateUserResponse, error)
+	ListUsers(context.Context, *emptypb.Empty) (*ListUsersResponse, error)
+	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
+	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	SessionCheck(context.Context, *emptypb.Empty) (*SessionCheckResponse, error)
 	CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error)
+	UpdateRole(context.Context, *UpdateRoleRequest) (*UpdateRoleResponse, error)
 	DeleteRole(context.Context, *DeleteRoleRequest) (*emptypb.Empty, error)
 	GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error)
 	ListRoles(context.Context, *emptypb.Empty) (*ListRolesResponse, error)
@@ -165,6 +322,14 @@ type UserApiServiceServer interface {
 	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
 	DeleteUserRole(context.Context, *DeleteUserRoleRequest) (*emptypb.Empty, error)
 	ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error)
+	AddToCart(context.Context, *AddToCartRequest) (*AddToCartResponse, error)
+	UpdateCart(context.Context, *UpdateCartRequest) (*UpdateCartResponse, error)
+	DeleteFromCart(context.Context, *DeleteFromCartRequest) (*emptypb.Empty, error)
+	ListCartItems(context.Context, *emptypb.Empty) (*ListCartItemsResponse, error)
+	DeleteAllFromCart(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	CreateOrder(context.Context, *emptypb.Empty) (*CreateOrderResponse, error)
+	ListOrder(context.Context, *emptypb.Empty) (*ListOrderResponse, error)
+	ListOrderByUserId(context.Context, *ListOrderByUserIdRequest) (*ListOrderResponse, error)
 	mustEmbedUnimplementedUserApiServiceServer()
 }
 
@@ -172,10 +337,28 @@ type UserApiServiceServer interface {
 type UnimplementedUserApiServiceServer struct {
 }
 
+func (UnimplementedUserApiServiceServer) AddItemToFavorite(context.Context, *AddItemToFavoriteRequest) (*AddItemToFavoriteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddItemToFavorite not implemented")
+}
+func (UnimplementedUserApiServiceServer) ListFavorite(context.Context, *emptypb.Empty) (*ListFavoriteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListFavorite not implemented")
+}
+func (UnimplementedUserApiServiceServer) GetUserInfoAboutProduct(context.Context, *GetUserInfoAboutProductRequest) (*GetUserInfoAboutProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfoAboutProduct not implemented")
+}
+func (UnimplementedUserApiServiceServer) DeleteItemFromFavorite(context.Context, *DeleteItemFromFavoriteRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteItemFromFavorite not implemented")
+}
 func (UnimplementedUserApiServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedUserApiServiceServer) Login(context.Context, *LoginRequest) (*CreateUserResponse, error) {
+func (UnimplementedUserApiServiceServer) ListUsers(context.Context, *emptypb.Empty) (*ListUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+}
+func (UnimplementedUserApiServiceServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserApiServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedUserApiServiceServer) Logout(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
@@ -186,6 +369,9 @@ func (UnimplementedUserApiServiceServer) SessionCheck(context.Context, *emptypb.
 }
 func (UnimplementedUserApiServiceServer) CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRole not implemented")
+}
+func (UnimplementedUserApiServiceServer) UpdateRole(context.Context, *UpdateRoleRequest) (*UpdateRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
 }
 func (UnimplementedUserApiServiceServer) DeleteRole(context.Context, *DeleteRoleRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteRole not implemented")
@@ -208,6 +394,30 @@ func (UnimplementedUserApiServiceServer) DeleteUserRole(context.Context, *Delete
 func (UnimplementedUserApiServiceServer) ListUserRoles(context.Context, *ListUserRolesRequest) (*ListUserRolesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListUserRoles not implemented")
 }
+func (UnimplementedUserApiServiceServer) AddToCart(context.Context, *AddToCartRequest) (*AddToCartResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddToCart not implemented")
+}
+func (UnimplementedUserApiServiceServer) UpdateCart(context.Context, *UpdateCartRequest) (*UpdateCartResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateCart not implemented")
+}
+func (UnimplementedUserApiServiceServer) DeleteFromCart(context.Context, *DeleteFromCartRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteFromCart not implemented")
+}
+func (UnimplementedUserApiServiceServer) ListCartItems(context.Context, *emptypb.Empty) (*ListCartItemsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCartItems not implemented")
+}
+func (UnimplementedUserApiServiceServer) DeleteAllFromCart(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAllFromCart not implemented")
+}
+func (UnimplementedUserApiServiceServer) CreateOrder(context.Context, *emptypb.Empty) (*CreateOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOrder not implemented")
+}
+func (UnimplementedUserApiServiceServer) ListOrder(context.Context, *emptypb.Empty) (*ListOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOrder not implemented")
+}
+func (UnimplementedUserApiServiceServer) ListOrderByUserId(context.Context, *ListOrderByUserIdRequest) (*ListOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListOrderByUserId not implemented")
+}
 func (UnimplementedUserApiServiceServer) mustEmbedUnimplementedUserApiServiceServer() {}
 
 // UnsafeUserApiServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -219,6 +429,78 @@ type UnsafeUserApiServiceServer interface {
 
 func RegisterUserApiServiceServer(s grpc.ServiceRegistrar, srv UserApiServiceServer) {
 	s.RegisterService(&UserApiService_ServiceDesc, srv)
+}
+
+func _UserApiService_AddItemToFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddItemToFavoriteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).AddItemToFavorite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/addItemToFavorite",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).AddItemToFavorite(ctx, req.(*AddItemToFavoriteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListFavorite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListFavorite",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListFavorite(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_GetUserInfoAboutProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserInfoAboutProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).GetUserInfoAboutProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/GetUserInfoAboutProduct",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).GetUserInfoAboutProduct(ctx, req.(*GetUserInfoAboutProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_DeleteItemFromFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteItemFromFavoriteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).DeleteItemFromFavorite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/deleteItemFromFavorite",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).DeleteItemFromFavorite(ctx, req.(*DeleteItemFromFavoriteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _UserApiService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -235,6 +517,42 @@ func _UserApiService_CreateUser_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserApiServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListUsers(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).GetUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/GetUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).GetUser(ctx, req.(*GetUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -307,6 +625,24 @@ func _UserApiService_CreateRole_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserApiServiceServer).CreateRole(ctx, req.(*CreateRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_UpdateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).UpdateRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/UpdateRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).UpdateRole(ctx, req.(*UpdateRoleRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -437,6 +773,150 @@ func _UserApiService_ListUserRoles_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserApiService_AddToCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddToCartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).AddToCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/AddToCart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).AddToCart(ctx, req.(*AddToCartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_UpdateCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).UpdateCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/updateCart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).UpdateCart(ctx, req.(*UpdateCartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_DeleteFromCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteFromCartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).DeleteFromCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/DeleteFromCart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).DeleteFromCart(ctx, req.(*DeleteFromCartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListCartItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListCartItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListCartItems",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListCartItems(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_DeleteAllFromCart_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).DeleteAllFromCart(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/deleteAllFromCart",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).DeleteAllFromCart(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_CreateOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).CreateOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/CreateOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).CreateOrder(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListOrder(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserApiService_ListOrderByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOrderByUserIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserApiServiceServer).ListOrderByUserId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.api.userApiService/ListOrderByUserId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserApiServiceServer).ListOrderByUserId(ctx, req.(*ListOrderByUserIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserApiService_ServiceDesc is the grpc.ServiceDesc for UserApiService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -445,8 +925,32 @@ var UserApiService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserApiServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "addItemToFavorite",
+			Handler:    _UserApiService_AddItemToFavorite_Handler,
+		},
+		{
+			MethodName: "ListFavorite",
+			Handler:    _UserApiService_ListFavorite_Handler,
+		},
+		{
+			MethodName: "GetUserInfoAboutProduct",
+			Handler:    _UserApiService_GetUserInfoAboutProduct_Handler,
+		},
+		{
+			MethodName: "deleteItemFromFavorite",
+			Handler:    _UserApiService_DeleteItemFromFavorite_Handler,
+		},
+		{
 			MethodName: "CreateUser",
 			Handler:    _UserApiService_CreateUser_Handler,
+		},
+		{
+			MethodName: "ListUsers",
+			Handler:    _UserApiService_ListUsers_Handler,
+		},
+		{
+			MethodName: "GetUser",
+			Handler:    _UserApiService_GetUser_Handler,
 		},
 		{
 			MethodName: "Login",
@@ -463,6 +967,10 @@ var UserApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRole",
 			Handler:    _UserApiService_CreateRole_Handler,
+		},
+		{
+			MethodName: "UpdateRole",
+			Handler:    _UserApiService_UpdateRole_Handler,
 		},
 		{
 			MethodName: "DeleteRole",
@@ -491,6 +999,38 @@ var UserApiService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListUserRoles",
 			Handler:    _UserApiService_ListUserRoles_Handler,
+		},
+		{
+			MethodName: "AddToCart",
+			Handler:    _UserApiService_AddToCart_Handler,
+		},
+		{
+			MethodName: "updateCart",
+			Handler:    _UserApiService_UpdateCart_Handler,
+		},
+		{
+			MethodName: "DeleteFromCart",
+			Handler:    _UserApiService_DeleteFromCart_Handler,
+		},
+		{
+			MethodName: "ListCartItems",
+			Handler:    _UserApiService_ListCartItems_Handler,
+		},
+		{
+			MethodName: "deleteAllFromCart",
+			Handler:    _UserApiService_DeleteAllFromCart_Handler,
+		},
+		{
+			MethodName: "CreateOrder",
+			Handler:    _UserApiService_CreateOrder_Handler,
+		},
+		{
+			MethodName: "ListOrder",
+			Handler:    _UserApiService_ListOrder_Handler,
+		},
+		{
+			MethodName: "ListOrderByUserId",
+			Handler:    _UserApiService_ListOrderByUserId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

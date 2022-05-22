@@ -9,11 +9,20 @@ import (
 
 type UserAPIClient interface {
 	SessionCheck(ctx context.Context) (*pb.SessionCheckResponse, error)
+	GetUserInfoAboutProduct(ctx context.Context, req *pb.GetUserInfoAboutProductRequest) (*pb.GetUserInfoAboutProductResponse, error)
 }
 
 type userAPIClient struct {
 	conn   *grpc.ClientConn
 	client pb.UserApiServiceClient
+}
+
+func (c *userAPIClient) GetUserInfoAboutProduct(ctx context.Context, req *pb.GetUserInfoAboutProductRequest) (*pb.GetUserInfoAboutProductResponse, error) {
+	resp, err := c.client.GetUserInfoAboutProduct(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (c *userAPIClient) SessionCheck(ctx context.Context) (*pb.SessionCheckResponse, error) {

@@ -48,7 +48,7 @@ func gatewayMetadataAnnotator(ctx context.Context, r *http.Request) metadata.MD 
 			if err != nil {
 				log.Info("failed to convert userinfo to byte")
 			}
-			md = metadata.Pairs(config.Config.Auth.UserInfoKey, string(byte))
+			md = metadata.Join(md, metadata.Pairs(config.Config.Auth.UserInfoKey, string(byte)))
 		}
 
 		return md
@@ -142,7 +142,7 @@ func main() {
 	categoryService := service.NewCategoryService(dao)
 	sizeService := service.NewSizeService(dao)
 	_ = service.NewMediaService(dao, s3)
-	productService := service.NewProductService(dao, s3, recognizeApiClien)
+	productService := service.NewProductService(dao, s3, recognizeApiClien, userAPIClient)
 	finalProductService := service.NewFinalProductService(dao)
 
 	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService, brandService, sizeService, productService, finalProductService)

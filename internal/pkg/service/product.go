@@ -4,11 +4,15 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
+	"fmt"
+	"github.com/alexeyzer/product-api/config"
 	"github.com/alexeyzer/product-api/internal/client"
 	"github.com/alexeyzer/product-api/internal/pkg/datastruct"
 	"github.com/alexeyzer/product-api/internal/pkg/repository"
+	pb "github.com/alexeyzer/product-api/pb/api/user/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -16,7 +20,7 @@ type ProductService interface {
 	CreateProduct(ctx context.Context, req datastruct.CreateProduct) (*datastruct.Product, error)
 	UpdateProduct(ctx context.Context, req datastruct.UpdateProduct, image []byte, contentType string, deletePhoto bool) (*datastruct.Product, error)
 	GetProduct(ctx context.Context, ID int64) (*datastruct.Product, error)
-	GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error)
+	GetFullProduct(ctx context.Context, ID int64, session string) (*datastruct.FullProduct, error)
 	DeleteProduct(ctx context.Context, ID int64) error
 	ListProducts(ctx context.Context, req datastruct.ListProductRequest) ([]*datastruct.Product, error)
 	ListProductsByIds(ctx context.Context, ids []int64) ([]*datastruct.Product, error)
@@ -27,6 +31,7 @@ type productService struct {
 	dao                repository.DAO
 	s3                 client.S3Client
 	recognizeAPIClient client.RecognizeAPIClient
+	userAPIClient      client.UserAPIClient
 }
 
 func (s *productService) ListProductsByIds(ctx context.Context, ids []int64) ([]*datastruct.Product, error) {
@@ -93,7 +98,7 @@ func (s *productService) UpdateProduct(ctx context.Context, req datastruct.Updat
 	return resp, nil
 }
 
-func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastruct.FullProduct, error) {
+func (s *productService) GetFullProduct(ctx context.Context, ID int64, session string) (*datastruct.FullProduct, error) {
 	product, err := s.dao.ProductQuery().GetFull(ctx, ID)
 	if err != nil {
 		return nil, err
@@ -101,6 +106,18 @@ func (s *productService) GetFullProduct(ctx context.Context, ID int64) (*datastr
 	sizes, err := s.dao.SizeQuery().GetByProductID(ctx, ID)
 	if err != nil {
 		return nil, err
+	}
+	if session != "" {
+		ctx = metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, session)
+		resp, err := s.userAPIClient.GetUserInfoAboutProduct(ctx, &pb.GetUserInfoAboutProductRequest{
+			ProductId: ID,
+		})
+		if err != nil {
+			return nil, err
+		}
+		fmt.Println("here")
+		product.IsFavorite = resp.GetIsFavorite()
+		product.UserQuantity = resp.GetUserQuantity()
 	}
 	product.Sizes = sizes
 
@@ -201,10 +218,11 @@ func (s *productService) CreateProduct(ctx context.Context, req datastruct.Creat
 	return createdProduct, nil
 }
 
-func NewProductService(dao repository.DAO, s3 client.S3Client, recognizeAPIClient client.RecognizeAPIClient) ProductService {
+func NewProductService(dao repository.DAO, s3 client.S3Client, recognizeAPIClient client.RecognizeAPIClient, userAPIClient client.UserAPIClient) ProductService {
 	return &productService{
 		dao:                dao,
 		s3:                 s3,
 		recognizeAPIClient: recognizeAPIClient,
+		userAPIClient:      userAPIClient,
 	}
 }

@@ -1421,6 +1421,13 @@
           "items": {
             "$ref": "#/definitions/apiGetSizeResponse"
           }
+        },
+        "isFavorite": {
+          "type": "boolean"
+        },
+        "userQuantity": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

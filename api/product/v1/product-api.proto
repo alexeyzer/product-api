@@ -325,6 +325,8 @@ message GetFullProductResponse {
   string color = 7;
   double price = 8;
   repeated GetSizeResponse sizes = 9;
+  bool is_favorite = 10;
+  int64 user_quantity = 11;
 }
 
 message GetSizeRequest {

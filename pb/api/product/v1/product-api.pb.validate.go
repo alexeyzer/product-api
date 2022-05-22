@@ -1786,6 +1786,10 @@ func (m *GetFullProductResponse) validate(all bool) error {
 
 	}
 
+	// no validation rules for IsFavorite
+
+	// no validation rules for UserQuantity
+
 	if len(errors) > 0 {
 		return GetFullProductResponseMultiError(errors)
 	}
