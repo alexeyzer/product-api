@@ -327,6 +327,7 @@ message GetFullProductResponse {
   repeated GetSizeResponse sizes = 9;
   bool is_favorite = 10;
   int64 user_quantity = 11;
+  int64 favorite_id = 12;
 }
 
 message GetSizeRequest {

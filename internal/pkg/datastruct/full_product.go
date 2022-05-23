@@ -12,4 +12,5 @@ type FullProduct struct {
 	Sizes        []*Size
 	IsFavorite   bool
 	UserQuantity int64
+	FavoriteID   int64
 }

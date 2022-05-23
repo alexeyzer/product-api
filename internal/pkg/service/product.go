@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/alexeyzer/product-api/config"
 	"github.com/alexeyzer/product-api/internal/client"
 	"github.com/alexeyzer/product-api/internal/pkg/datastruct"
@@ -115,9 +114,9 @@ func (s *productService) GetFullProduct(ctx context.Context, ID int64, session s
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("here")
 		product.IsFavorite = resp.GetIsFavorite()
 		product.UserQuantity = resp.GetUserQuantity()
+		product.FavoriteID = resp.GetFavoriteId()
 	}
 	product.Sizes = sizes
 
