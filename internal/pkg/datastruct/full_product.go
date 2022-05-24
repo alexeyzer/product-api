@@ -11,6 +11,5 @@ type FullProduct struct {
 	Color        string  `db:"color"`
 	Sizes        []*Size
 	IsFavorite   bool
-	UserQuantity int64
 	FavoriteID   int64
 }

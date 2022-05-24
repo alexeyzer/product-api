@@ -7,7 +7,8 @@ import (
 )
 
 func (s *ProductApiServiceServer) ListFinalProducts(ctx context.Context, req *desc.ListFinalProductsRequest) (*desc.ListFinalProductsResponse, error) {
-	resp, err := s.finalProductService.ListFinalProducts(ctx, req.GetProductId())
+	session := s.GetSessionIDFromContext(ctx)
+	resp, err := s.finalProductService.ListFinalProducts(ctx, req.GetProductId(), session)
 	if err != nil {
 		return nil, err
 	}
@@ -16,10 +17,18 @@ func (s *ProductApiServiceServer) ListFinalProducts(ctx context.Context, req *de
 
 func (s *ProductApiServiceServer) productsToProtoListFinalProductsResponse(resp []*datastruct.FinalProductWithSizeName) *desc.ListFinalProductsResponse {
 	internalResp := &desc.ListFinalProductsResponse{
-		Products: make([]*desc.GetFinalProductResponse, 0, len(resp)),
+		Products: make([]*desc.ListFinalProductsResponse_Item, 0, len(resp)),
 	}
 	for _, item := range resp {
-		internalResp.Products = append(internalResp.Products, s.finalProductToProtoGetFinalProductResponse(item))
+		internalResp.Products = append(internalResp.Products, &desc.ListFinalProductsResponse_Item{
+			Id:           item.ID,
+			ProductId:    item.ProductID,
+			SizeId:       item.SizeID,
+			Sku:          item.Sku,
+			Amount:       item.Amount,
+			SizeName:     item.SizeName,
+			UserQuantity: item.UserQuantity,
+		})
 	}
 	return internalResp
 }

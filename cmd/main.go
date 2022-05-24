@@ -143,7 +143,7 @@ func main() {
 	sizeService := service.NewSizeService(dao)
 	_ = service.NewMediaService(dao, s3)
 	productService := service.NewProductService(dao, s3, recognizeApiClien, userAPIClient)
-	finalProductService := service.NewFinalProductService(dao)
+	finalProductService := service.NewFinalProductService(dao, userAPIClient)
 
 	productApiServiceServer := product_serivce.NewProductApiServiceServer(categoryService, brandService, sizeService, productService, finalProductService)
 	if err := RunServer(ctx, productApiServiceServer); err != nil {

@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"github.com/alexeyzer/product-api/config"
+	"github.com/alexeyzer/product-api/internal/client"
+	"google.golang.org/grpc/metadata"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -16,12 +19,13 @@ type FinalProductService interface {
 	UpdateFinalProduct(ctx context.Context, req datastruct.FinalProduct) (*datastruct.FinalProduct, error)
 	GetFinalProduct(ctx context.Context, ID int64) (*datastruct.FinalProductWithSizeName, error)
 	DeleteFinalProduct(ctx context.Context, ID int64) error
-	ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProductWithSizeName, error)
+	ListFinalProducts(ctx context.Context, productID int64, session string) ([]*datastruct.FinalProductWithSizeName, error)
 	ListFullFinalProducts(ctx context.Context, finalProductIds []int64) ([]*datastruct.FullFinalProduct, error)
 }
 
 type finalProductService struct {
-	dao repository.DAO
+	dao           repository.DAO
+	userAPIClient client.UserAPIClient
 }
 
 func (s *finalProductService) BatchUpdateFinalProduct(ctx context.Context, req []datastruct.FinalProduct) error {
@@ -61,12 +65,27 @@ func (s *finalProductService) GetFinalProduct(ctx context.Context, ID int64) (*d
 	return product, nil
 }
 
-func (s *finalProductService) ListFinalProducts(ctx context.Context, productID int64) ([]*datastruct.FinalProductWithSizeName, error) {
+func (s *finalProductService) ListFinalProducts(ctx context.Context, productID int64, session string) ([]*datastruct.FinalProductWithSizeName, error) {
 	products, err := s.dao.FinalProductQuery().List(ctx, productID)
 	if err != nil {
 		return nil, err
 	}
-
+	if session != "" {
+		ctx = metadata.AppendToOutgoingContext(ctx, config.Config.Auth.SessionKey, session)
+		resp, err := s.userAPIClient.ListCartItems(ctx)
+		if err != nil {
+			return nil, err
+		}
+		quantityMap := make(map[int64]int64)
+		for _, item := range resp.GetProducts() {
+			quantityMap[item.FullProductId] = item.UserQuantity
+		}
+		for _, product := range products {
+			if quantity, ok := quantityMap[product.ID]; ok {
+				product.UserQuantity = quantity
+			}
+		}
+	}
 	return products, nil
 }
 
@@ -128,8 +147,9 @@ func (s *finalProductService) CreateFinalProduct(ctx context.Context, req datast
 	return createdFinalProduct, nil
 }
 
-func NewFinalProductService(dao repository.DAO) FinalProductService {
+func NewFinalProductService(dao repository.DAO, userAPIClient client.UserAPIClient) FinalProductService {
 	return &finalProductService{
-		dao: dao,
+		dao:           dao,
+		userAPIClient: userAPIClient,
 	}
 }

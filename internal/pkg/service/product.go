@@ -115,7 +115,6 @@ func (s *productService) GetFullProduct(ctx context.Context, ID int64, session s
 			return nil, err
 		}
 		product.IsFavorite = resp.GetIsFavorite()
-		product.UserQuantity = resp.GetUserQuantity()
 		product.FavoriteID = resp.GetFavoriteId()
 	}
 	product.Sizes = sizes

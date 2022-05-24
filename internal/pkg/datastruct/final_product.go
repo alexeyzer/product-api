@@ -11,12 +11,13 @@ type FinalProduct struct {
 }
 
 type FinalProductWithSizeName struct {
-	ID        int64  `db:"id"`
-	ProductID int64  `db:"product_id"`
-	SizeID    int64  `db:"size_id"`
-	SizeName  string `db:"size_name"`
-	Amount    int64  `db:"amount"`
-	Sku       int64  `db:"sku"`
+	ID           int64  `db:"id"`
+	ProductID    int64  `db:"product_id"`
+	SizeID       int64  `db:"size_id"`
+	SizeName     string `db:"size_name"`
+	Amount       int64  `db:"amount"`
+	Sku          int64  `db:"sku"`
+	UserQuantity int64
 }
 
 type FullFinalProduct struct {

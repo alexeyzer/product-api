@@ -345,7 +345,16 @@ message ListFinalProductsRequest {
 }
 
 message ListFinalProductsResponse {
-  repeated GetFinalProductResponse products = 1;
+  repeated Item products = 1;
+  message Item {
+    int64 id = 1;
+    int64 product_id = 2;
+    int64 size_id = 3;
+    int64 sku = 4;
+    int64 amount = 5;
+    string size_name = 6;
+    int64 user_quantity= 7;
+  }
 }
 
 message GetFinalProductRequest {

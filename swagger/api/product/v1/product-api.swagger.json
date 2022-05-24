@@ -1001,19 +1001,6 @@
     }
   },
   "definitions": {
-    "BatchUpdateFinalProductRequestItem": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "amount": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
     "ListBrandsGroupedResponseBrandGroup": {
       "type": "object",
       "properties": {
@@ -1092,8 +1079,21 @@
         "items": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/BatchUpdateFinalProductRequestItem"
+            "$ref": "#/definitions/apiBatchUpdateFinalProductRequestItem"
           }
+        }
+      }
+    },
+    "apiBatchUpdateFinalProductRequestItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -1523,8 +1523,40 @@
         "products": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/apiGetFinalProductResponse"
+            "$ref": "#/definitions/apiListFinalProductsResponseItem"
           }
+        }
+      }
+    },
+    "apiListFinalProductsResponseItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "productId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sizeId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sku": {
+          "type": "string",
+          "format": "int64"
+        },
+        "amount": {
+          "type": "string",
+          "format": "int64"
+        },
+        "sizeName": {
+          "type": "string"
+        },
+        "userQuantity": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

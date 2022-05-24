@@ -27,7 +27,6 @@ func (s *ProductApiServiceServer) fullProductToProtoGetFullProductResponse(resp 
 		Price:        resp.Price,
 		Sizes:        make([]*desc.GetSizeResponse, 0, len(resp.Sizes)),
 		IsFavorite:   resp.IsFavorite,
-		UserQuantity: resp.UserQuantity,
 		FavoriteId:   resp.FavoriteID,
 	}
 	for _, item := range resp.Sizes {
