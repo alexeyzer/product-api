@@ -21,6 +21,7 @@ type FinalProductWithSizeName struct {
 
 type FullFinalProduct struct {
 	ID           int64   `db:"id"`
+	ProductID    int64   `db:"product_id"`
 	Amount       int64   `db:"amount"`
 	Sku          int64   `db:"sku"`
 	Name         string  `db:"name"`

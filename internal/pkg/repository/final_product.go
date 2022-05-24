@@ -129,6 +129,7 @@ func (q *finalProductQuery) ListFull(ctx context.Context, productIds []int64) ([
 	qb := q.builder.
 		Select(
 			"fptn.id",
+			"fptn.product_id",
 			"fptn.amount",
 			"fptn.sku",
 			"ptn.name",

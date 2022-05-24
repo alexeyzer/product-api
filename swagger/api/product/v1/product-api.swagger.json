@@ -1067,6 +1067,10 @@
         "sku": {
           "type": "string",
           "format": "int64"
+        },
+        "productId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

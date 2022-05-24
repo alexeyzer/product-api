@@ -31,6 +31,7 @@ func (s *ProductApiServiceServer) datastructFullFInalProductsToProto(resp []*dat
 			Size:         product.Size,
 			Amount:       product.Amount,
 			Sku:          product.Sku,
+			ProductId:    product.ProductID,
 		})
 	}
 	return internalResp

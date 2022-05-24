@@ -6578,6 +6578,8 @@ func (m *ListFullFinalProductsResponse_FullFinalProduct) validate(all bool) erro
 
 	// no validation rules for Sku
 
+	// no validation rules for ProductId
+
 	if len(errors) > 0 {
 		return ListFullFinalProductsResponse_FullFinalProductMultiError(errors)
 	}
